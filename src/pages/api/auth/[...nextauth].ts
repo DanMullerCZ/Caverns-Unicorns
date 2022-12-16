@@ -5,21 +5,16 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../../../env/server.mjs";
 import { prisma } from "../../../server/db/client";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { User, Session, Account, Prisma } from "@prisma/client";
+import { generateTokens, hashToken } from "./jwt";
+import GitHubProvider from "next-auth/providers/github";
 
-
-import jwt, { Secret } from 'jsonwebtoken';
-import * as dotenv from "dotenv";
-import * as crypto from "crypto";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
-  callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        //session.user.id = user.id;
-      }
-      return session;
-    },
+
+  pages: {
+    //signIn: "/login"
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
@@ -29,38 +24,62 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
     CredentialsProvider({
-      type: "credentials",
-      id: "domain-login",
-      name: "Domain Account",
+      //type: "credentials",
+      //id: "domain-login",
+      name: "Credentials",
       async authorize(credentials: any, req: any) {
         const payload = {
-          email: credentials.email //|| "no password",
+          email: credentials.email,
+          password: credentials.password, //|| "no password",
         };
-        console.log("********" + payload.email);
-        
-          const user = await prisma.user.findUnique({
-          where: { email: payload.email },
-        }); 
 
-        if (user) {
+        const user: User = (await prisma.user.findUnique({
+          where: { email: payload.email },
+        })) as User;
+
+        if (user.password == hashToken(payload.password)) {
           return user;
         } else {
           return null;
         }
       },
       credentials: {
-        username: { label: "Username", type: "text ", placeholder: "jsmith" },
-        email: { label: "Password", type: "text" },
+        email: { label: "E-mail", type: "text " },
+        password: { label: "Password", type: "password" },
       },
     }),
   ],
-  debug: process.env.NODE_ENV === 'development',
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.sub as string;
+        const s: Prisma.BatchPayload = await prisma.session.updateMany({
+          where: { userId: token.sub },
+          data: {
+            sessionToken: hashToken(token.jti),
+          },
+        });
+        const tokens = generateTokens(
+          token.email as string,
+          token.jti as string
+        );
+        const a: Prisma.BatchPayload = await prisma.account.updateMany({
+          where: { userId: token.sub },
+          data: {
+            access_token: tokens.accessToken,
+            refresh_token: tokens.refreshToken,
+          },
+        });
+        console.log(a, s);
+      }
+      return session;
+    },
+  },
+  debug: process.env.NODE_ENV === "development",
   session: {
     // Set to jwt in order to CredentialsProvider works properly
-    strategy: 'jwt'
-  }
-  
-  
+    strategy: "jwt",
+  },
 };
 
 export default NextAuth(authOptions);

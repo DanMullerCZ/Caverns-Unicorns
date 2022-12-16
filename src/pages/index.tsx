@@ -14,7 +14,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main >
-        <h1>D&D</h1>
+        <p>D&D</p>
 
         <AuthShowcase />
       </main>
@@ -25,7 +25,9 @@ const Home: NextPage = () => {
 export default Home;
 
 const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
+  const  { data: sessionData }= useSession();
+  const s = useSession()
+  s.data?.user?.id
 
   const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery(
     undefined, // no input
@@ -36,7 +38,9 @@ const AuthShowcase: React.FC = () => {
     <div>
       <p>{sessionData?.user?.email}</p>
       <p>{sessionData?.user?.id}</p>
+      
       <p>
+
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         {secretMessage && <span> - {secretMessage}</span>}
       </p>
