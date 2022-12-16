@@ -16,16 +16,18 @@ const register = () => {
         creation.mutate(user)
         }
         
-  if (creation.isSuccess) window.location.href='/login'
-      //creation.data?.id
+  if (creation.isSuccess) {
+     window.location.href='/login'
+    }
+  
   return (
     <>
      <form className="grid grid-rows-3 gap-1" >
           <input className="border border-solid border-black" onChange={handleChange} type="text" name="username" id="username" />
           <input className="border border-solid border-black" onChange={handleChange} type="password" name="password" id="password" />
           <button type="button" onClick={createUser} className="bg-red-400 border-gray-900">Registrate</button>
-          {creation.error && <p>{creation.error.message}</p>}
-          <Link href={'/'}>{'<-'}</Link>
+          {creation.error && <p className='bg-red-400'>{creation.error.message}</p>}
+          <Link href='/'>{'<-'}</Link>
         </form> 
     </>
   )

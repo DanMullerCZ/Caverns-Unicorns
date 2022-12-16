@@ -57,7 +57,7 @@ const Home: NextPage = () => {
         {/* <p className='bg-white'>{race.data?.name}</p>
         {races.data?.map(e=>(<div key={e.id} className='bg-white'> {e.name}</div>))} */}
         <Link href='/character-list'>characters</Link>
-      
+        <Link href='/races'>races</Link>
 
       </main>
     </>
