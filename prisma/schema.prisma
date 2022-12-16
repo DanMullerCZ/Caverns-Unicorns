@@ -29,15 +29,15 @@ model Login {
 }
 
 model Race {
-  name               String
-  id                 Int     @id @default(autoincrement())
-  description        String? @db.VarChar(255)
-  dexterity_bonus    Int?
-  strength_bonus     Int?
-  constitution_bonus Int?
-  intelligence_bonus Int?
-  wisdom_bonus       Int?
-  charisma_bonus     Int?
+  name        String
+  id          Int     @id @default(autoincrement())
+  description String? @db.VarChar(255)
+  dex         Int?
+  str         Int?
+  con         Int?
+  int         Int?
+  wis         Int?
+  char        Int?
 }
 
 model Account {

@@ -11,14 +11,16 @@ const races = () => {
     const handleClick = () => {
         addRace.mutate({'name':race})
     }
-   // if (addRace.isSuccess){console.log(addRace.data)}
+    
   return (
-    <>
-        <input onChange={handleChange} type="text" name="race" id="race" />
-        <button onClick={handleClick}>Add race</button>
-        {addRace.error && <p>{addRace.error.message}</p>}
-        <Link href='/'>{'<-'}</Link>
-    </>
+    <div className='grid grid-cols-1 w-52'>
+        <h2>Races with amazing styling!</h2>
+        <input onChange={handleChange} type="text" name="race" id="race" className='border-black border-solid border' />
+        <button onClick={handleClick} className='border-black border-solid border'>Add race</button>
+        {addRace.error && <p className='border-black border-solid border'>{addRace.error.message}</p>}
+        {addRace.isSuccess && <p className='border-black border-solid border'>Succesfully added race {race} to the database.</p>}
+        <Link href='/' className='border-black border-solid border w-6'>{'<-'}</Link>
+    </div>
   )
 }
 
