@@ -1,0 +1,65 @@
+# 02. Add Races
+
+## Description
+
+Every hero needs to be assigned a race and we need a way to add them. This endpoint only needs a valid ***name***
+of one of the races and the bonuses will be fetched from [DnD5eAPI](https://www.dnd5eapi.co/docs/#get-/api/races/-index-).
+
+## Backend Part
+
+### Endpoint
+
+`POST /races/`
+
+### Sample Request (status 200)
+```json
+{
+    "name": "Gnome"
+}
+```
+
+### Sample Response (status 200)
+```json
+{
+    "name": "Gnome",
+    "strength_bonus": 0,
+    "dexterity_bonus": 0,
+    "constitution_bonus": 0,
+    "intelligence_bonus": 2,
+    "wisdom_bonus": 0,
+    "charisma_bonus": 0
+}
+```
+
+### Testing (BE)
+
+- Create ***unit tests*** that should cover cases of present and missing race.
+
+## Frontend Part
+
+### Acceptance Criteria
+
+#### Scenario 1
+
+Given the /races route. When the page is loaded. Then the form
+exists.
+
+#### Scenario 2
+
+Given the loaded page. When I click on the submit button. And the input
+fields is blank. Then an error message shows up: "All fields are
+required."
+
+#### Scenario 3
+
+Given the loaded page. When I click on the submit button. And the input
+fields is filled with a non-existing race. Then an error message shows up: "Invalid race name."
+
+#### Scenario 4
+
+Given the loaded page. When I click on the submit button. And the input
+fields is filled with a valid race name. Race is assigned to the hero and a message shows up: "Successfully added race {race} to the database."
+
+### Testing (FE)
+
+- Create ***unit tests*** that should cover the above cases.

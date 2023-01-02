@@ -2,21 +2,11 @@ import { z } from "zod";
 import { router, publicProcedure } from "../trpc";
 
 export const exampleRouter = router({
-  //     getCharacters: publicProcedure.input(z.object({id:z.number()}))
-  //       .query(async (input) =>{
-  //       return await prisma?.characters.findMany({where : {owner_id:input.input.id}})
-  //   })
-  //   ,
-  //   race: publicProcedure.query(async () => {
-  //     return await prisma?.race.findFirst()
-  //   }),
-  //   getRaces: publicProcedure.query(async () => {
-  //     return await prisma?.race.findMany()
-  //   }),
+
   races: publicProcedure.input(z.object({ 'name': z.string() }))
     .mutation(async (input) => {
       if (input.input.name.length == 0) { throw new Error('All fields are required.') }
-      const check = await prisma?.race.findFirst({where:{name:input.input.name.toLowerCase()}})
+      const check = await prisma?.race.findFirst({ where: { name: input.input.name.toLowerCase() } })
       if (check) { throw new Error('Race already added.') }
       const res = await fetch(`https://www.dnd5eapi.co/api/races/${input.input.name.toLowerCase()}`).then(res => res.json())
 
@@ -58,8 +48,7 @@ export const exampleRouter = router({
           }
         }
       }
-      
-      await prisma?.race.create({data:response})
+      await prisma?.race.create({ data: response })
       return response
     }),
 
@@ -79,17 +68,5 @@ export const exampleRouter = router({
 
     }),
 
-  //   logInUser: publicProcedure.input(z.object({ 'username': z.string(), 'password': z.string() }))
-  //   .mutation(async (input)=>{
-  //     const check = await prisma?.login.findFirstOrThrow({
-  //       where:{username: input.input.username,password:input.input.password}
-  //     })
-  //   }),
-  //   getUserId: publicProcedure.input(z.object({ 'username': z.string(), 'password': z.string() }))
-  //       .query(async (input)=>{
-  //         const res = await prisma?.login.findFirst({
-  //           where: {username:input.input.username,password:input.input.password}
-  //         })
-  //         return res?.id
-  //       })
+
 });

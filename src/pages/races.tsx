@@ -15,8 +15,10 @@ const races = () => {
   return (
     <div className='grid grid-cols-1 w-52'>
         <h2>Races with amazing styling!</h2>
+        <form >
         <input onChange={handleChange} type="text" name="race" id="race" className='border-black border-solid border' />
-        <button onClick={handleClick} className='border-black border-solid border'>Add race</button>
+        <button type='button' onClick={handleClick} className='border-black border-solid border'>Add race</button>
+        </form>
         {addRace.error && <p className='border-black border-solid border'>{addRace.error.message}</p>}
         {addRace.isSuccess && <p className='border-black border-solid border'>Succesfully added race {race} to the database.</p>}
         <Link href='/' className='border-black border-solid border w-6'>{'<-'}</Link>
