@@ -11,7 +11,7 @@ import { prisma } from '../prisma';
 export const exampleRouter = router({
   races: publicProcedure
     .input(z.object({ name: z.string() }))
-    .mutation(async (input) => {
+    .mutation(async (input: any) => {
       if (input.input.name.length == 0) {
         throw new Error('All fields are required.');
       }
@@ -28,7 +28,7 @@ export const exampleRouter = router({
     .input(
       z.object({ email: z.string(), password: z.string(), name: z.string() }),
     )
-    .mutation(async (input) => {
+    .mutation(async (input: any) => {
       console.log('registration endpoint');
 
       const date = new Date();
@@ -80,7 +80,7 @@ export const exampleRouter = router({
 
   veryfiEmail: publicProcedure
     .input(z.object({ token: z.string() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input }: any) => {
       const token: string = input.token;
       let account: Account[];
       let user: User;
