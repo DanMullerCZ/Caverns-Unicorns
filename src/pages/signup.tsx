@@ -1,27 +1,37 @@
-import { type NextPage } from "next";
-import Head from "next/head";
-import { useState } from "react";
+import { type NextPage } from 'next';
+import Head from 'next/head';
+import { useState } from 'react';
 
 //import { signIn, signOut, useSession } from "next-auth/react";
 
-import { trpc } from "../utils/trpc";
+import { trpc } from '../utils/trpc';
 
 const SignUp: NextPage = () => {
-    const creation = trpc.backend.registration.useMutation()
-    const [formData, setFormData] = useState({email:"",password1:"",password2:"", name:""})
-    const handleChange = (ev: any) =>{
-        setFormData({...formData,[ev.target?.name]:ev.target.value})
+  const creation = trpc.backend.registration.useMutation();
+  const [formData, setFormData] = useState({
+    email: '',
+    password1: '',
+    password2: '',
+    name: '',
+  });
+  const handleChange = (ev: React.FormEvent<EventTarget>) => {
+    const target: HTMLInputElement = ev.target as HTMLInputElement;
+    setFormData({ ...formData, [target.name]: target.value });
+  };
+  const submitForm = async () => {
+    console.log(formData.password1, '--', formData.password2);
+
+    if (formData.password1 == formData.password2) {
+      creation.mutate({
+        email: formData.email,
+        password: formData.password1,
+        name: formData.name,
+      });
+      console.log(formData, 'has been sent');
+    } else {
+      console.log('Passwords dont match');
     }
-    const submitForm = async () => {
-      console.log(formData.password1,"--",formData.password2);
-      
-        if(formData.password1==formData.password2){
-            creation.mutate({email:formData.email,password:formData.password1,name:formData.name})
-            console.log(formData, "has been sent");
-            
-        }else{console.log("Passwords dont match");
-        }
-      }
+  };
 
   return (
     <>
@@ -30,12 +40,19 @@ const SignUp: NextPage = () => {
       </Head>
       <form>
         <label htmlFor="email">Email:</label>
-        <input className="bg-black text-white" type="email" name="email" 
-        onChange={handleChange}
-        /><br/>
+        <input
+          className="bg-black text-white"
+          type="email"
+          name="email"
+          onChange={handleChange}
+        />
+        <br />
         <label htmlFor="name">Name:</label>
-        <input className="bg-black text-white" type="text" name="name" 
-        onChange={handleChange}
+        <input
+          className="bg-black text-white"
+          type="text"
+          name="name"
+          onChange={handleChange}
         />
         <br />
         <label htmlFor="password1">Password</label>
@@ -54,7 +71,9 @@ const SignUp: NextPage = () => {
           onChange={handleChange}
         />
         <br />
-        <button type="button" onClick={submitForm}>Submit</button>
+        <button type="button" onClick={submitForm}>
+          Submit
+        </button>
       </form>
     </>
   );

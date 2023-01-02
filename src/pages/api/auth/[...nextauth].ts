@@ -1,20 +1,21 @@
-import NextAuth, { type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import NextAuth, { type NextAuthOptions } from 'next-auth';
+import DiscordProvider from 'next-auth/providers/discord';
 // Prisma adapter for NextAuth, optional and can be removed
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { env } from "../../../env/server.mjs";
-import { prisma } from "../../../server/db/client";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { User, Session, Account, Prisma } from "@prisma/client";
-import { generateTokens, hashToken } from "./jwt";
-import GitHubProvider from "next-auth/providers/github";
-
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { env } from '../../../env/server.mjs';
+import { prisma } from '../../../server/db/client';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { User, Session, Account, Prisma } from '@prisma/client';
+import { generateTokens, hashToken, expiresAt } from './jwt';
+import { randomBytes, randomUUID } from 'crypto';
+import jwt from 'jsonwebtoken';
+import { Secret } from 'next-auth/jwt/types.js';
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
 
   pages: {
-    //signIn: "/login"
+    signIn: '/login',
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
@@ -26,48 +27,59 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       //type: "credentials",
       //id: "domain-login",
-      name: "Credentials",
-      async authorize(credentials: any, req: any) {
+
+      name: 'Credentials',
+      async authorize(
+        credentials: Record<'email' | 'password', string> | undefined,
+      ) {
         const payload = {
-          email: credentials.email,
-          password: credentials.password, //|| "no password",
+          email: credentials?.email,
+          password: credentials?.password,
         };
 
         const user: User = (await prisma.user.findUnique({
           where: { email: payload.email },
         })) as User;
 
-        if (user.password == hashToken(payload.password)) {
+        if (
+          user.password == hashToken(payload.password as string) &&
+          user.emailVerified
+        ) {
           return user;
         } else {
           return null;
         }
       },
       credentials: {
-        email: { label: "E-mail", type: "text " },
-        password: { label: "Password", type: "password" },
+        email: { label: 'E-mail', type: 'text ' },
+        password: { label: 'Password', type: 'password' },
       },
     }),
   ],
   callbacks: {
     async session({ session, token }) {
       if (session.user) {
+        console.log(token);
+        const st = (): string => {
+          return randomUUID?.() ?? randomBytes(32).toString('hex');
+        };
         session.user.id = token.sub as string;
         const s: Prisma.BatchPayload = await prisma.session.updateMany({
           where: { userId: token.sub },
           data: {
-            sessionToken: hashToken(token.jti),
+            sessionToken: st(),
+            expires: new Date(Number(token.exp) * 1000),
           },
         });
-        const tokens = generateTokens(
-          token.email as string,
-          token.jti as string
-        );
+        const tokens = generateTokens(token);
+
         const a: Prisma.BatchPayload = await prisma.account.updateMany({
           where: { userId: token.sub },
           data: {
             access_token: tokens.accessToken,
             refresh_token: tokens.refreshToken,
+            expires_at: expiresAt(tokens.accessToken),
+            id_token: token.jti as string,
           },
         });
         console.log(a, s);
@@ -75,10 +87,10 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === 'development',
   session: {
     // Set to jwt in order to CredentialsProvider works properly
-    strategy: "jwt",
+    strategy: 'jwt',
   },
 };
 
