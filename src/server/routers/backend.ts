@@ -6,7 +6,7 @@ import { Secret } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
 import { sendEmailVerificationToken } from './mail';
 import { expiresAt } from '../../pages/api/auth/jwt';
-import { prisma } from '../prisma';
+import { prisma } from '.././db/client';
 
 export const exampleRouter = router({
   races: publicProcedure
