@@ -8,7 +8,6 @@ const subject = new Subject<string>();
 const chatMsg = new Subject<string>();
 const online = new Subject<string>();
 
-
 export const wsRouter = router({
   sub: protectedProcedure.subscription(() => {
     console.log('subscribed');

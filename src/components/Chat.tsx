@@ -39,7 +39,6 @@ export const Chat: NextPage = () => {
     },
   });
 
-
   return (
     <>
       <div>
