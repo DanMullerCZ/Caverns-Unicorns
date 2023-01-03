@@ -1,9 +1,14 @@
-<<<<<<< HEAD:src/server/trpc/router/backend.ts
-import { z } from "zod";
-import { router, publicProcedure } from "../trpc";
+import { z } from 'zod';
+import { router, publicProcedure } from '../trpc';
+import { generateTokens, hashToken } from '../../pages/api/auth/jwt';
+import { User, Account, Session } from '@prisma/client';
+import { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import { sendEmailVerificationToken } from './mail';
+import { expiresAt } from '../../pages/api/auth/jwt';
+import { prisma } from '../prisma';
 
 export const exampleRouter = router({
-
   races: publicProcedure.input(z.object({ 'name': z.string() }))
     .mutation(async (input) => {
       if (input.input.name.length == 0) { throw new Error('All fields are required.') }
@@ -52,51 +57,6 @@ export const exampleRouter = router({
       await prisma?.race.create({ data: response })
       return response
     }),
-
-
-  registration: publicProcedure.input(z.object({ 'username': z.string(), 'password': z.string() }))
-    .mutation(async (input) => {
-      const check = await prisma?.login.findFirst({
-        where: { username: input.input.username }
-      })
-      if (input.input.username.length == 0 || input.input.password.length == 0) { throw new Error('All fields are required.') }
-      if (check) { throw new Error('Username is already taken, choose another one.') }
-      if (input.input.password.length < 8) { throw new Error('Password must be 8 characters.') }
-      const res = await prisma?.login.create({ data: input.input })
-      const result = JSON.stringify(res)
-      console.log(result)
-      return result
-
-    }),
-
-
-=======
-import { z } from 'zod';
-import { router, publicProcedure } from '../trpc';
-import { generateTokens, hashToken } from '../../pages/api/auth/jwt';
-import { User, Account, Session } from '@prisma/client';
-import { Secret } from 'jsonwebtoken';
-import jwt from 'jsonwebtoken';
-import { sendEmailVerificationToken } from './mail';
-import { expiresAt } from '../../pages/api/auth/jwt';
-import { prisma } from '../prisma';
-
-export const exampleRouter = router({
-  races: publicProcedure
-    .input(z.object({ name: z.string() }))
-    .mutation(async (input) => {
-      if (input.input.name.length == 0) {
-        throw new Error('All fields are required.');
-      }
-      const res = await fetch(`https://www.dnd5eapi.co/api/races/human`);
-      console.log(res);
-      if (!res) {
-        throw new Error('Invalid race name.');
-      }
-      const result = JSON.stringify(res);
-      return result;
-    }),
-
   registration: publicProcedure
     .input(
       z.object({ email: z.string(), password: z.string(), name: z.string() }),
@@ -191,5 +151,4 @@ export const exampleRouter = router({
         }
       }
     }),
->>>>>>> master:src/server/routers/backend.ts
 });

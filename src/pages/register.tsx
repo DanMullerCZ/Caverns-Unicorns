@@ -1,36 +1,82 @@
-import React from 'react'
-import { trpc } from "../utils/trpc";
-import { useEffect, useState } from "react";
-import Link from 'next/link';
+import { type NextPage } from 'next';
+import Head from 'next/head';
+import { useState } from 'react';
 
-const register = () => {
-  const [user, setUser] = useState({
-    username: '',
-    password: ''
-  })
-  const handleChange = (event: any) => {
-    setUser({ ...user, [event.target.name]: event.target.value })
-  }
-  const creation = trpc.backend.registration.useMutation()
-  const createUser =  () => {
-        creation.mutate(user)
-        }
-        
-  if (creation.isSuccess) {
-     window.location.href='/login'
+//import { signIn, signOut, useSession } from "next-auth/react";
+
+import { trpc } from '../utils/trpc';
+
+const SignUp: NextPage = () => {
+  const creation = trpc.backend.registration.useMutation();
+  const [formData, setFormData] = useState({
+    email: '',
+    password1: '',
+    password2: '',
+    name: '',
+  });
+  const handleChange = (ev: React.FormEvent<EventTarget>) => {
+    const target: HTMLInputElement = ev.target as HTMLInputElement;
+    setFormData({ ...formData, [target.name]: target.value });
+  };
+  const submitForm = async () => {
+    console.log(formData.password1, '--', formData.password2);
+
+    if (formData.password1 == formData.password2) {
+      creation.mutate({
+        email: formData.email,
+        password: formData.password1,
+        name: formData.name,
+      });
+      console.log(formData, 'has been sent');
+    } else {
+      console.log('Passwords dont match');
     }
-  
+  };
+
   return (
     <>
-     <form className="grid grid-rows-3 gap-1" >
-          <input className="border border-solid border-black" onChange={handleChange} type="text" name="username" id="username" />
-          <input className="border border-solid border-black" onChange={handleChange} type="password" name="password" id="password" />
-          <button type="button" onClick={createUser} className="bg-red-400 border-gray-900">Registrate</button>
-          {creation.error && <p className='bg-red-400'>{creation.error.message}</p>}
-          <Link href='/'>{'<-'}</Link>
-        </form> 
+      <Head>
+        <title>Register</title>
+      </Head>
+      <form>
+        <label htmlFor="email">Email:</label>
+        <input
+          className="bg-black text-white"
+          type="email"
+          name="email"
+          onChange={handleChange}
+        />
+        <br />
+        <label htmlFor="name">Name:</label>
+        <input
+          className="bg-black text-white"
+          type="text"
+          name="name"
+          onChange={handleChange}
+        />
+        <br />
+        <label htmlFor="password1">Password</label>
+        <input
+          className="bg-black text-white"
+          type="password"
+          name="password1"
+          onChange={handleChange}
+        />
+        <br />
+        <label htmlFor="password1">Confirm password:</label>
+        <input
+          className="bg-black text-white"
+          type="password"
+          name="password2"
+          onChange={handleChange}
+        />
+        <br />
+        <button type="button" onClick={submitForm}>
+          Submit
+        </button>
+      </form>
     </>
-  )
-}
+  );
+};
 
-export default register
+export default SignUp;
