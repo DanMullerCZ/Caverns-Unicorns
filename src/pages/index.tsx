@@ -39,7 +39,7 @@ const AuthShowcase: React.FC = () => {
     'This is the subscription field',
   );
   trpc.wsRouter.sub.useSubscription(undefined, {
-    onData(data) {
+    onData(data: any) {
       setMessage(data);
     },
   });
