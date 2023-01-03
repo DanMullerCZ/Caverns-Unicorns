@@ -56,7 +56,7 @@ model Characters {
   name     String? @db.VarChar(20)
   race_id  Int?
   class_id Int?
-  owner_id Int?
+  owner_id String? @db.VarChar(50)
 }
 
 model Class {
