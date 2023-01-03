@@ -7,7 +7,7 @@ import {
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { fromEvent } from 'rxjs';
-import Image from 'next/image'
+import Image from 'next/image';
 
 const Signin = () => {
   const router = useRouter();
@@ -39,13 +39,12 @@ const Signin = () => {
                 Password
               </label>
               <input
-                className="w-96 rounded-md border border-slate-400 px-3 py-2 bg-[url('/img/hero-pattern.svg')]"
+                className="w-96 rounded-md border border-slate-400 bg-[url('/img/hero-pattern.svg')] px-3 py-2"
                 onChange={handleChange}
                 type="password"
                 name="password"
                 id="password"
               />
-
             </div>
 
             <p className="text-right">
@@ -77,8 +76,8 @@ const Signin = () => {
             </button>
             <div className="flex justify-around">
               <button
-                className="border border-solid px-4 py-2 rounded-md bg-white-600 text-black
-            duration-300 ease-in hover:bg-gray-100 hover:drop-shadow-md" 
+                className="bg-white-600 rounded-md border border-solid px-4 py-2 text-black
+            duration-300 ease-in hover:bg-gray-100 hover:drop-shadow-md"
                 onClick={() => {
                   signIn('discord', { callbackUrl: process.env.HOST });
                 }}
@@ -86,8 +85,8 @@ const Signin = () => {
                 Login with discord
               </button>
               <button
-                className="border border-solid px-4 py-2 rounded-md bg-white-600 text-black
-                duration-300 ease-in hover:bg-gray-100 hover:drop-shadow-md"  
+                className="bg-white-600 rounded-md border border-solid px-4 py-2 text-black
+                duration-300 ease-in hover:bg-gray-100 hover:drop-shadow-md"
                 onClick={() => {
                   signIn('discord', { callbackUrl: process.env.HOST });
                 }}
