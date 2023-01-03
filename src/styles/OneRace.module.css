@@ -1,0 +1,14 @@
+.hidden{
+    display: none;
+}
+.container{
+    padding: 10px;
+    border: 1px;
+    border-style: solid;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: grid;
+    justify-items: center;
+    border-radius: 50px;
+}
