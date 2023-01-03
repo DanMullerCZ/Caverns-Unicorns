@@ -3,7 +3,7 @@ import { type NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/react';
-
+import { Chat } from 'components/Chat';
 import { trpc } from '../utils/trpc';
 import { useState } from 'react';
 
@@ -74,6 +74,7 @@ const AuthShowcase: React.FC = () => {
         onChange={handleChange}
         className="border-4 border-black"
       />
+      <Chat />
     </div>
   );
 };
