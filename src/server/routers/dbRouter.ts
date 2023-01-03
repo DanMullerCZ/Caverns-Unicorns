@@ -1,11 +1,11 @@
-import { router, publicProcedure, protectedProcedure } from '../trpc';
+import { router, publicProcedure } from '../trpc';
 import { prisma } from '../db/client'
 import { z } from 'zod';
 
 export const dbRouter = router({
     getRace: publicProcedure
-        .input(z.string)
-        .query(async (input: any) => {
+        .input(z.string())
+        .query(async ({ input }) => {
             const race = await prisma.race.findFirst({
                 where: {
                     name: input
