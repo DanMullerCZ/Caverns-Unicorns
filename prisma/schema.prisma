@@ -26,7 +26,7 @@ model Account {
 
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   
+  sessionToken String
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -54,15 +54,19 @@ model VerificationToken {
 model Characters {
   id       Int     @id @default(autoincrement())
   name     String? @db.VarChar(20)
-  race_id  Int?
-  class_id Int?
+  race_id  Int
+  class_id Int
   owner_id String? @db.VarChar(50)
+  race              Race    @relation(fields: [race_id], references: [id], onDelete: Cascade)
+  class              Class    @relation(fields: [class_id], references: [id], onDelete: Cascade)
+
 }
 
 model Class {
   name        String
   id          Int     @id @default(autoincrement())
   description String? @db.VarChar(255)
+  character Characters[]
 }
 
 model Login {
@@ -81,4 +85,5 @@ model Race {
   int         Int?
   wis         Int?
   char        Int?
+  character Characters[]
 }
