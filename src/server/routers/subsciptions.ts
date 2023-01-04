@@ -44,9 +44,6 @@ export const wsRouter = router({
   imOnline: protectedProcedure.mutation(async ({ ctx }) => {
     online.next(ctx.session.user.name as string);
   }),
-  imOffline: protectedProcedure.mutation(async ({ ctx }) => {
-    console.log(ctx.session.user.name + 'is offline');
-  }),
 
   onlinePlayers: protectedProcedure.subscription(() => {
     return observable<string>((emit) => {

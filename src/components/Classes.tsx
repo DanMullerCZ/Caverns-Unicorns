@@ -1,19 +1,22 @@
-import React from 'react'
-import styles from '../styles/Classes.module.css'
-import OneClass from './OneClass'
+import { Class } from '@prisma/client';
+import React from 'react';
+import styles from '../styles/Classes.module.css';
+import OneClass from './OneClass';
 
-
-const Classes = ({classes}:{classes:any}) => {
-   return (
+const Classes = ({ classes }: { classes: Class[] }) => {
+  return (
     <>
-        <div className={styles.container}>
-
-        {classes.map(e=>(<OneClass key={e.id} desc={e.description} name={e.name}>{e.name}</OneClass>))}
-        </div>
-    
-    
+      <div className={styles.container}>
+        {classes.map((e: any) => (
+          <>
+            <OneClass key={e.id} desc={e.description} name={e.name}>
+              {e.name}
+            </OneClass>
+          </>
+        ))}
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default Classes
+export default Classes;

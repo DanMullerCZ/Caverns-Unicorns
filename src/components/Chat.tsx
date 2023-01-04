@@ -10,7 +10,7 @@ import { useRef } from 'react';
 export const Chat: NextPage = () => {
   const inputElement = useRef<HTMLInputElement>(null);
   const [messages, setMessages] = useState<string[]>([]);
-  const [players, setPlayers] = useState(new Set<string>());
+  const [players, setPlayers] = useState<{ [k: string]: number }>({});
   const messenger = trpc.wsRouter.sendMessage.useMutation();
   const [message, setMessage] = useState<string>('');
   trpc.wsRouter.recieveMessage.useSubscription(undefined, {
@@ -22,19 +22,39 @@ export const Chat: NextPage = () => {
   });
   const online = trpc.wsRouter.imOnline.useMutation();
   useEffect(() => {
-    const interval = setInterval(() => {
+    const onlineCheck = setInterval(() => {
       online.mutate();
-    }, 10000);
+      setPlayers((prev) => {
+        for (const p in prev) {
+          prev[p] = prev[p] + 5;
+        }
+        return prev;
+      });
+    }, 5000);
+
+    const usersCheck = setInterval(() => {
+      console.log(players);
+
+      setPlayers((prev) => {
+        for (const p in prev) {
+          if (prev[p] > 15) {
+            delete prev[p];
+          }
+        }
+        return prev;
+      });
+    }, 20000);
+    online.mutate();
     return () => {
-      clearInterval(interval);
-      trpc.wsRouter.imOffline.useMutation();
+      clearInterval(onlineCheck);
+      clearInterval(usersCheck);
     };
   }, []);
-  trpc.wsRouter.onlinePlayers.useSubscription(undefined, {
+
+  const t = trpc.wsRouter.onlinePlayers.useSubscription(undefined, {
     onData(data) {
-      setPlayers((prev: Set<string>) => {
-        const string: string[] = [...Array.from(prev), data];
-        return new Set<string>(string);
+      setPlayers((prev) => {
+        return { ...prev, [data]: 0 };
       });
     },
   });
@@ -42,10 +62,10 @@ export const Chat: NextPage = () => {
   return (
     <>
       <div>
-        {Array.from(players).map((p, index: number) => (
-          // eslint-disable-next-line react/jsx-key
-          <p key={index}>{p}</p>
-        ))}
+        Online Players:
+        {Object.keys(players).map((key, index) => {
+          return <div key={index}>{key}</div>;
+        })}
       </div>
       <div>
         {messages.map((m, index: number) => (
@@ -55,6 +75,7 @@ export const Chat: NextPage = () => {
       </div>
       <input
         type="text"
+        className="border-8"
         ref={inputElement}
         onChange={(ev: React.FormEvent<EventTarget>) => {
           const target: HTMLInputElement = ev.target as HTMLInputElement;

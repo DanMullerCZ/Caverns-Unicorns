@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { trpc } from '../utils/trpc';
 import Link from 'next/link';
 import Races from 'components/Races';
 
 const races = ({ response }: { response: any }) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [race, setRace] = useState('');
   const handleChange = (event: any) => {
     setRace(event.target.value);
