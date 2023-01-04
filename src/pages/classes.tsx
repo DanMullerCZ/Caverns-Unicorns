@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import Classes from 'components/Classes'
+import { Class } from '@prisma/client'
 
 const classes =  ({response}:{response:any}) => {
     
@@ -16,11 +17,11 @@ const classes =  ({response}:{response:any}) => {
 
 export default classes
  export const getStaticProps = async () => {
-  const res =  await prisma!.class.findMany({
+  const res:Class[] =  await prisma!.class.findMany({
     orderBy: {
       name: 'asc',
     },
-  })
+  }) as Class[]
   return {
     props:{response:res}
   }

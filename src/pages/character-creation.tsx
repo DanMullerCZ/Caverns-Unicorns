@@ -4,6 +4,7 @@ import Races from 'components/Races'
 import styles from '../styles/character-creation.module.css'
 import { trpc } from 'utils/trpc'
 import { useSession } from 'next-auth/react';
+import { Class, Race } from '@prisma/client'
 
 const createNewChar = ({ ...props }) => {
     const sessionData = useSession()
@@ -79,16 +80,16 @@ const createNewChar = ({ ...props }) => {
 }
 
 export const getStaticProps = async () => {
-    const races = await prisma?.race.findMany({
+    const races:Race[] = await prisma?.race.findMany({
         orderBy: {
             name: 'asc',
         },
-    });
-    const classes = await prisma?.class.findMany({
+    }) as Race[];
+    const classes:Class[] = await prisma?.class.findMany({
         orderBy: {
             name: 'asc',
         },
-    })
+    }) as Class[]
     return {
         props: { races: races, classes: classes }
     }
