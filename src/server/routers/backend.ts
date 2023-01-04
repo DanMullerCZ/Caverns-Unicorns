@@ -9,6 +9,42 @@ import { expiresAt } from '../../pages/api/auth/jwt';
 import { prisma } from '../prisma';
 
 export const exampleRouter = router({
+  addChar: publicProcedure
+    .input(z.object({ class: z.string(), race: z.string(), user_id: z.string(), name: z.string().nullish() }))
+    .mutation(async (input) => {
+      if (!input.input.name){
+        throw new Error('Name required.');
+      }
+      const check = await prisma.characters.findFirst({where:{name:input.input.name}})
+      if (check){
+        throw new Error('Name already taken.');
+      }
+      const class_id = await prisma.class.findFirst({
+        where: {
+          name: input.input.class
+        },
+        select: {
+          id: true
+        }
+      })
+      const race_id = await prisma.race.findFirst({
+        where: {
+          name: input.input.race
+        },
+        select: {
+          id: true
+        }
+      })
+      
+      if (!race_id || !class_id) return 'error'
+      await prisma.characters.create({data:{
+        name:input.input.name,
+        race_id:race_id.id,
+        class_id:class_id.id,
+        owner_id:input.input.user_id
+      }})
+      return 'ok'
+    }),
   races: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async (input) => {
@@ -109,11 +145,10 @@ export const exampleRouter = router({
       const message = `Token expires in ${tokenExpiration}, at  ${timeOfExpiration.toLocaleTimeString(
         'Cs-cz',
       )}
-      ${
-        (process.env.HOST +
+      ${(process.env.HOST +
           '/veryfiEmail?token=' +
           account.access_token) as string
-      }
+        }
       `;
       sendEmailVerificationToken(
         user.email as string,
