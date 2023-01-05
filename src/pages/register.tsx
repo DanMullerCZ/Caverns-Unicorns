@@ -75,6 +75,7 @@ const SignUp: NextPage = () => {
           Submit
         </button>
       </form>
+      <p test-id='response'>{creation.data ?? creation.data}</p>
     </>
   );
 };
