@@ -6,7 +6,7 @@ module.exports = {
       fontFamily: {
         'grand-hotel': ['"Grand Hotel"', 'san-serif'],
       },
-    },
+    }
   },
   plugins: [],
 };

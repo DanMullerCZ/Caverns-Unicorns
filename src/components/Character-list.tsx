@@ -1,52 +1,77 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image'
+import Image from 'next/image';
+import styles from '../styles/Character-list.module.css';
 
 const Characters = ({ characters }: { characters: any }) => {
   const [hero, setHero] = React.useState({
-    name: characters[0].name ,
+    name: characters[0].name,
     race: characters[0].race.name,
-    class: characters[0].class.name
-  })
+    class: characters[0].class.name,
+  });
 
   const handleClick = (name: string, race: string, nameOfClass: string) => {
-    setHero(hero => ({
+    setHero((hero) => ({
       name: name,
       race: race,
-      class: nameOfClass
-    })
-  )};
+      class: nameOfClass,
+    }));
+  };
 
   return (
     <>
       <section className="">
-        <div className="w-screen h-screen grid grid-cols-4 grid-rows-4 ">
-          <div>
-            <p>{hero.name}</p>
-            <p>{hero.race}</p>
-            <p>{hero.class}</p>
+        <div className={styles.container}>
+          <div className={styles.heroDisplay}>
+            <Image
+                className="rounded-lg"
+                src={`/${hero.class}.png`}
+                alt={`${hero.class}`}
+                width={200}
+                height={200}
+              />
+            <div className="">
+              <p className="text-2xl">{hero.name}</p>
+              <p>
+                  <span className="text-gray-400">
+                    {hero.race} {hero.class}
+                  </span>
+              </p>
+              
+            </div>
           </div>
-          <div className="col-start-4 col-end-5">
-            {characters.map((e) => (
-              <div
-                onClick={() => handleClick(e.name, e.race.name, e.class.name)}
-                className="cursor-pointer rounded-xl bg-white p-4 drop-shadow"
-                key={e.id}
-              >
+          <Link className={styles.startGameButton} href="/character-creation">
+            <button
+              className="w-full rounded-md bg-blue-600 px-10 py-4 text-white
+                duration-300 ease-in hover:bg-blue-500 hover:drop-shadow-md"
+            >
+              Start the Game
+            </button>
+          </Link>
+          {characters.map((e) => (
+            <div
+              onClick={() => handleClick(e.name, e.race.name, e.class.name)}
+              className="flex justify-around items-center col-start-4 col-end-5 row-span-1 cursor-pointer rounded-xl bg-white p-4 drop-shadow"
+              key={e.id}
+            >
+              <div>
                 <p className="text-2xl">{e.name}</p>
                 <p>
                   <span className="text-gray-400">
                     {e.race.name} {e.class.name}
                   </span>
-                  <Image src={`/iconsClasses/${e.class.name}-icon.jpeg`} alt="dfa" width={15} height={15} />
                 </p>
               </div>
-            ))}
-          </div>
-          <Link
-            className="col-start-4 col-end-5 row-start-4 row-end-5 pb-8"
-            href="/character-creation"
-          >
+              <Image
+                className="w-8 h-8 rounded-lg"
+                src={`/iconsClasses/${e.class.name}-icon.jpeg`}
+                alt={`${e.class.name}`}
+                width={15}
+                height={15}
+              />
+            </div>
+          ))}
+          <Link className={styles.createButton} href="/character-creation">
             <button
               className="w-full rounded-md bg-blue-600 px-10 py-4 text-white
                 duration-300 ease-in hover:bg-blue-500 hover:drop-shadow-md"
