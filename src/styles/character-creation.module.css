@@ -1,0 +1,13 @@
+.container{
+    width: 80vw;
+    height: 95vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+}
+.container div{
+    border: solid;
+    width: 30vw;
+    height: 48vh;
+    }
