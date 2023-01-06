@@ -1,6 +1,6 @@
-import { router } from "../trpc";
-import { authRouter } from "./auth";
-import { exampleRouter } from "./backend";
+import { router } from '../trpc';
+import { authRouter } from './auth';
+import { exampleRouter } from './backend';
 
 export const appRouter = router({
   backend: exampleRouter,

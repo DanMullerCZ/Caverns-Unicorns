@@ -14,6 +14,7 @@ const config: PlaywrightTestConfig = {
     ...devices['Desktop Chrome'],
     baseURL: baseUrl,
     headless: opts.headless,
+    testIdAttribute: 'test-id',
   },
 };
 
