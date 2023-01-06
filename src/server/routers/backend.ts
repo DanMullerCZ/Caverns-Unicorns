@@ -10,7 +10,7 @@ import { prisma } from '.././db/client';
 
 export const exampleRouter = router({
   addChar: publicProcedure
-    .input(z.object({ class: z.string(), race: z.string(), user_id: z.string(), name: z.string().nullish() }))
+    .input(z.object({ class: z.string(), race: z.string(), user_id: z.string(), name: z.string() }))
     .mutation(async (input) => {
       if (!input.input.name){
         throw new Error('Name required.');
@@ -36,7 +36,8 @@ export const exampleRouter = router({
         }
       })
       
-      if (!race_id || !class_id) return 'error'
+      if (!race_id) return 'Race not found.'
+      if (!class_id) return 'Class not found.'
       await prisma.characters.create({data:{
         name:input.input.name,
         race_id:race_id.id,

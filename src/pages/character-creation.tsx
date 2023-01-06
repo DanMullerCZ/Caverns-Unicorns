@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Classes from 'components/Classes'
-import Races from 'components/Races'
+import ClassList from 'components/ClassList'
+import RaceList from 'components/RaceList'
 import styles from '../styles/character-creation.module.css'
 import { trpc } from 'utils/trpc'
 import { useSession } from 'next-auth/react';
@@ -54,13 +54,13 @@ const createNewChar = ({ ...props }) => {
                 {(!character.race && props.races) && (
                     <div>
                         <h1>SELECT RACE</h1>
-                        <Races setRace={setRace} creation={true} races={props.races} />
+                        <RaceList setRace={setRace} creation={true} races={props.races} />
                     </div>
                 )}
                 {(!character.class && character.race && props.classes) && (
                     <div>
                         <h1>SELECT CLASS</h1>
-                        <Classes creation={true} setClass={setClass} classes={props.classes} />
+                        <ClassList creation={true} setClass={setClass} classes={props.classes} />
                     </div>
                 )}
             </div>)}

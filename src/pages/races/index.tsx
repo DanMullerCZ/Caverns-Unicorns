@@ -1,5 +1,5 @@
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
-import Races from 'components/Races';
+import RaceList from 'components/RaceList';
 import { GetStaticPropsContext } from 'next';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
@@ -37,7 +37,7 @@ export default function GetAllRaces() {
     <>
         {/* <p>Data status: {data.status}</p> */}
         {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
-        <div>{data.data && <Races races={data.data} />}</div>
+        <div>{data.data && <RaceList races={data.data} />}</div>
     </>
   );
 }

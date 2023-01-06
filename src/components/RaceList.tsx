@@ -1,12 +1,12 @@
 import React from 'react'
-import OneRace from './OneRace'
+import RaceDetail from './RaceDetail'
 import styles from '../styles/Races.module.css'
 import PropTypes from 'prop-types';
 import { Race } from '@prisma/client';
 
 
 
-const Races = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:Function,creation:boolean}) => {
+const RaceList = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:Function,creation:boolean}) => {
   const handleClick = (e:string)=>{
     setRace(e)
 }
@@ -15,21 +15,21 @@ const Races = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:Funct
     <>
         <div className={styles.container}>
 
-        {races.map((e:Race)=>(<OneRace key={e.id} creation={creation} click={handleClick} desc={e.description!} name={e.name}></OneRace>))}
+        {races.map((e:Race)=>(<RaceDetail key={e.id} creation={creation} click={handleClick} desc={e.description!} name={e.name}></RaceDetail>))}
         </div>
     
     
     </>
   )
 }
-Races.defaultProps = {
+RaceList.defaultProps = {
   setRace: () => {},
   creation:false
 };
 
-Races.propTypes = {
+RaceList.propTypes = {
   setRace: PropTypes.func,
   creation: PropTypes.bool
 };
 
-export default Races
+export default RaceList

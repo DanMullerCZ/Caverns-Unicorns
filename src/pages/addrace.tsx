@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { trpc } from '../utils/trpc';
 import Link from 'next/link';
-import Races from 'components/Races';
+import RaceList from 'components/RaceList';
 
 const races = ({ response }: { response: any }) => {
   const [race, setRace] = useState('');

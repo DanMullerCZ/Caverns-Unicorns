@@ -3,7 +3,7 @@ import React,{useEffect,useState} from 'react'
 import styles from '../styles/OneRace.module.css'
 
 
-const OneClass = ({name,desc,click,creation}:{name:string,desc:string,click:Function,creation:boolean}) => {
+const ClassDetail = ({name,desc,click,creation}:{name:string,desc:string,click:Function,creation:boolean}) => {
   const handleClick = () => {
     click(name)
   }
@@ -21,4 +21,4 @@ const OneClass = ({name,desc,click,creation}:{name:string,desc:string,click:Func
   )
 }
 
-export default OneClass
+export default ClassDetail
