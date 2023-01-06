@@ -1,10 +1,10 @@
-import React from 'react';
+import { useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '../styles/Character-list.module.css';
 
 const Characters = ({ characters }: { characters: any }) => {
-  const [hero, setHero] = React.useState({
+  const [hero, setHero] = useState({
     name: characters[0].name,
     race: characters[0].race.name,
     class: characters[0].class.name,

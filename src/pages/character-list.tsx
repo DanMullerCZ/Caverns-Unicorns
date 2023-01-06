@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Characters from 'components/Character-list';
 import { getSession } from 'next-auth/react';
