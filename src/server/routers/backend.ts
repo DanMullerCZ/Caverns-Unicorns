@@ -9,6 +9,43 @@ import { expiresAt } from '../../pages/api/auth/jwt';
 import { prisma } from '.././db/client';
 
 export const exampleRouter = router({
+  addChar: publicProcedure
+    .input(z.object({ class: z.string(), race: z.string(), user_id: z.string(), name: z.string() }))
+    .mutation(async (input) => {
+      if (!input.input.name){
+        throw new Error('Name required.');
+      }
+      const check = await prisma.characters.findFirst({where:{name:input.input.name}})
+      if (check){
+        throw new Error('Name already taken.');
+      }
+      const class_id = await prisma.class.findFirst({
+        where: {
+          name: input.input.class
+        },
+        select: {
+          id: true
+        }
+      })
+      const race_id = await prisma.race.findFirst({
+        where: {
+          name: input.input.race
+        },
+        select: {
+          id: true
+        }
+      })
+      
+      if (!race_id) return 'Race not found.'
+      if (!class_id) return 'Class not found.'
+      await prisma.characters.create({data:{
+        name:input.input.name,
+        race_id:race_id.id,
+        class_id:class_id.id,
+        owner_id:input.input.user_id
+      }})
+      return 'ok'
+    }),
   races: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async (input: any) => {
