@@ -110,52 +110,61 @@ export const exampleRouter = router({
       z.object({ email: z.string(), password: z.string(), name: z.string() }),
     )
     .mutation(async (input: any) => {
-      console.log('registration endpoint');
+      try {
+        console.log('registration endpoint');
 
-      const date = new Date();
+        const date = new Date();
 
-      date.setDate(date.getSeconds() + 30);
-      const user: User = (await prisma?.user.create({
-        data: {
-          email: input.input.email,
-          password: hashToken(input.input.password),
-          name: input.input.name,
-        },
-      })) as User;
-      const timeOfExpiration = new Date();
-      const tokenExpiration = '5min'; // set also one line below
-      timeOfExpiration.setMinutes(timeOfExpiration.getMinutes() + 5);
-      const account: Account = (await prisma?.account.create({
-        data: {
-          userId: user.id,
-          type: 'normal',
-          provider: 'Credentials',
-          providerAccountId: 'not important',
-          access_token: jwt.sign(
-            { email: user.email },
-            process.env.JWT_ACCESS_SECRET as Secret,
-            {
-              expiresIn: tokenExpiration,
-            },
-          ),
-        },
-      })) as Account;
-      const session: Session = (await prisma?.session.create({
-        data: { expires: date, userId: user.id, sessionToken: '-' },
-      })) as Session;
-      const message = `Token expires in ${tokenExpiration}, at  ${timeOfExpiration.toLocaleTimeString(
-        'Cs-cz',
-      )}
-      ${(process.env.HOST +
-          '/veryfiEmail?token=' +
-          account.access_token) as string
+        date.setDate(date.getSeconds() + 30);
+        const user: User = (await prisma?.user.create({
+          data: {
+            email: input.input.email,
+            password: hashToken(input.input.password),
+            name: input.input.name,
+          },
+        })) as User;
+        const timeOfExpiration = new Date();
+        const tokenExpiration = '10min'; // set also one line below
+        timeOfExpiration.setMinutes(timeOfExpiration.getMinutes() + 10);
+        const account: Account = (await prisma?.account.create({
+          data: {
+            userId: user.id,
+            type: 'normal',
+            provider: 'Credentials',
+            providerAccountId: 'not important',
+            access_token: jwt.sign(
+              { email: user.email },
+              process.env.JWT_ACCESS_SECRET as Secret,
+              {
+                expiresIn: tokenExpiration,
+              },
+            ),
+          },
+        })) as Account;
+        const session: Session = (await prisma?.session.create({
+          data: { expires: date, userId: user.id, sessionToken: '-' },
+        })) as Session;
+        const message = `Token expires in ${tokenExpiration}, at  ${timeOfExpiration.toLocaleTimeString(
+          'Cs-cz',
+        )}
+        ${
+          (process.env.HOST +
+            '/veryfiEmail?token=' +
+            account.access_token) as string
         }
-      `;
-      sendEmailVerificationToken(
-        user.email as string,
-        'Verify your account',
-        message,
-      );
+        `;
+        sendEmailVerificationToken(
+          user.email as string,
+          'Verify your account',
+          message,
+        );
+        if (session) {
+          return 'all good'
+        }
+      } catch (error: any) {
+        return 'error'
+      }
+      
     }),
 
   veryfiEmail: publicProcedure
