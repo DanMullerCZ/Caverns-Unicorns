@@ -8,6 +8,8 @@ import {
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
+import RaceDetail from 'components/RaceDetail';
+import Image from 'next/image';
 
 export async function getStaticProps(
     context: GetStaticPropsContext<{ race: string }>,
@@ -68,6 +70,12 @@ export default function GetRace(
     </ul> */}
         <p>Data status: {data.status}</p>
         <pre>{data.data ? JSON.stringify(data.data, null, 4) : 'No such race in Caverns & Unicorns'}</pre>
+        {data.data &&(
+          <>
+            <h1>{data.data.name}</h1>
+            <Image src={`/${data.data.name.toLowerCase()}.png`} alt={data.data.name} width={150} height={150}/>
+          </>
+        )}
     </>
   );
 
