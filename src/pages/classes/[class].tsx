@@ -20,7 +20,7 @@ export const getStaticProps = async(context: GetStaticPropsContext<{ class: stri
           },})
     
         return {
-            props : {classDetail:classDetail,cntx:nameOfClass}
+            props : {classDetail:classDetail}
         }
 }
 
