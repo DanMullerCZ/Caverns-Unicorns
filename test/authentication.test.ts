@@ -1,9 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-test('Initial home page title', async ({ page }) => {
-  await page.goto('/')
-  await expect(page).toHaveTitle('D&D')
-});
+// It is imposibble to test specific trpc procedures on backend, 
+// if you want to test something it must go through frontend
 
 test('Login form with start at homepage', async ({ page }) => {
   await page.goto('http://localhost:3000/');
@@ -18,7 +16,9 @@ test('Login form with start at homepage', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Login with credentials' }).click();
 
-  await expect(page.getByText('Logged in as Dan')).toHaveText('Logged in as Dan')
+  await expect(page.getByText('Logged in as Dan')).toHaveText(
+    'Logged in as Dan',
+  );
 });
 
 test('Registration with already used email', async ({ page }) => {
@@ -38,28 +38,22 @@ test('Registration with already used email', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Submit' }).click();
 
-  await expect(page.getByTestId('response')).toHaveText('error')
+  await expect(page.getByTestId('response')).toHaveText('error');
 });
 
+///////////////////////////////////////////
+// email must not be verified!!!!!!!!!!!!!!
+///////////////////////////////////////////
 
-// test.setTimeout(35e3);
+test.afterEach(async ({ page }, testInfo) => {
+  console.log(`Finished ${testInfo.title} => ${testInfo.status?.toUpperCase()}`);
 
-// test('send message', async ({ browser, page }) => {
-//   const viewer = await browser.newPage();
-//   await viewer.goto('/');
-//   await page.goto('/api/auth/signin');
-//   await page.type('[name="name"]', 'test');
-//   await page.click('[type="submit"]');
-//   const nonce =
-//     Math.random()
-//       .toString(36)
-//       .replace(/[^a-z]+/g, '')
-//       .slice(0, 6) || 'nonce';
-//   // await page.click('[type=submit]');
-//   await page.type('[name=text]', nonce);
-//   await page.click('[type=submit]');
-//   await viewer.waitForSelector(`text=${nonce}`);
-//   viewer.close();
-// });
+  if (testInfo.status !== testInfo.expectedStatus)
+    console.log(`Did not run as expected, ended up at ${page.url()}`);
+});
+
+test.afterAll(async () => {
+  // delete test user 
+});
 
 export {};

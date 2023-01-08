@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
         })) as User;
 
         if (
-          user.password == hashToken(payload.password as string) &&
+          user.password == hashToken(payload.password as string) && 
           user.emailVerified
         ) {
           return user;

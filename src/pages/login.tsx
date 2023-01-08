@@ -63,7 +63,7 @@ const Signin = () => {
                   (response) => {
                     if (response?.error) {
                       console.log(
-                        'Credentials were wrong or Email wasnt verified',
+                        'Credentials were wrong or Email wasnt verified', response
                       );
                     } else {
                       router.push(process.env.HOST || '/');
