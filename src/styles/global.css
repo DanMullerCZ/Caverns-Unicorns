@@ -26,11 +26,12 @@
 
 @keyframes glow {
   from {
-    text-shadow: 0 0 5px transparent, 0 0 2px rgb(241, 249, 242), 0 0 3px transparent, 0 0 4px #a38e25, 0 0 5px #dfd7ff, 0 0 6px #30d17e, 0 0 70px #ffffff;
+    text-shadow: 0 0 0px transparent, 0 0 30px transparent, 0 0 40px gold, 0 0 50px transparent, 0 0 6px transparent, 0 0 70px #e27777, 0 0 500px #000000;
   }
   
   to {
-    text-shadow: 0 0 0px transparent, 0 0 30px transparent, 0 0 40px gold, 0 0 50px transparent, 0 0 6px transparent, 0 0 70px #e27777, 0 0 500px #000000;
+    text-shadow: 0 0 5px transparent, 0 0 2px rgb(241, 249, 242), 0 0 3px transparent, 0 0 4px #a38e25, 0 0 5px #dfd7ff, 0 0 6px #30d17e, 0 0 70px #ffffff;
+    
   }
 }
 /* text texture */
