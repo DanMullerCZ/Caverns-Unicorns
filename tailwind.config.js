@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'grand-hotel': ['"Grand Hotel"', 'san-serif'],
+        'LOTR' : ["LOTR", 'sans-serif']
       },
     },
   },
