@@ -86,4 +86,6 @@ model Race {
   wis         Int?
   char        Int?
   character Characters[]
-}
+  }
+
+

@@ -6,6 +6,7 @@ import Link from 'next/link';
 //import { signIn, signOut, useSession } from "next-auth/react";
 
 import { trpc } from '../utils/trpc';
+import VideoBackground from 'components/VideoBackground';
 
 const Register: NextPage = () => {
   const creation = trpc.backend.registration.useMutation();
@@ -36,10 +37,12 @@ const Register: NextPage = () => {
 
   return (
     <>
+      <VideoBackground/>
       <Head>
         <title>Register</title>
       </Head>
       <div className="flex h-screen w-screen items-center justify-center">
+        
         <form className="space-y-5 rounded-xl bg-white p-10 drop-shadow-lg">
           <h1 className="text-center text-3xl">Registration</h1>
           <div className="flex flex-col space-y-2">
