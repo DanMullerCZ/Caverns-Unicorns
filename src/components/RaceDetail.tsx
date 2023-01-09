@@ -11,7 +11,7 @@ const RaceDetail = ({name,desc,click,creation}:{name:string,desc:string,click:Fu
   const mouseEnter = () => setMouseIn(true)
   const mouseLeave = () => setMouseIn(false)
   return (
-    <div className={styles.container} onClick={handleClick} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} style={{ backgroundImage: `url(/${name}.png)` }}>
+    <div test-id='race' className={styles.container} onClick={handleClick} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} style={{ backgroundImage: `url(/${name}.png)` }}>
         {!creation &&(<Link href={`/races/${name}`}>
                 <h2 >{name.toUpperCase()}</h2>
         </Link>)}

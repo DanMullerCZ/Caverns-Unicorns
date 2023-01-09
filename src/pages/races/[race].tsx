@@ -66,8 +66,8 @@ export default function GetRace(
       <li>Dexterity: {data?.dex}</li>
       <li>Intelligence: {data?.int}</li>
     </ul> */}
-        <p>Data status: {data.status}</p>
-        <pre>{data.data ? JSON.stringify(data.data, null, 4) : 'No such race in Caverns & Unicorns'}</pre>
+        <p test-id='race_detail_status'>Data status: {data.status}</p>
+        <pre test-id='race_detail'>{data.data ? JSON.stringify(data.data, null, 4) : 'No such race in Caverns & Unicorns'}</pre>
     </>
   );
 
