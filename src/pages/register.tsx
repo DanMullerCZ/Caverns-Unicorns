@@ -1,7 +1,6 @@
 import { type NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
-import Link from 'next/link';
 
 //import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -21,31 +20,36 @@ const Register: NextPage = () => {
     setFormData({ ...formData, [target.name]: target.value });
   };
   const submitForm = async () => {
-    console.log(formData.password1, '--', formData.password2);
-
     if (formData.password1 == formData.password2) {
       creation.mutate({
         email: formData.email,
         password: formData.password1,
         name: formData.name,
+        match: true,
       });
-      console.log(formData, 'has been sent');
     } else {
-      console.log('Passwords dont match');
+      creation.mutate({
+        email: formData.email,
+        password: formData.password1,
+        name: formData.name,
+        match: false,
+      });
     }
   };
 
   return (
     <>
-      <VideoBackground/>
+      <VideoBackground />
       <Head>
         <title>Register</title>
       </Head>
       <div className="flex h-screen w-screen items-center justify-center">
-        
         <form className="space-y-5 rounded-xl bg-white p-10 drop-shadow-lg">
           <h1 className="text-center text-3xl">Registration</h1>
           <div className="flex flex-col space-y-2">
+            <div test-id="registration-error-response" className="text-red-600 text-center text-lg">
+              {creation.data}
+            </div>
             <label className="text-sm font-light" htmlFor="email">
               Email:
             </label>
@@ -97,12 +101,6 @@ const Register: NextPage = () => {
           >
             Submit
           </button>
-          <p className="text-center text-gray-400">
-            {"don't have an account yet?"}
-            <Link href="http://www.google.com">
-              <span className="text-blue-700"> Register</span>
-            </Link>
-          </p>
         </form>
       </div>
     </>

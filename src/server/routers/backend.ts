@@ -1,50 +1,60 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../trpc';
-import { generateTokens, hashToken } from '../../pages/api/auth/jwt';
+import { hashToken } from '../../pages/api/auth/jwt';
 import { User, Account, Session } from '@prisma/client';
 import { Secret } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
 import { sendEmailVerificationToken } from './mail';
-import { expiresAt } from '../../pages/api/auth/jwt';
 import { prisma } from '.././db/client';
 
 export const exampleRouter = router({
   addChar: publicProcedure
-    .input(z.object({ class: z.string(), race: z.string(), user_id: z.string(), name: z.string() }))
+    .input(
+      z.object({
+        class: z.string(),
+        race: z.string(),
+        user_id: z.string(),
+        name: z.string(),
+      }),
+    )
     .mutation(async (input) => {
-      if (!input.input.name){
+      if (!input.input.name) {
         throw new Error('Name required.');
       }
-      const check = await prisma.characters.findFirst({where:{name:input.input.name}})
-      if (check){
+      const check = await prisma.characters.findFirst({
+        where: { name: input.input.name },
+      });
+      if (check) {
         throw new Error('Name already taken.');
       }
       const class_id = await prisma.class.findFirst({
         where: {
-          name: input.input.class
+          name: input.input.class,
         },
         select: {
-          id: true
-        }
-      })
+          id: true,
+        },
+      });
       const race_id = await prisma.race.findFirst({
         where: {
-          name: input.input.race
+          name: input.input.race,
         },
         select: {
-          id: true
-        }
-      })
-      
-      if (!race_id) return 'Race not found.'
-      if (!class_id) return 'Class not found.'
-      await prisma.characters.create({data:{
-        name:input.input.name,
-        race_id:race_id.id,
-        class_id:class_id.id,
-        owner_id:input.input.user_id
-      }})
-      return 'ok'
+          id: true,
+        },
+      });
+
+      if (!race_id) return 'Race not found.';
+      if (!class_id) return 'Class not found.';
+      await prisma.characters.create({
+        data: {
+          name: input.input.name,
+          race_id: race_id.id,
+          class_id: class_id.id,
+          owner_id: input.input.user_id,
+        },
+      });
+      return 'ok';
     }),
   races: publicProcedure
     .input(z.object({ name: z.string() }))
@@ -107,12 +117,13 @@ export const exampleRouter = router({
     }),
   registration: publicProcedure
     .input(
-      z.object({ email: z.string(), password: z.string(), name: z.string() }),
+      z.object({ email: z.string(), password: z.string(), name: z.string(), match: z.boolean() }),
     )
     .mutation(async (input: any) => {
       try {
-        console.log('registration endpoint');
-
+        if(!input.input.match){
+          return 'Passwords do not match'
+        }
         const date = new Date();
 
         date.setDate(date.getSeconds() + 30);
@@ -141,9 +152,11 @@ export const exampleRouter = router({
             ),
           },
         })) as Account;
+
         const session: Session = (await prisma?.session.create({
           data: { expires: date, userId: user.id, sessionToken: '-' },
         })) as Session;
+
         const message = `Token expires in ${tokenExpiration}, at  ${timeOfExpiration.toLocaleTimeString(
           'Cs-cz',
         )}
@@ -158,13 +171,16 @@ export const exampleRouter = router({
           'Verify your account',
           message,
         );
+
         if (session) {
-          return 'all good'
+          return 'Successfully registered';
+
+        } else {
+          return 'Internal error';
         }
       } catch (error: any) {
-        return 'error'
+        return 'Invalid inputs';
       }
-      
     }),
 
   veryfiEmail: publicProcedure
