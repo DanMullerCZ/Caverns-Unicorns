@@ -98,7 +98,7 @@ const Register: NextPage = () => {
             Submit
           </button>
           <p className="text-center text-gray-400">
-            don't have an account yet?
+            {"don't have an account yet?"}
             <Link href="http://www.google.com">
               <span className="text-blue-700"> Register</span>
             </Link>

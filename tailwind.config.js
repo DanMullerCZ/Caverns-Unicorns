@@ -7,7 +7,7 @@ module.exports = {
         'grand-hotel': ['"Grand Hotel"', 'san-serif'],
         'LOTR' : ["LOTR", 'sans-serif']
       },
-    },
+    }
   },
   plugins: [],
 };

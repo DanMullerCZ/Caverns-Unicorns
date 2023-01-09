@@ -1,16 +1,44 @@
-import React from 'react'
-import { trpc } from "../utils/trpc";
+import { useState } from 'react';
+import Link from 'next/link';
+import Characters from 'components/Character-list';
+import { getSession } from 'next-auth/react';
+import { NextApiRequest } from 'next';
 
-const characterList = () => {
-  // const characters =  trpc.backend.getCharacters.useQuery({id:1})
-  // console.log(characters)
+const CharacterList = ({ response }: { response: any }) => {
   return (
     <>
-    {/* {characters.data?.map(e=><div key={e.id}>Name: {e.name}</div>)}
-      {(!characters.data || characters.data?.length<10) && <button>create new char</button>} */}
-    
+      <div className="w-full">
+        {response && <Characters characters={response} />}
+        {/* {sessionData.data && <p>{sessionData.data!.user?.id}</p>} */}
+      </div>
     </>
-  )
-}
+  );
+};
+export default CharacterList;
 
-export default characterList
+export const getStaticProps = async (context: { req: NextApiRequest }) => {
+  const sessionData = await getSession(context);
+
+  const characters = await prisma!.characters.findMany({
+    where: {
+      owner_id: sessionData?.user?.id,
+    },
+    select: {
+      name: true,
+      race: {
+        select: {
+          name: true,
+        },
+      },
+      class: {
+        select: {
+          name: true
+        }
+      }
+    },
+  });
+
+  return {
+    props: { response: characters },
+  };
+};
