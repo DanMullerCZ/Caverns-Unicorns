@@ -13,7 +13,7 @@ const RaceList = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:Fu
 
   return (
     <>
-        <div className={styles.container}>
+        <div test-id='racesArr' className={styles.container}>
 
         {races.map((e:Race)=>(<RaceDetail key={e.id} creation={creation} click={handleClick} desc={e.description!} name={e.name}></RaceDetail>))}
         </div>

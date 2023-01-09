@@ -5,13 +5,15 @@ import {
   SignInResponse,
 } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { fromEvent } from 'rxjs';
 import Image from 'next/image';
+import VideoBackground from 'components/VideoBackground';
 
 const Signin = () => {
   const router = useRouter();
   const [auth, setAuth] = useState({ email: '', password: '' });
+  const emailInput = useRef<HTMLInputElement>(null)
   const handleChange = (ev: React.FormEvent<EventTarget>) => {
     const target: HTMLInputElement = ev.target as HTMLInputElement;
     setAuth({ ...auth, [target.name]: target.value });
@@ -20,6 +22,7 @@ const Signin = () => {
   return (
     <>
       <section>
+        <VideoBackground/>
         <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
           <div className="space-y-5 rounded-xl bg-white p-10 drop-shadow-lg">
             <h1 className="text-center text-3xl">Sign In</h1>
@@ -63,7 +66,7 @@ const Signin = () => {
                   (response) => {
                     if (response?.error) {
                       console.log(
-                        'Credentials were wrong or Email wasnt verified',
+                        'Credentials were wrong or Email wasnt verified', response
                       );
                     } else {
                       router.push(process.env.HOST || '/');

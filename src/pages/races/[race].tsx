@@ -79,6 +79,7 @@ export default function GetRace(
           <p test-id='race_details'>{data.data.description}</p>
         </>
       )}
+
     </>
   );
 
