@@ -72,12 +72,11 @@ export default function GetRace(
       <li>Dexterity: {data?.dex}</li>
       <li>Intelligence: {data?.int}</li>
     </ul> */}
-      <p>Data status: {data.status}</p>
-      <pre>{data.data ? JSON.stringify(data.data, null, 4) : 'No such race in Caverns & Unicorns'}</pre>
       {data.data && (
         <>
           <h1>{data.data.name}</h1>
           <Image test-id={`image${data.data.name}`} src={`/${data.data.name.toLowerCase()}.png`} alt={data.data.name} width={150} height={150} />
+          <p test-id='race_details'>{data.data.description}</p>
         </>
       )}
     </>
