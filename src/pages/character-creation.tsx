@@ -8,10 +8,11 @@ import { Class, Race } from '@prisma/client';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
+import Head from 'next/head';
 
 const createNewChar = () => {
   const dataRaces = trpc.dbRouter.getAllRaces.useQuery()
-  const races = dataRaces.data  
+  const races = dataRaces.data
   const dataClasses = trpc.dbRouter.getAllClasses.useQuery()
   const classes = dataClasses.data
   const sessionData = useSession();
@@ -65,16 +66,19 @@ const createNewChar = () => {
   }
   return (
     <>
+      <Head>
+        <title>Create new hero</title>
+      </Head>
       {(!character.race || !character.class) && (
-        <div className={styles.container}>
+        <div test-id='creation-container' className={styles.container}>
           {!character.race && races && (
-            <div>
+            <div test-id='race-selection'>
               <h1>SELECT RACE</h1>
               <RaceList setRace={setRace} creation={true} races={races} />
             </div>
           )}
           {!character.class && character.race && classes && (
-            <div>
+            <div test-id='class-selection'>
               <h1>SELECT CLASS</h1>
               <ClassList
                 creation={true}

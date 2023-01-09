@@ -4,6 +4,7 @@ import { GetStaticPropsContext } from 'next';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
+import Head from 'next/head';
 
 export async function getStaticProps() {
   const ssg = await createProxySSGHelpers({
@@ -25,19 +26,22 @@ export async function getStaticProps() {
 export default function GetAllRaces() {
   const data = trpc.dbRouter.getAllRaces.useQuery()
 
-  if(data.status === 'error'){
+  if (data.status === 'error') {
     return (
-        <>
-            <p>Internal error occured</p>
-        </>
+      <>
+        <p>Internal error occured</p>
+      </>
     )
   }
 
   return (
     <>
-        {/* <p>Data status: {data.status}</p> */}
-        {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
-        <div>{data.data && <RaceList races={data.data} />}</div>
+      <Head>
+        <title>Races</title>
+      </Head>
+      {/* <p>Data status: {data.status}</p> */}
+      {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
+      <div>{data.data && <RaceList races={data.data} />}</div>
     </>
   );
 }
