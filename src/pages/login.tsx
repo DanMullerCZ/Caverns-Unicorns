@@ -1,14 +1,8 @@
-import {
-  signIn,
-  getCsrfToken,
-  getProviders,
-  SignInResponse,
-} from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
-import { fromEvent } from 'rxjs';
-import Image from 'next/image';
+import { useState } from 'react';
 import VideoBackground from 'components/VideoBackground';
+import Link from 'next/link';
 
 const Signin = () => {
   const router = useRouter();
@@ -21,6 +15,7 @@ const Signin = () => {
         <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
           <div className="space-y-5 rounded-xl bg-white p-10 drop-shadow-lg">
             <h1 className="text-center text-3xl">Sign In</h1>
+            <div test-id='login-error-response' className='text-red-600 text-center text-lg'>{router.asPath === '/login?error=true' && 'Error has occured. Check your credentials'}</div>
             <form ref={input} className="flex flex-col space-y-2">
               <label className="text-sm font-light" htmlFor="email">
                 Email
@@ -64,18 +59,15 @@ const Signin = () => {
                     redirect: false,
                   }).then((response) => {
                     if (response?.error) {
-                      console.log(
-                        'Credentials were wrong or Email wasnt verified',
-                        response,
-                      );
+                      router.push('/login', { query: { error: 'true' } } )
                     } else {
-                      router.push(process.env.HOST || '/');
+                      router.push(process.env.HOST || '/character-list');
                     }
                   });
                 }
               }}
             >
-              Login with credentials
+              Login with Credentials
             </button>
             <div className="flex justify-around">
               <button
@@ -85,7 +77,7 @@ const Signin = () => {
                   signIn('discord', { callbackUrl: process.env.HOST });
                 }}
               >
-                Login with discord
+                Login with Discord
               </button>
               <button
                 className="bg-white-600 rounded-md border border-solid px-4 py-2 text-black
@@ -94,13 +86,20 @@ const Signin = () => {
                   signIn('discord', { callbackUrl: process.env.HOST });
                 }}
               >
-                Login with google
+                Login with Google
               </button>
             </div>
+            <p className="text-center text-gray-400">
+              {"Don't have an account yet?"}
+              <Link href="http://localhost:3000/register">
+                <span className="text-blue-700"> Register</span>
+              </Link>
+            </p>
           </div>
         </div>
       </section>
     </>
   );
 };
+
 export default Signin;

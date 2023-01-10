@@ -48,7 +48,7 @@ const Characters = ({ characters }: { characters: any }) => {
               Start the Game
             </button>
           </Link>
-          {characters.map((e) => (
+          {characters.map((e: any) => (
             <div
               onClick={() => handleClick(e.name, e.race.name, e.class.name)}
               className="flex justify-around items-center col-start-4 col-end-5 row-span-1 cursor-pointer rounded-xl bg-white p-4 drop-shadow"

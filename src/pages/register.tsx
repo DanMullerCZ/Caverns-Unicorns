@@ -3,8 +3,6 @@ import Head from 'next/head';
 import { useRef, useState } from 'react';
 import Link from 'next/link';
 
-//import { signIn, signOut, useSession } from "next-auth/react";
-
 import { trpc } from '../utils/trpc';
 import VideoBackground from 'components/VideoBackground';
 
@@ -23,11 +21,16 @@ const Register: NextPage = () => {
           email: email.value,
           password: password.value,
           name: name.value,
+          match: true
         });
         console.log(regForm, 'has been sent');
-      } else {
-        console.log('Passwords dont match');
-      }
+    } else {
+      creation.mutate({
+        email: formData.email,
+        password: formData.password1,
+        name: formData.name,
+        match: false,
+      });
     }
   };
 
@@ -44,6 +47,9 @@ const Register: NextPage = () => {
         >
           <h1 className="text-center text-3xl">Registration</h1>
           <div className="flex flex-col space-y-2">
+            <div test-id="registration-error-response" className="text-red-600 text-center text-lg">
+              {creation.data}
+            </div>
             <label className="text-sm font-light" htmlFor="email">
               Email:
             </label>
@@ -97,12 +103,6 @@ const Register: NextPage = () => {
           >
             Submit
           </button>
-          <p className="text-center text-gray-400">
-            {"don't have an account yet?"}
-            <Link href="http://www.google.com">
-              <span className="text-blue-700"> Register</span>
-            </Link>
-          </p>
         </form>
       </div>
     </>
