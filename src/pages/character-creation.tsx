@@ -9,6 +9,8 @@ import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Head from 'next/head';
+import { prisma } from 'server/db/client';
+
 
 const createNewChar = () => {
   const dataRaces = trpc.dbRouter.getAllRaces.useQuery()

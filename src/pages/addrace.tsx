@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { trpc } from '../utils/trpc';
 import Link from 'next/link';
 import RaceList from 'components/RaceList';
+import Dice from 'components/Dice';
 
 const races = ({ response }: { response: any }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -31,6 +32,7 @@ const races = ({ response }: { response: any }) => {
         {addRace.isSuccess && <p className='border-black border-solid border'>Succesfully added race {race} to the database.</p>}
         {/* {response && <Races races={response} />} */}
       </div>
+      <Dice />
     </>
   );
 };

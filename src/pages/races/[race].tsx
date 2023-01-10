@@ -12,6 +12,7 @@ import RaceDetail from 'components/RaceDetail';
 import Image from 'next/image';
 import Head from 'next/head';
 
+
 export async function getStaticProps(
   context: GetStaticPropsContext<{ race: string }>,
 ) {
