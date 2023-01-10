@@ -1,10 +1,11 @@
+import { Class } from '@prisma/client';
+import ClassList from 'components/ClassList';
+import { trpc } from 'utils/trpc';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
-import RaceList from 'components/RaceList';
-import { GetStaticPropsContext } from 'next';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
-import { trpc } from 'utils/trpc';
 import Head from 'next/head';
+
 
 export async function getStaticProps() {
   const ssg = await createProxySSGHelpers({
@@ -13,8 +14,9 @@ export async function getStaticProps() {
     transformer: superjson, // optional - adds superjson serialization
   });
 
-  // prefetch `races`
-  await ssg.dbRouter.getAllRaces.prefetch();
+  // prefetch `classes`
+  await ssg.dbRouter.getAllClasses.prefetch();
+
   return {
     props: {
       trpcState: ssg.dehydrate(),
@@ -23,8 +25,8 @@ export async function getStaticProps() {
   };
 }
 
-export default function GetAllRaces() {
-  const data = trpc.dbRouter.getAllRaces.useQuery()
+export default function GetAllClasses() {
+  const data = trpc.dbRouter.getAllClasses.useQuery()
 
   if (data.status === 'error') {
     return (
@@ -33,15 +35,14 @@ export default function GetAllRaces() {
       </>
     )
   }
-
   return (
     <>
       <Head>
-        <title>Races</title>
+        <title>Classes</title>
       </Head>
       {/* <p>Data status: {data.status}</p> */}
       {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
-      <div>{data.data && <RaceList races={data.data} />}</div>
+      <div >{data.data && <ClassList classes={data.data} />}</div>
     </>
   );
 }

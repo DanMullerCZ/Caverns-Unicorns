@@ -42,8 +42,11 @@ test('GET /classes, returns all classes', async ({ page }) => {
     await expect(page.getByTestId('class')).toHaveCount(12); 
 });
 
-test('GET /classes/monk, return class stats', async ({ page }) => {
-    // waits for specific page to be made
+test('GET /classes/monk, return class description', async ({ page }) => {
+    await page.goto('/classes/monk');
+    await expect(page.getByTestId('class_details')).toHaveText(`A master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection.`
+    );  
+    await expect(page).toHaveTitle('Monk');
 })
 
 test('GET /classes/mentor, error handling on non-existent race', async ({ page }) => {
@@ -59,3 +62,11 @@ test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus)
       console.log(`Did not run as expected, ended up at ${page.url()}`);
 });
+test('GET /character-creation',async ({page})=>{
+    await page.goto('/character-creation')
+    await expect(page).toHaveTitle('Create new hero')
+    await expect(page.getByTestId('creation-container')).toBeDefined
+    await expect(page.getByTestId('class-selection')).toBeUndefined
+    await expect(page.getByTestId('race-selection')).toBeDefined
+
+})

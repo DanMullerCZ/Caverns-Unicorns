@@ -18,4 +18,19 @@ export const dbRouter = router({
             const races = await prisma?.race.findMany()
             return races
         }),
+    getClass: publicProcedure
+        .input(z.string())
+        .query(async ({ input }) => {
+            const classDetail = await prisma.class.findFirst({
+                where: {
+                    name: input
+                }
+            })
+            return classDetail;
+        }),
+    getAllClasses: publicProcedure
+        .query(async () => {
+            const classes = await prisma?.class.findMany()
+            return classes
+        }),
 });
