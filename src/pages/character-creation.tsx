@@ -5,6 +5,7 @@ import styles from '../styles/character-creation.module.css';
 import { trpc } from 'utils/trpc';
 import { useSession } from 'next-auth/react';
 import { Class, Race } from '@prisma/client';
+import { prisma } from 'server/db/client';
 
 const createNewChar = ({ ...props }) => {
   const sessionData = useSession();

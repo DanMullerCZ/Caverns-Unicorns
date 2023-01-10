@@ -9,6 +9,7 @@ import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
 
+
 export async function getStaticProps(
     context: GetStaticPropsContext<{ race: string }>,
 ) {
