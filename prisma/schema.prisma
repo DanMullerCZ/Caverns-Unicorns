@@ -57,16 +57,15 @@ model Characters {
   race_id  Int
   class_id Int
   owner_id String? @db.VarChar(50)
-  race              Race    @relation(fields: [race_id], references: [id], onDelete: Cascade)
-  class              Class    @relation(fields: [class_id], references: [id], onDelete: Cascade)
-
+  race     Race    @relation(fields: [race_id], references: [id], onDelete: Cascade)
+  class    Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
 }
 
 model Class {
   name        String
-  id          Int     @id @default(autoincrement())
-  description String? @db.VarChar(255)
-  character Characters[]
+  id          Int          @id @default(autoincrement())
+  description String?      @db.VarChar(255)
+  character   Characters[]
 }
 
 model Login {
@@ -77,15 +76,13 @@ model Login {
 
 model Race {
   name        String
-  id          Int     @id @default(autoincrement())
-  description String? @db.VarChar(255)
+  id          Int          @id @default(autoincrement())
+  description String?      @db.VarChar(255)
   dex         Int?
   str         Int?
   con         Int?
   int         Int?
   wis         Int?
   char        Int?
-  character Characters[]
-  }
-
-
+  character   Characters[]
+}
