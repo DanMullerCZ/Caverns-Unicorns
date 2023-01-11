@@ -14,25 +14,25 @@ const Register: NextPage = () => {
     if (regForm.current) {
       const password = regForm.current[2] as HTMLInputElement;
       const confirmPassword = regForm.current[3] as HTMLInputElement;
+      const email = regForm.current[0] as HTMLInputElement;
+      const name = regForm.current[1] as HTMLInputElement;
       if (password.value == confirmPassword.value) {
-        const email = regForm.current[0] as HTMLInputElement;
-        const name = regForm.current[1] as HTMLInputElement;
         creation.mutate({
           email: email.value,
           password: password.value,
           name: name.value,
           match: true
         });
-        console.log(regForm, 'has been sent');
     } else {
       creation.mutate({
-        email: formData.email,
-        password: formData.password1,
-        name: formData.name,
+        email: email.value,
+        password: password.value,
+        name: name.value,
         match: false,
       });
     }
-  };
+  }
+}
 
   return (
     <>

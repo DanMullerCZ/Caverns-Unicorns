@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useRef } from 'react';
 import VideoBackground from 'components/VideoBackground';
 import Link from 'next/link';
 
@@ -61,7 +61,7 @@ const Signin = () => {
                     if (response?.error) {
                       router.push('/login', { query: { error: 'true' } } )
                     } else {
-                      router.push(process.env.HOST || '/character-list');
+                      router.push(process.env.HOST || '/user');
                     }
                   });
                 }

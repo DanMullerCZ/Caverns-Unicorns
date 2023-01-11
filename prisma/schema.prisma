@@ -9,19 +9,20 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.VarChar(300)
-  access_token      String? @db.VarChar(300)
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String  @id @default(cuid())
+  userId             String  @unique
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? @db.VarChar(300)
+  access_token       String? @db.VarChar(300)
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  verification_token String? @db.VarChar(300)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {
@@ -34,7 +35,7 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
+  name          String?   @unique
   email         String?   @unique
   emailVerified DateTime?
   image         String?
