@@ -165,6 +165,12 @@
     border-radius: var(--border-radius);
     transition: background var(--speed);
     padding: 0.5rem;
+    color: rgb(234, 178,92)
+    /* background: url("/fonts-images/strip.jpg") repeat center center;
+    background-size: 100px 100px;
+    background-clip: content-box;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text; */
   }
   
   .menu-item .icon-button {
@@ -177,7 +183,7 @@
   }
   
   .menu-item:hover {
-    background-color: #525357;
+    background-color: #033200;
   }
   
   .icon-right {

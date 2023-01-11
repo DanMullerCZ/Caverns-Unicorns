@@ -54,7 +54,7 @@ function DropdownMenu() {
     return (
       <a
         href="#"
-        className="menu-item gold"
+        className="menu-item"
         onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}
       >
         {/* <span className="icon-button">{props.leftIcon}</span> */}
