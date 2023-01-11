@@ -25,14 +25,16 @@ const Register: NextPage = () => {
         });
         console.log(regForm, 'has been sent');
     } else {
+      const email = regForm.current[0] as HTMLInputElement;
+      const name = regForm.current[1] as HTMLInputElement;
       creation.mutate({
-        email: formData.email,
-        password: formData.password1,
-        name: formData.name,
+        email: email.value,
+        password: password.value,
+        name: name.value,
         match: false,
       });
     }
-  };
+    };}
 
   return (
     <>
@@ -40,10 +42,13 @@ const Register: NextPage = () => {
       <Head>
         <title>Register</title>
       </Head>
-      <div className=" flex h-screen w-screen items-center ">
+      <div className='flex w-screen h-screen justify-center z-10 fixed items-center'>
+        <div className='background '></div>
+      </div>
+      <div className=" flex h-screen w-screen items-center justify-center z-30 absolute">
         <form
           ref={regForm}
-          className=" gold goldeffect space-y-5 rounded-xl bg-transparent bg-white p-10 font-LOTR text-xl drop-shadow-lg "
+          className=" gold goldnohover space-y-5 rounded-xl bg-transparent bg-white p-10 font-LOTR text-xl drop-shadow-lg "
         >
           <h1 className="text-center text-3xl">Registration</h1>
           <div className="flex flex-col space-y-2">
@@ -96,8 +101,7 @@ const Register: NextPage = () => {
             />
           </div>
           <button
-            className="border-yellow-400px-10 w-full rounded-md py-2 text-white
-            duration-300 ease-in hover:bg-blue-500 hover:drop-shadow-md"
+            className="border-yellow-400px-10 w-full rounded-md py-2 goldeffect "
             type="button"
             onClick={submitForm}
           >
