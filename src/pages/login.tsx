@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import VideoBackground from 'components/VideoBackground';
 import Link from 'next/link';
 
@@ -12,42 +12,45 @@ const Signin = () => {
     <>
       <section>
         <VideoBackground />
-        <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-          <div className="space-y-5 rounded-xl bg-white p-10 drop-shadow-lg">
-            <h1 className="text-center text-3xl">Sign In</h1>
+        <div className=" flex flex-col items-center justify-center  md:h-screen font-LOTR ">
+        <div className='flex w-screen h-screen justify-center z-10 fixed items-center'>
+        <div className='background '></div>
+        </div>
+          <div className="space-y-5 rounded-x p-10 drop-shadow-lg gold  goldnohover z-30">
+            <h1 className="text-center text-3xl font-LOTR">Sign In</h1>
             <div test-id='login-error-response' className='text-red-600 text-center text-lg'>{router.asPath === '/login?error=true' && 'Error has occured. Check your credentials'}</div>
+            
             <form ref={input} className="flex flex-col space-y-2">
-              <label className="text-sm font-light" htmlFor="email">
+              <label className="text-sm" htmlFor="email">
                 Email
               </label>
               <input
-                className="w-96 rounded-md border border-slate-400 px-3 py-2"
+                className="w-96 rounded-md border border-yellow-400 px-3 py-2 bg-transparent"
                 type="email"
                 name="email"
                 id="email"
               />
-              <label className="text-sm font-light" htmlFor="password">
+              <label className="text-sm" htmlFor="password">
                 Password
               </label>
               <input
-                className="w-96 rounded-md border border-slate-400 bg-[url('/img/hero-pattern.svg')] px-3 py-2"
+                className="w-96 rounded-md border border-yellow-400 px-3 py-2 bg-transparent"
                 type="password"
                 name="password"
                 id="password"
               />
             </form>
 
-            <p className="text-right">
+            <p className="text-center goldeffect ">
               <a
-                className="text-sm font-light text-blue-600 hover:underline"
+                className="text-sm font-light "
                 href="https://www.google.com"
               >
-                Forget Password?
+                Forgot Password?
               </a>
             </p>
             <button
-              className="w-full rounded-md bg-blue-600 px-10 py-2 text-white
-            duration-300 ease-in hover:bg-blue-500 hover:drop-shadow-md"
+              className="w-full rounded-md border border-yellow-400 px-10 py-2 goldeffect"
               onClick={() => {
                 if (input.current) {
                   const email = input.current.elements[0] as HTMLInputElement;
@@ -71,8 +74,7 @@ const Signin = () => {
             </button>
             <div className="flex justify-around">
               <button
-                className="bg-white-600 rounded-md border border-solid px-4 py-2 text-black
-            duration-300 ease-in hover:bg-gray-100 hover:drop-shadow-md"
+                className=" rounded-md border  border-yellow-400 px-4 py-2 goldeffect "
                 onClick={() => {
                   signIn('discord', { callbackUrl: process.env.HOST });
                 }}
@@ -80,8 +82,7 @@ const Signin = () => {
                 Login with Discord
               </button>
               <button
-                className="bg-white-600 rounded-md border border-solid px-4 py-2 text-black
-                duration-300 ease-in hover:bg-gray-100 hover:drop-shadow-md"
+                className=" rounded-md border  border-yellow-400 px-4 py-2 goldeffect "
                 onClick={() => {
                   signIn('discord', { callbackUrl: process.env.HOST });
                 }}
@@ -89,10 +90,10 @@ const Signin = () => {
                 Login with Google
               </button>
             </div>
-            <p className="text-center text-gray-400">
+            <p className="text-center">
               {"Don't have an account yet?"}
               <Link href="http://localhost:3000/register">
-                <span className="text-blue-700"> Register</span>
+                 Register
               </Link>
             </p>
           </div>

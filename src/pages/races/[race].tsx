@@ -8,9 +8,13 @@ import {
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
+import RaceDetail from 'components/RaceDetail';
+import Image from 'next/image';
+import Head from 'next/head';
+
 
 export async function getStaticProps(
-    context: GetStaticPropsContext<{ race: string }>,
+  context: GetStaticPropsContext<{ race: string }>,
 ) {
   const ssg = await createProxySSGHelpers({
     router: appRouter,
@@ -56,6 +60,9 @@ export default function GetRace(
 
   return (
     <>
+      <Head>
+        <title>{data?.data?.name}</title>
+      </Head>
       {/* <h1>{data.name}</h1>
       <p>Here is your race:::</p>
       <ul>
@@ -66,8 +73,14 @@ export default function GetRace(
       <li>Dexterity: {data?.dex}</li>
       <li>Intelligence: {data?.int}</li>
     </ul> */}
-        <p test-id='race_detail_status'>Data status: {data.status}</p>
-        <pre test-id='race_detail'>{data.data ? JSON.stringify(data.data, null, 4) : 'No such race in Caverns & Unicorns'}</pre>
+      {data.data && (
+        <>
+          <h1>{data.data.name}</h1>
+          <Image test-id={`image${data.data.name}`} src={`/${data.data.name.toLowerCase()}.png`} alt={data.data.name} width={150} height={150} />
+          <p test-id='race_details'>{data.data.description}</p>
+        </>
+      )}
+
     </>
   );
 

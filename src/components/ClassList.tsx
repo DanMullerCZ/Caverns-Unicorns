@@ -12,7 +12,7 @@ const ClassList = ({classes,setClass=()=>{},creation=false}:{classes:Class[],set
 }
    return (
     <>
-        <div className={styles.container}>
+        <div test-id='classesArr' className={styles.container}>
 
         {classes.map((e:Class)=>(<ClassDetail key={e.id} creation={creation} click={handleClick} desc={e.description!} name={e.name}></ClassDetail>))}
         </div>
