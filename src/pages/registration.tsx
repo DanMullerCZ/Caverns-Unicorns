@@ -42,7 +42,10 @@ const Register: NextPage = () => {
       <Head>
         <title>Register</title>
       </Head>
-      <div className=" flex h-screen w-screen items-center ">
+      <div className='flex w-screen h-screen justify-center z-10 fixed items-center'>
+      <div className='background '></div>
+      </div>
+      <div className=" flex h-screen w-screen items-center justify-center z-30 absolute">
         <form
           ref={regForm}
           className=" gold goldeffect space-y-5 rounded-xl bg-transparent bg-white p-10 font-LOTR text-xl drop-shadow-lg "
