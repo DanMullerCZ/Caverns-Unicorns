@@ -64,7 +64,7 @@ const Signin = () => {
                     if (response?.error) {
                       router.push('/login', { query: { error: 'true' } } )
                     } else {
-                      router.push(process.env.HOST || '/character-list');
+                      router.push(process.env.HOST || '/user');
                     }
                   });
                 }
