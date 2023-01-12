@@ -98,7 +98,9 @@ function DropdownMenu() {
           <DropdownItem goToMenu="classes">Classes</DropdownItem>
           {/* <DropdownItem goToMenu="quests">Quests</DropdownItem>
           <DropdownItem goToMenu="races">Spells</DropdownItem> */}
-          <Link href="/shop"><DropdownItem>Shop</DropdownItem></Link>
+          <Link href="/shop">
+            <DropdownItem>Shop</DropdownItem>
+          </Link>
         </div>
       </CSSTransition>
 
@@ -113,6 +115,9 @@ function DropdownMenu() {
           <DropdownItem goToMenu="main">
             <Image src={ArrowIcon} alt="" height={20} width={20}></Image>
           </DropdownItem>
+          <Link href={`/races`}>
+            <DropdownItem>All Races</DropdownItem>
+          </Link>
           {races?.map((e: any) => (
             <Link href={`/races/${e.name}`}>
               <DropdownItem>{e.name}</DropdownItem>
@@ -132,6 +137,9 @@ function DropdownMenu() {
           <DropdownItem goToMenu="main">
             <Image src={ArrowIcon} alt="" height={20} width={20}></Image>
           </DropdownItem>
+          <Link href={`/classes`}>
+            <DropdownItem>All Classes</DropdownItem>
+          </Link>
           {classes?.map((e: any) => (
             <Link href={`/classes/${e.name}`}>
               <DropdownItem>{e.name}</DropdownItem>
