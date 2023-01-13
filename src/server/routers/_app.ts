@@ -3,6 +3,7 @@ import { wsRouter } from './subsciptions';
 import { authRouter } from './auth';
 import { exampleRouter } from './backend';
 import { dbRouter } from './dbRouter';
+import { userSettRouter } from './userSettings';
 
 export const appRouter = router({
   healthcheck: publicProcedure.query(() => 'yay!'),
@@ -10,6 +11,7 @@ export const appRouter = router({
   backend: exampleRouter,
   auth: authRouter,
   dbRouter: dbRouter,
+  userSettings: userSettRouter,
 });
 
 export type AppRouter = typeof appRouter;

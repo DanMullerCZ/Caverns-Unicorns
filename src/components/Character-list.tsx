@@ -2,6 +2,7 @@ import { useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '../styles/Character-list.module.css';
+import UserSettings from './userSettings/UserSettings';
 
 const Characters = ({ characters }: { characters: any }) => {
   const [hero, setHero] = useState({
@@ -20,6 +21,7 @@ const Characters = ({ characters }: { characters: any }) => {
 
   return (
     <>
+      <UserSettings />
       <section className="">
         <div className={styles.container}>
           <div className={styles.heroDisplay}>
