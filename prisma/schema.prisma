@@ -42,6 +42,7 @@ model User {
   password      String?
   accounts      Account[]
   sessions      Session[]
+  premium       Premium_Membership?
 }
 
 model Characters {
@@ -99,4 +100,12 @@ model SpellsForClasses {
   class   Class @relation(fields: [classId], references: [id])
 
   @@id([spellId, classId])
+}
+
+model Premium_Membership {
+  id       String   @id @default(cuid())
+  userId   String   @unique
+  paidDate DateTime
+  status   String
+  user     User     @relation(fields: [userId], references: [id])
 }

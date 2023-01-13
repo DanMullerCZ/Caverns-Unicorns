@@ -34,7 +34,7 @@ const Register: NextPage = () => {
         match: false,
       });
     }
-  };
+  }};
 
   return (
     <>
@@ -113,5 +113,4 @@ const Register: NextPage = () => {
     </>
   );
 };
-
 export default Register;
