@@ -10,7 +10,7 @@ datasource db {
 
 model Account {
   id                 String  @id @default(cuid())
-  userId             String  @unique
+  userId             String
   type               String
   provider           String
   providerAccountId  String
@@ -34,23 +34,15 @@ model Session {
 }
 
 model User {
-  id            String              @id @default(cuid())
-  name          String?             @unique
-  email         String?             @unique
+  id            String    @id @default(cuid())
+  name          String    @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
   sessions      Session[]
   premium       Premium_Membership?
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
 }
 
 model Characters {
@@ -77,12 +69,6 @@ model Class {
   description String?            @db.VarChar(255)
   character   Characters[]
   spells      SpellsForClasses[]
-}
-
-model Login {
-  id       Int     @id @default(autoincrement())
-  username String? @db.VarChar(30)
-  password String? @db.VarChar(30)
 }
 
 model Race {
