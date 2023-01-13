@@ -64,14 +64,14 @@ model Characters {
 model Class {
   name        String
   id          Int                @id @default(autoincrement())
-  description String?            @db.VarChar(255)
+  description String            @db.VarChar(255)
   spells      SpellsForClasses[]
 }
 
 model Race {
   name        String
   id          Int          @id @default(autoincrement())
-  description String?      @db.VarChar(255)
+  description String      @db.VarChar(255)
   dex         Int
   str         Int
   con         Int

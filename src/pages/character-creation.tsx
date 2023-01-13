@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import ClassList from 'components/ClassList';
 import RaceList from 'components/RaceList';
 import styles from '../styles/character-creation.module.css';
 import { trpc } from 'utils/trpc';
 import { useSession } from 'next-auth/react';
-import { Class, Race } from '@prisma/client';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Head from 'next/head';
-import { prisma } from 'server/db/client';
 
 
 const createNewChar = () => {
@@ -53,11 +51,12 @@ const createNewChar = () => {
   };
   const addChar = trpc.backend.addChar.useMutation();
   const createChar = async () => {
+    if (sessionData.data?.user?.id && nameOfChar?.current?.value)
     addChar.mutate({
       class: character.class,
       race: character.race,
-      user_id: sessionData.data!.user!.id,
-      name: nameOfChar.current!.value,
+      user_id: sessionData.data.user.id,
+      name: nameOfChar.current.value,
     });
   };
   if (addChar.isSuccess) {

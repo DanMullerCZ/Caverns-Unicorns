@@ -92,6 +92,7 @@ export const exampleRouter = router({
         int: 0,
         wis: 0,
         char: 0,
+        description: 'bla bla'
       };
       for (let i = 0; i < res.ability_bonuses.length; i++) {
         switch (res.ability_bonuses[i].ability_score.index) {

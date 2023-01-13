@@ -5,7 +5,7 @@ class Playground {
     constructor() {
         this.players = new Map();
         this.interval = setInterval(() => {
-            this.players.forEach((value, key) => {
+            this.players.forEach((value) => {
                 value.move();
             });
         }, 25);

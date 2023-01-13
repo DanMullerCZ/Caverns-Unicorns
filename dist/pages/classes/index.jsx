@@ -37,8 +37,6 @@ function GetAllClasses() {
       <head_1.default>
         <title>Classes</title>
       </head_1.default>
-      {/* <p>Data status: {data.status}</p> */}
-      {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
       <div>{data.data && <ClassList_1.default classes={data.data}/>}</div>
     </>);
 }

@@ -1,4 +1,3 @@
-import { Class } from '@prisma/client';
 import ClassList from 'components/ClassList';
 import { trpc } from 'utils/trpc';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
@@ -40,8 +39,6 @@ export default function GetAllClasses() {
       <Head>
         <title>Classes</title>
       </Head>
-      {/* <p>Data status: {data.status}</p> */}
-      {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
       <div >{data.data && <ClassList classes={data.data} />}</div>
     </>
   );

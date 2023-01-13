@@ -4,7 +4,7 @@ exports.wsRouter = void 0;
 const observable_1 = require("@trpc/server/observable");
 //import { prisma } from '../prisma';
 const zod_1 = require("zod");
-const trpc_1 = require("server/trpc");
+const trpc_1 = require("../trpc");
 const rxjs_1 = require("rxjs");
 const subject = new rxjs_1.Subject();
 const chatMsg = new rxjs_1.Subject();

@@ -1,6 +1,4 @@
 import { type NextPage } from 'next';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import { useRef } from 'react';

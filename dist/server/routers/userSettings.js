@@ -4,7 +4,7 @@ exports.userSettRouter = void 0;
 const trpc_1 = require("../trpc");
 const client_1 = require("../db/client");
 const zod_1 = require("zod");
-const jwt_1 = require("pages/api/auth/jwt");
+const jwt_1 = require("../../pages/api/auth/jwt");
 exports.userSettRouter = (0, trpc_1.router)({
     changePassword: trpc_1.publicProcedure
         .input(zod_1.z.string())
