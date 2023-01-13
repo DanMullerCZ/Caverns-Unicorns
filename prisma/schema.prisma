@@ -34,14 +34,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?   @unique
-  email         String?   @unique
+  id            String              @id @default(cuid())
+  name          String?             @unique
+  email         String?             @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
   sessions      Session[]
+  premium       Premium_Membership?
 }
 
 model VerificationToken {
@@ -53,20 +54,29 @@ model VerificationToken {
 }
 
 model Characters {
-  id       Int     @id @default(autoincrement())
-  name     String? @db.VarChar(20)
-  race_id  Int
-  class_id Int
-  owner_id String? @db.VarChar(50)
-  race     Race    @relation(fields: [race_id], references: [id], onDelete: Cascade)
-  class    Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
+  id        Int     @id @default(autoincrement())
+  name      String? @db.VarChar(20)
+  race_id   Int
+  class_id  Int
+  owner_id  String? @db.VarChar(50)
+  maxHP     Int?
+  currentHP Int?
+  str       Int?
+  dex       Int?
+  con       Int?
+  int       Int?
+  wis       Int?
+  char      Int?
+  race      Race    @relation(fields: [race_id], references: [id], onDelete: Cascade)
+  class     Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
 }
 
 model Class {
   name        String
-  id          Int          @id @default(autoincrement())
-  description String?      @db.VarChar(255)
+  id          Int                @id @default(autoincrement())
+  description String?            @db.VarChar(255)
   character   Characters[]
+  spells      SpellsForClasses[]
 }
 
 model Login {
@@ -86,4 +96,30 @@ model Race {
   wis         Int?
   char        Int?
   character   Characters[]
+}
+
+model Spell {
+  name        String             @unique
+  id          Int                @id @default(autoincrement())
+  description String?            @db.VarChar(500)
+  damage      Int?
+  cooldown    Int?
+  classes     SpellsForClasses[]
+}
+
+model SpellsForClasses {
+  spellId Int
+  classId Int
+  spell   Spell @relation(fields: [spellId], references: [id])
+  class   Class @relation(fields: [classId], references: [id])
+
+  @@id([spellId, classId])
+}
+
+model Premium_Membership {
+  id       String   @id @default(cuid())
+  userId   String   @unique
+  paidDate DateTime
+  status   String
+  user     User     @relation(fields: [userId], references: [id])
 }
