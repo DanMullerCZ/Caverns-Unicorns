@@ -53,6 +53,11 @@ const AuthShowcase: React.FC = () => {
 
     messenger.mutate({ typing: target.value });
   };
+
+  // const changePassword = trpc.userSettings.changePassword.useQuery(
+
+  // )
+
   return (
     <div className="text-[40px]">
       <p>{sessionData?.user?.email}</p>

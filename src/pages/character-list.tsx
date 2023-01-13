@@ -1,17 +1,24 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import Characters from 'components/Character-list';
 import { getSession, useSession } from 'next-auth/react';
 import { NextApiRequest } from 'next';
+import { trpc } from 'utils/trpc';
 
 const CharacterList = ({ response }: { response: any }) => {
-  const sessionData = useSession()
+  const sessionData = useSession();
+  
+
 
   return (
     <>
       <div className="w-full">
         {response && <Characters characters={response} />}
-        {sessionData.data && <p>{sessionData.data!.user?.name}: {sessionData.data!.user?.id}</p>}
+        {sessionData.data && (
+          <p>
+            {sessionData.data!.user?.name}: {sessionData.data!.user?.id}
+          </p>
+        )}
       </div>
     </>
   );
@@ -34,9 +41,9 @@ export const getStaticProps = async (context: { req: NextApiRequest }) => {
       },
       class: {
         select: {
-          name: true
-        }
-      }
+          name: true,
+        },
+      },
     },
   });
 
