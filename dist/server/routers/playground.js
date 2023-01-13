@@ -4,8 +4,8 @@ exports.playground = void 0;
 const observable_1 = require("@trpc/server/observable");
 //import { prisma } from '../prisma';
 const zod_1 = require("zod");
-const trpc_1 = require("server/trpc");
-const playground_1 = require("server/playground/playground");
+const trpc_1 = require("../trpc");
+const playground_1 = require("../playground/playground");
 const pg = new playground_1.Playground();
 exports.playground = (0, trpc_1.router)({
     sub: trpc_1.protectedProcedure.subscription(() => {

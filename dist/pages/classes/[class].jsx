@@ -19,15 +19,6 @@ const getStaticProps = async (context) => {
         transformer: superjson_1.default, // optional - adds superjson serialization
     });
     const nameOfClass = (_a = context.params) === null || _a === void 0 ? void 0 : _a.class;
-    //     const classDetail = await prisma.class.findFirst({
-    //         where: { name: nameOfClass }, orderBy: {
-    //             name: 'asc',
-    //         },
-    //     })
-    //     return {
-    //         props: { classDetail: classDetail }
-    //     }
-    // }
     await ssg.dbRouter.getClass.prefetch(nameOfClass);
     return {
         props: {

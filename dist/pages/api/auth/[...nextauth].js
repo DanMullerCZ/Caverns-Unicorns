@@ -9,7 +9,7 @@ const next_auth_1 = __importDefault(require("next-auth"));
 const discord_1 = __importDefault(require("next-auth/providers/discord"));
 // Prisma adapter for NextAuth, optional and can be removed
 const prisma_adapter_1 = require("@next-auth/prisma-adapter");
-const server_mjs_1 = require("../../../env/server.mjs");
+const server_1 = require("../../../env/server");
 const client_1 = require("../../../server/db/client");
 const credentials_1 = __importDefault(require("next-auth/providers/credentials"));
 const jwt_1 = require("./jwt");
@@ -23,8 +23,8 @@ exports.authOptions = {
     adapter: (0, prisma_adapter_1.PrismaAdapter)(client_1.prisma),
     providers: [
         (0, discord_1.default)({
-            clientId: server_mjs_1.env.DISCORD_CLIENT_ID,
-            clientSecret: server_mjs_1.env.DISCORD_CLIENT_SECRET,
+            clientId: server_1.env.DISCORD_CLIENT_ID,
+            clientSecret: server_1.env.DISCORD_CLIENT_SECRET,
         }),
         (0, credentials_1.default)({
             //type: "credentials",

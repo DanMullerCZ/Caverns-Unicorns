@@ -78,12 +78,14 @@ const createNewChar = () => {
     };
     const addChar = trpc_1.trpc.backend.addChar.useMutation();
     const createChar = async () => {
-        addChar.mutate({
-            class: character.class,
-            race: character.race,
-            user_id: sessionData.data.user.id,
-            name: nameOfChar.current.value,
-        });
+        var _a, _b, _c;
+        if (((_b = (_a = sessionData.data) === null || _a === void 0 ? void 0 : _a.user) === null || _b === void 0 ? void 0 : _b.id) && ((_c = nameOfChar === null || nameOfChar === void 0 ? void 0 : nameOfChar.current) === null || _c === void 0 ? void 0 : _c.value))
+            addChar.mutate({
+                class: character.class,
+                race: character.race,
+                user_id: sessionData.data.user.id,
+                name: nameOfChar.current.value,
+            });
     };
     if (addChar.isSuccess) {
         window.location.href = 'character-list';
