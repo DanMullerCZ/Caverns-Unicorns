@@ -10,6 +10,7 @@ import superjson from 'superjson';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Head from 'next/head';
 import { prisma } from 'server/db/client';
+import Attribute from 'components/Attribute';
 
 
 const createNewChar = () => {
@@ -18,10 +19,19 @@ const createNewChar = () => {
   const dataClasses = trpc.dbRouter.getAllClasses.useQuery()
   const classes = dataClasses.data
   const sessionData = useSession();
+  const [confirmAtr, setConfirmAtr] = useState(false)
   const nameOfChar = useRef<HTMLInputElement>(null);
+  type CharacterProperties = 'str' | 'con' | 'dex' | 'int' | 'wis' | 'char';
+  const arr: CharacterProperties[] = ['str', 'dex', 'con', 'wis', 'char', 'int'];
   const [character, setCharacter] = useState({
     race: '',
     class: '',
+    str: 10,
+    con: 10,
+    dex: 10,
+    int: 10,
+    wis: 10,
+    char: 10
   });
   const setRace = (x: string) => {
     const updatedRace = { race: x };
@@ -30,6 +40,7 @@ const createNewChar = () => {
       ...updatedRace,
     }));
   };
+  const confirmation = () => setConfirmAtr(true)
   const delRace = () => {
     const updatedRace = { race: '' };
     setCharacter((character) => ({
@@ -44,6 +55,7 @@ const createNewChar = () => {
       ...updatedClass,
     }));
   };
+
   const delClass = () => {
     const updatedClass = { class: '' };
     setCharacter((character) => ({
@@ -58,6 +70,12 @@ const createNewChar = () => {
       race: character.race,
       user_id: sessionData.data!.user!.id,
       name: nameOfChar.current!.value,
+      str:character.str,
+      dex:character.dex,
+      con:character.con,
+      int:character.int,
+      wis:character.wis,
+      char:character.char,
     });
   };
   if (addChar.isSuccess) {
@@ -91,13 +109,25 @@ const createNewChar = () => {
           )}
         </div>
       )}
-      {character.race && character.class && (
+      {character.race && character.class && !confirmAtr && (
+        <>
+          {arr.map((e: CharacterProperties) => (<Attribute key={e} defaultAtr={character[e]} name={e} bonus={2} change={(atrValue:number,atrName:CharacterProperties) => {
+            setCharacter((character) => ({
+              ...character,
+              ...{[atrName]:atrValue},
+            }))
+          }} />))}
+          <button type='button' onClick={confirmation}>confirm attributes</button>
+        </>
+      )}
+      {character.race && character.class && confirmAtr && (
         <>
           <input ref={nameOfChar} className="border-4" type="text" />
           <div>{character.race}</div>
           <button onClick={delRace}>X</button>
           <div>{character.class}</div>
           <button onClick={delClass}>X</button>
+          <div>{JSON.stringify(character)}</div>
           <br />
           <button className="border-4" onClick={createChar}>
             create char

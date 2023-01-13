@@ -9,19 +9,20 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.VarChar(300)
-  access_token      String? @db.VarChar(300)
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? @db.VarChar(300)
+  access_token       String? @db.VarChar(300)
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  verification_token String? @db.VarChar(300)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {
@@ -34,8 +35,8 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
+  name          String    @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
   password      String?
@@ -43,22 +44,22 @@ model User {
   sessions      Session[]
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
 model Characters {
-  id       Int     @id @default(autoincrement())
-  name     String? @db.VarChar(20)
-  race_id  Int
-  class_id Int
-  owner_id String? @db.VarChar(50)
-  race     Race    @relation(fields: [race_id], references: [id], onDelete: Cascade)
-  class    Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
+  id        Int     @id @default(autoincrement())
+  name      String? @db.VarChar(20)
+  race_id   Int
+  class_id  Int
+  owner_id  String? @db.VarChar(50)
+  maxHP     Int?
+  currentHP Int?
+  str       Int?
+  dex       Int?
+  con       Int?
+  int       Int?
+  wis       Int?
+  char      Int?
+  race      Race    @relation(fields: [race_id], references: [id], onDelete: Cascade)
+  class     Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
 }
 
 model Class {
@@ -66,12 +67,6 @@ model Class {
   id          Int          @id @default(autoincrement())
   description String?      @db.VarChar(255)
   character   Characters[]
-}
-
-model Login {
-  id       Int     @id @default(autoincrement())
-  username String? @db.VarChar(30)
-  password String? @db.VarChar(30)
 }
 
 model Race {
@@ -85,4 +80,19 @@ model Race {
   wis         Int?
   char        Int?
   character   Characters[]
+}
+
+model Spell {
+  name        String  @unique
+  id          Int     @id @default(autoincrement())
+  description String? @db.VarChar(500)
+  damage      Int?
+  cooldown    Int?
+}
+
+model SpellsForClasses {
+  spellId Int
+  classId Int
+
+  @@id([spellId, classId])
 }

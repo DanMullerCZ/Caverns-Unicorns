@@ -15,6 +15,12 @@ export const exampleRouter = router({
         race: z.string(),
         user_id: z.string(),
         name: z.string(),
+        str:z.number(),
+        con:z.number(),
+        dex:z.number(),
+        int:z.number(),
+        wis:z.number(),
+        char:z.number(),
       }),
     )
     .mutation(async (input) => {
@@ -51,7 +57,15 @@ export const exampleRouter = router({
           name: input.input.name,
           race_id: race_id.id,
           class_id: class_id.id,
+          maxHP:10,
+          currentHP:10,
           owner_id: input.input.user_id,
+          str:input.input.str,
+          dex:input.input.dex,
+          con:input.input.con,
+          int:input.input.int,
+          wis:input.input.wis,
+          char:input.input.char,
         },
       });
       return 'ok';
