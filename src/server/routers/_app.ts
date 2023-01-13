@@ -3,6 +3,7 @@ import { wsRouter } from './subsciptions';
 import { authRouter } from './auth';
 import { exampleRouter } from './backend';
 import { dbRouter } from './dbRouter';
+import { userSettRouter } from './userSettings';
 import { playground } from './playground';
 
 export const appRouter = router({
@@ -11,6 +12,7 @@ export const appRouter = router({
   backend: exampleRouter,
   auth: authRouter,
   dbRouter: dbRouter,
+  userSettings: userSettRouter,
   playground: playground,
 });
 
