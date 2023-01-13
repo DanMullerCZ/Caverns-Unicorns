@@ -20,18 +20,24 @@ const RaceDetail = ({
   const mouseEnter = () => setMouseIn(true);
   const mouseLeave = () => setMouseIn(false);
   return (
-    <li
+    <div
       test-id="race"
-      className={styles.li}
+      className={styles.container}
       onClick={handleClick}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
+      style={{ backgroundImage: `url(/${name}.png)` }}
     >
-      <div className={styles.details}>
-        <img src={`/${name}.png`}></img>
-        {!creation && <h2 className={styles.h2}>{name.toUpperCase()}</h2>}
-      </div>
-    </li>
+      {!creation && (
+        <Link href={`/races/${name}`}>
+          <h2>{name.toUpperCase()}</h2>
+        </Link>
+      )}
+      {creation && <h2>{name.toUpperCase()}</h2>}
+      <p className={mouseIn ? '' : styles.hidden}>
+        {desc || 'Lorem ipsum mozna'}
+      </p>
+    </div>
   );
 };
 

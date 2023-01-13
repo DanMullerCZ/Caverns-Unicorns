@@ -19,8 +19,8 @@ const RaceList = ({
 
   return (
     <>
-      <div className={styles.body}>
-        <ul test-id="racesArr" className={styles.ul}>
+      <div className="flex h-screen w-screen items-center justify-center">
+        <div test-id="racesArr" className={styles.container}>
           {races.map((e: Race) => (
             <RaceDetail
               key={e.id}
@@ -30,7 +30,7 @@ const RaceList = ({
               name={e.name}
             ></RaceDetail>
           ))}
-        </ul>
+        </div>
       </div>
     </>
   );
