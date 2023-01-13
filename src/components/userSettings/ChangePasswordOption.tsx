@@ -12,7 +12,7 @@ const ChangePasswordOption: NextPage = () => {
     const passwordInput = useRef<HTMLInputElement>(null);
     const userPassword = trpc.userSettings.changePassword.useMutation()
     const handleClick = () => {    
-        userPassword.mutate(passwordInput.current?.value!)
+        userPassword.mutate(passwordInput.current!.value!)
     }
 
     return  (

@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '../styles/Character-list.module.css';
@@ -12,11 +12,12 @@ const Characters = ({ characters }: { characters: any }) => {
   });
 
   const handleClick = (name: string, race: string, nameOfClass: string) => {
-    setHero((hero) => ({
+    setHero({
       name: name,
       race: race,
       class: nameOfClass,
-    }));
+    }
+    );
   };
 
   return (
@@ -26,20 +27,20 @@ const Characters = ({ characters }: { characters: any }) => {
         <div className={styles.container}>
           <div className={styles.heroDisplay}>
             <Image
-                className="rounded-lg"
-                src={`/${hero.class}.png`}
-                alt={`${hero.class}`}
-                width={200}
-                height={200}
-              />
+              className="rounded-lg"
+              src={`/${hero.class}.png`}
+              alt={`${hero.class}`}
+              width={200}
+              height={200}
+            />
             <div className="">
               <p className="text-2xl">{hero.name}</p>
               <p>
-                  <span className="text-gray-400">
-                    {hero.race} {hero.class}
-                  </span>
+                <span className="text-gray-400">
+                  {hero.race} {hero.class}
+                </span>
               </p>
-              
+
             </div>
           </div>
           <Link className={styles.startGameButton} href="/character-creation">

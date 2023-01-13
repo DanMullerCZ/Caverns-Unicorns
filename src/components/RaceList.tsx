@@ -6,7 +6,8 @@ import { Race } from '@prisma/client';
 
 
 
-const RaceList = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:Function,creation:boolean}) => {
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const RaceList = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:(arg:string)=>void,creation:boolean}) => {
   const handleClick = (e:string)=>{
     setRace(e)
 }
@@ -23,6 +24,7 @@ const RaceList = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:Fu
   )
 }
 RaceList.defaultProps = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setRace: () => {},
   creation:false
 };

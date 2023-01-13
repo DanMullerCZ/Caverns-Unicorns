@@ -49,9 +49,17 @@ export const exampleRouter = router({
       await prisma.characters.create({
         data: {
           name: input.input.name,
-          race_id: race_id.id,
-          class_id: class_id.id,
+          race: input.input.race,
+          class: input.input.class,
           owner_id: input.input.user_id,
+          str:0,
+          int:0,
+          dex:0,
+          con:0,
+          wis:0,
+          char:0,
+          maxHP:0,
+          currentHP:0
         },
       });
       return 'ok';

@@ -119,7 +119,7 @@ function DropdownMenu() {
             <DropdownItem>All Races</DropdownItem>
           </Link>
           {races?.map((e: any) => (
-            <Link href={`/races/${e.name}`}>
+            <Link key={e} href={`/races/${e.name}`}>
               <DropdownItem>{e.name}</DropdownItem>
             </Link>
           ))}
@@ -141,7 +141,7 @@ function DropdownMenu() {
             <DropdownItem>All Classes</DropdownItem>
           </Link>
           {classes?.map((e: any) => (
-            <Link href={`/classes/${e.name}`}>
+            <Link key={e} href={`/classes/${e.name}`}>
               <DropdownItem>{e.name}</DropdownItem>
             </Link>
           ))}
