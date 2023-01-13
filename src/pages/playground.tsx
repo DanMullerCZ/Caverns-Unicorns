@@ -5,8 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import styles from '../styles/playground.module.css';
 import { mapArray } from 'components/array';
-import Image from 'next/image'
-import Dice from 'components/Dice';
 
 const Playground: NextPage = () => {
   const controller = trpc.playground.remoteControl.useMutation();
@@ -89,7 +87,7 @@ const Playground: NextPage = () => {
       >
         {/* <h1 className="text-[100px]">Welcome to the Wildlands</h1> */}
         <div className={styles.container}>
-          {mapArray.map(e => (e.map(f => (<MapTile tileType={f} />))))}
+          {mapArray.map((e,index) => (e.map(f => (<MapTile key={index} tileType={f} />))))}
         </div>
         <Map />
       </div>

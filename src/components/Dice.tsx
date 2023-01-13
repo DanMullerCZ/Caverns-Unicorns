@@ -7,7 +7,7 @@ const Dice = () => {
     let lastFace:number
     let timeoutId:any
    //let transitionDuration:number = 500
-    let animationDuration:number  = 300
+    const animationDuration  = 300
     const handleClick = () => {
             die.current?.classList.add('rolling')
             clearTimeout(timeoutId)
@@ -24,7 +24,7 @@ const Dice = () => {
         die.current?.setAttribute('data-face', face.toString());
       }
       const randomFace =()=> {
-        var face = Math.floor((Math.random() * 20)) + 1
+        const face = Math.floor((Math.random() * 20)) + 1
         lastFace = face == lastFace ? randomFace() : face
         return face;
       }

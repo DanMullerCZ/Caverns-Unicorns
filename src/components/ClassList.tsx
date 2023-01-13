@@ -6,7 +6,8 @@ import { Class } from '@prisma/client';
 
 
 
-const ClassList = ({classes,setClass=()=>{},creation=false}:{classes:Class[],setClass:Function,creation:boolean}) => {
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const ClassList = ({classes,setClass=()=>{},creation=false}:{classes:Class[],setClass:(arg: string)=>void,creation:boolean}) => {
   const handleClick = (e:string)=>{
     setClass(e)
 }
@@ -22,6 +23,7 @@ const ClassList = ({classes,setClass=()=>{},creation=false}:{classes:Class[],set
   )
 }
 ClassList.defaultProps = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setClass: () => {},
   creation:false
 };

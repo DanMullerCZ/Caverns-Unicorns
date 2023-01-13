@@ -34,12 +34,12 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String   @unique
-  email         String   @unique
+  id            String              @id @default(cuid())
+  name          String              @unique
+  email         String              @unique
   emailVerified DateTime?
   image         String?
-  password      String
+  password      String?
   accounts      Account[]
   sessions      Session[]
   premium       Premium_Membership?
@@ -47,10 +47,8 @@ model User {
 
 model Characters {
   id        Int     @id @default(autoincrement())
-  name      String @db.VarChar(20)
-  race_id   Int
-  class_id  Int
-  owner_id  String @db.VarChar(50)
+  name      String? @db.VarChar(20)
+  owner_id  String? @db.VarChar(50)
   maxHP     Int
   currentHP Int
   str       Int
@@ -59,29 +57,27 @@ model Characters {
   int       Int
   wis       Int
   char      Int
-  race      Race    @relation(fields: [race_id], references: [id], onDelete: Cascade)
-  class     Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
+  class   String
+  race    String
 }
 
 model Class {
   name        String
   id          Int                @id @default(autoincrement())
-  description String            @db.VarChar(255)
-  character   Characters[]
+  description String?            @db.VarChar(255)
   spells      SpellsForClasses[]
 }
 
 model Race {
   name        String
   id          Int          @id @default(autoincrement())
-  description String      @db.VarChar(255)
+  description String?      @db.VarChar(255)
   dex         Int
   str         Int
   con         Int
   int         Int
   wis         Int
   char        Int
-  character   Characters[]
 }
 
 model Spell {
@@ -118,3 +114,8 @@ model Premium_Membership {
   user     User     @relation(fields: [userId], references: [id])
 }
 
+model Login {
+  id       Int     @id @default(autoincrement())
+  username String? @db.VarChar(30)
+  password String? @db.VarChar(30)
+}
