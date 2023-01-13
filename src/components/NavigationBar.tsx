@@ -1,8 +1,13 @@
 import Image from 'next/image';
 import ArrowIcon from '../../public/iconsNavBar/arrow.svg';
+import Link from 'next/link';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { createProxySSGHelpers } from '@trpc/react-query/ssg';
+import { appRouter } from 'server/routers/_app';
+import superjson from 'superjson';
+import { trpc } from 'utils/trpc';
 
 export function NavigationBar() {
   return (
@@ -23,15 +28,22 @@ function Navbar(props: any) {
 }
 
 function NavItem(props: any) {
-  const [open, setOpen] = useState(false);
+  //   const [open, setOpen] = useState(false);
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false);
 
   return (
-    <li className="nav-item">
-      <a href="#" className="icon-butto gold goldeffect text-2xl pl-20" onClick={() => setOpen(!open)}>
+    <li className="nav-item" ref={ref}>
+      <a
+        href="#"
+        className="icon-butto gold goldeffect pl-20 text-2xl"
+        onClick={() => setIsComponentVisible(!isComponentVisible)}
+        ref={ref}
+      >
         Menu
         {props.icon}
       </a>
-      {open && props.children}
+      {isComponentVisible && props.children}
     </li>
   );
 }
@@ -40,6 +52,12 @@ function DropdownMenu() {
   const [activeMenu, setActiveMenu] = useState('main');
   const [menuHeight, setMenuHeight] = useState<any>(null);
   const dropdownRef = useRef<any>(null);
+  //   const { ref, isComponentVisible } = useComponentVisible(true);
+
+  const dataRaces = trpc.dbRouter.getAllRaces.useQuery();
+  const races = dataRaces.data;
+  const dataClasses = trpc.dbRouter.getAllClasses.useQuery();
+  const classes = dataClasses.data;
 
   useEffect(() => {
     setMenuHeight(dropdownRef.current?.firstChild.offsetHeigh);
@@ -54,7 +72,7 @@ function DropdownMenu() {
     return (
       <a
         href="#"
-        className="menu-item gold"
+        className="menu-item"
         onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}
       >
         {/* <span className="icon-button">{props.leftIcon}</span> */}
@@ -65,6 +83,8 @@ function DropdownMenu() {
   }
 
   return (
+    // <div ref={ref}>
+    //   {isComponentVisible && (
     <div className="dropdown" style={{ height: menuHeight }} ref={dropdownRef}>
       <CSSTransition
         in={activeMenu === 'main'}
@@ -76,9 +96,11 @@ function DropdownMenu() {
         <div className="menu">
           <DropdownItem goToMenu="races">Races</DropdownItem>
           <DropdownItem goToMenu="classes">Classes</DropdownItem>
-          <DropdownItem goToMenu="quests">Quests</DropdownItem>
-          <DropdownItem goToMenu="races">Spells</DropdownItem>
-          <DropdownItem goToMenu="races">Shop</DropdownItem>
+          {/* <DropdownItem goToMenu="quests">Quests</DropdownItem>
+          <DropdownItem goToMenu="races">Spells</DropdownItem> */}
+          <Link href="/shop">
+            <DropdownItem>Shop</DropdownItem>
+          </Link>
         </div>
       </CSSTransition>
 
@@ -93,10 +115,14 @@ function DropdownMenu() {
           <DropdownItem goToMenu="main">
             <Image src={ArrowIcon} alt="" height={20} width={20}></Image>
           </DropdownItem>
-          <DropdownItem>Human</DropdownItem>
-          <DropdownItem>Elf</DropdownItem>
-          <DropdownItem>Dwarf</DropdownItem>
-          <DropdownItem>Hobbit</DropdownItem>
+          <Link href={`/races`}>
+            <DropdownItem>All Races</DropdownItem>
+          </Link>
+          {races?.map((e: any) => (
+            <Link href={`/races/${e.name}`}>
+              <DropdownItem>{e.name}</DropdownItem>
+            </Link>
+          ))}
         </div>
       </CSSTransition>
 
@@ -111,16 +137,41 @@ function DropdownMenu() {
           <DropdownItem goToMenu="main">
             <Image src={ArrowIcon} alt="" height={20} width={20}></Image>
           </DropdownItem>
-          <DropdownItem leftIcon="🦘">Fighter</DropdownItem>
-          <DropdownItem leftIcon="🐸">Cleric</DropdownItem>
-          <DropdownItem leftIcon="🦋">Paladin</DropdownItem>
-          <DropdownItem leftIcon="🦔">Hunter</DropdownItem>
-          <DropdownItem leftIcon="🦔">Hunter</DropdownItem>
-          <DropdownItem leftIcon="🦔">Hunter</DropdownItem>
+          <Link href={`/classes`}>
+            <DropdownItem>All Classes</DropdownItem>
+          </Link>
+          {classes?.map((e: any) => (
+            <Link href={`/classes/${e.name}`}>
+              <DropdownItem>{e.name}</DropdownItem>
+            </Link>
+          ))}
         </div>
       </CSSTransition>
     </div>
+    //   )}
+    // </div>
   );
+}
+
+export function useComponentVisible(initialIsVisible: any) {
+  const [isComponentVisible, setIsComponentVisible] =
+    useState(initialIsVisible);
+  const ref = useRef<any>(null);
+
+  const handleClickOutside = (event: any) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIsComponentVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
+
+  return { ref, isComponentVisible, setIsComponentVisible };
 }
 
 export default NavigationBar;

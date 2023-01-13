@@ -14,6 +14,7 @@ const VeryfiEmail: NextPage = () => {
   return (
     <div>
       <p>{veryfiEmail.data?.message}</p>
+      <p>Token: {token}</p>
     </div>
   );
 };
