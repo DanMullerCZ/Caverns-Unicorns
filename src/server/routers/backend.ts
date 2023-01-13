@@ -239,8 +239,7 @@ export const exampleRouter = router({
 
         
         const account: Account = await prisma.account.upsert({
-          where: {
-            userId: input.data.user.id,
+          where: {userId: input.data.user.id 
           },
           update : {
             verification_token: jwt.sign(

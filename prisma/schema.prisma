@@ -10,7 +10,7 @@ datasource db {
 
 model Account {
   id                 String  @id @default(cuid())
-  userId             String
+  userId             String  @unique
   type               String
   provider           String
   providerAccountId  String
@@ -35,8 +35,8 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  name          String    @unique
-  email         String    @unique
+  name          String?   @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
   password      String?
@@ -99,4 +99,25 @@ model SpellsForClasses {
   class   Class @relation(fields: [classId], references: [id])
 
   @@id([spellId, classId])
+}
+
+model Login {
+  id       Int     @id @default(autoincrement())
+  username String? @db.VarChar(30)
+  password String? @db.VarChar(30)
+}
+
+model Premium_Membership {
+  id       String   @id
+  userId   String   @unique
+  paidDate DateTime
+  status   String
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
