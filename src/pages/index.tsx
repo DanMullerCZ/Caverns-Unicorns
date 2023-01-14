@@ -73,7 +73,7 @@ const AuthShowcase: React.FC = () => {
       >
         {sessionData ? 'Log Out' : 'Log In'}
       </button>
-      <Link className="goldeffect" href={'/register'}>
+      <Link className="goldeffect" href={'/registration'}>
         Register
       </Link>
     </div>
