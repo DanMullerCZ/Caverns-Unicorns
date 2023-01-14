@@ -15,9 +15,6 @@ export const userSettRouter = router({
         }))
         .mutation(async({input, ctx }) => {      
             try {
-                if( input.currentPassword === '' ){
-                    return 'Current password required'
-                }
                 const userPass: any = await prisma.user.findFirst({
                     where: { id: ctx.session?.user?.id } ,
                     select: { password: true }
@@ -37,29 +34,10 @@ export const userSettRouter = router({
                     })
                     return `Succesfully changed password ${newPassword}`
                 } else {
-                    return 'something went wrong :('
+                    return 'wrong password'
                 }
             } catch (e) {
                 return `Cannot acces data from database, error:${e}`
             }
-        }),
-    changePassword: publicProcedure
-            .input(z.string())
-            .mutation(async({ input, ctx }) => {
-                try{
-                    const hashedNewPass = hashToken(input)
-                    const newPassword: any = await prisma.user.update({
-                        where: { 
-                            id: ctx.session?.user?.id 
-                        },
-                        data: {
-                            password: hashedNewPass
-                        }  
-                    })
-                    console.log('succes');                   
-                    return newPassword
-                } catch(e){
-                    return 'Cannot update database in change password procedure'
-                }
         })
-    })
+    })        
