@@ -1,3 +1,4 @@
+import UserSettings from "components/userSettings/UserSettings";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -27,7 +28,8 @@ export default function userPage() {
     }
 
     return <>
-        <h1>Here is your user page</h1>
+        <h1 test-id='succes login'>Here is your user page</h1>
+        <UserSettings/>
         <hr />
         <p>{session.data?.user?.name}</p>
         <p>{session.data?.user?.id}</p>
