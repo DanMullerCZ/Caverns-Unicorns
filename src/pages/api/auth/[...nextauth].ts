@@ -70,11 +70,14 @@ export const authOptions: NextAuthOptions = {
             id: session.user.id
           },
           select: {
-            emailVerified: true
+            emailVerified: true,
+            premium: true
           }
         })
        
+        // updates session
         session.user.emailVerified = verif?.emailVerified ? true : false
+        session.user.premium = verif?.premium ? true : false
 
         const s: Prisma.BatchPayload = await prisma.session.updateMany({
           where: { userId: token.sub },

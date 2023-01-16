@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import VideoBackground from 'components/VideoBackground';
 import Link from 'next/link';
 
@@ -29,6 +29,7 @@ const Signin = () => {
                 type="email"
                 name="email"
                 id="email"
+                required
               />
               <label className="text-sm" htmlFor="password">
                 Password
@@ -38,6 +39,7 @@ const Signin = () => {
                 type="password"
                 name="password"
                 id="password"
+                required
               />
             </form>
 
@@ -76,7 +78,7 @@ const Signin = () => {
               <button
                 className=" rounded-md border  border-yellow-400 px-4 py-2 goldeffect "
                 onClick={() => {
-                  signIn('discord', { callbackUrl: process.env.HOST });
+                  signIn('discord', { callbackUrl: process.env.HOST } );
                 }}
               >
                 Login with Discord
