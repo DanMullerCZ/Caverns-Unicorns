@@ -45,22 +45,6 @@ model User {
   premium       Premium_Membership?
 }
 
-model Characters {
-  id        Int     @id @default(autoincrement())
-  name      String? @db.VarChar(20)
-  owner_id  String? @db.VarChar(50)
-  maxHP     Int
-  currentHP Int
-  str       Int
-  dex       Int
-  con       Int
-  int       Int
-  wis       Int
-  char      Int
-  class   String
-  race    String
-}
-
 model Class {
   name        String
   id          Int                @id @default(autoincrement())
@@ -113,41 +97,6 @@ model Characters {
   char      Int
   class     String
   race      String
-}
-
-model Class {
-  name        String
-  id          Int          @id @default(autoincrement())
-  description String?      @db.VarChar(255)
-  spells Spell[]
-}
-
-model Race {
-  name        String
-  id          Int          @id @default(autoincrement())
-  description String?      @db.VarChar(255)
-  dex         Int
-  str         Int
-  con         Int
-  int         Int
-  wis         Int
-  char        Int
-}
-
-model Spell {
-  name        String  @unique
-  id          Int     @id @default(autoincrement())
-  description String? @db.VarChar(500)
-  damage      Int?
-  cooldown    Int?
-  classes     Class[]
-}
-
-model SpellsForClasses {
-  spellId Int
-  classId Int
-
-  @@id([spellId, classId])
 }
 
 model VerificationToken {
