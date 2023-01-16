@@ -70,5 +70,21 @@ export const dbRouter = router({
             } catch (error: any) {
                 return `Unable to delete user with id ${input}`
             }
-        })
+        }),
+    createPremium: publicProcedure
+        .input(z.string())
+        .mutation(async ({ input }) => {
+            try {
+                const newPremium = await prisma.premium_Membership.create({
+                    data: {
+                        userId: input,
+                        paidDate: new Date(),
+                        status: 'active',
+                    }
+                })
+                return newPremium
+            } catch (error) {
+                return 'error has occured'
+            }
+        }),
 });

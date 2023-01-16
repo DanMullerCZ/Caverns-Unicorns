@@ -1,27 +1,46 @@
-import ItemInShop from 'components/ItemInShop';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { loadStripe, StripeError } from "@stripe/stripe-js";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-export default function Shop() {
-  const session = useSession();
-  const router = useRouter();
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string)
 
-  useEffect(() => {
-    if (session.status === 'unauthenticated') {
-      router.push('/login');
-    }
-  });
+export default function Checkout () {
+    const router = useRouter()
+    const session = useSession()
 
-  return (
-    <>
-      <h1>Page is in development</h1>
-      <ItemInShop name='VIP' price={500} link='https://buy.stripe.com/test_aEU5kJb4M6ha5huaEF'/>
-      <Link href="/" className="w-6 border border-solid border-black">
-        BACK TO THE HOMEPAGE
-      </Link>
+    useEffect(() => {
+        if (session.status === 'unauthenticated') {
+          router.push('/login');
+        }
+    })
 
+    const handleClick = async () => {
+        const { sessionId } = await fetch('api/stripe/checkout/session', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({quantity: 1})
+        }).then(res => res.json())
+
+        const stripe = await stripePromise
+        const { error } = await stripe?.redirectToCheckout({
+            sessionId
+        }) as {error: StripeError}
+
+        if (error) {
+            router.reload()
+        }
+    }   
+
+    return <>
+        <div>
+            <h1>Checkout</h1>
+            <h2>{ }</h2>
+            <button role="link" onClick={handleClick}>
+                Click HERE to buy your PREMIUM MEMBERSHIP
+            </button>
+        </div>
     </>
-  );
 }
