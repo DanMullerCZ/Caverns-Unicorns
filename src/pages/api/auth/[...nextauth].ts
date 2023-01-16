@@ -3,7 +3,7 @@ import NextAuth, { type NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { env } from '../../../env/server.mjs';
+import { env } from '../../../env/server';
 import { prisma } from '../../../server/db/client';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { User, Session, Account, Prisma } from '@prisma/client';

@@ -1,8 +1,8 @@
 import { observable } from '@trpc/server/observable';
 //import { prisma } from '../prisma';
 import { z } from 'zod';
-import { protectedProcedure, router } from 'server/trpc';
-import { Playground } from 'server/playground/playground';
+import { protectedProcedure, router } from '../trpc';
+import { Playground } from '../playground/playground';
 
 const pg = new Playground();
 

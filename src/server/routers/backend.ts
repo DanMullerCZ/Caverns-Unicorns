@@ -15,6 +15,12 @@ export const exampleRouter = router({
         race: z.string(),
         user_id: z.string(),
         name: z.string(),
+        str:z.number(),
+        con:z.number(),
+        dex:z.number(),
+        int:z.number(),
+        wis:z.number(),
+        char:z.number(),
       }),
     )
     .mutation(async (input) => {
@@ -49,9 +55,17 @@ export const exampleRouter = router({
       await prisma.characters.create({
         data: {
           name: input.input.name,
-          race_id: race_id.id,
-          class_id: class_id.id,
+          race: input.input.race,
+          class: input.input.class,
+          maxHP:input.input.con,
+          currentHP:input.input.con,
           owner_id: input.input.user_id,
+          str:input.input.str,
+          dex:input.input.dex,
+          con:input.input.con,
+          int:input.input.int,
+          wis:input.input.wis,
+          char:input.input.char,
         },
       });
       return 'ok';
@@ -84,6 +98,7 @@ export const exampleRouter = router({
         int: 0,
         wis: 0,
         char: 0,
+        description: 'bla bla'
       };
       for (let i = 0; i < res.ability_bonuses.length; i++) {
         switch (res.ability_bonuses[i].ability_score.index) {
