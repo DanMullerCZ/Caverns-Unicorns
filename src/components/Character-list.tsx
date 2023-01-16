@@ -1,7 +1,8 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '../styles/Character-list.module.css';
+import UserSettings from './userSettings/UserSettings';
 
 const Characters = ({ characters }: { characters: any }) => {
   const [hero, setHero] = useState({
@@ -11,33 +12,37 @@ const Characters = ({ characters }: { characters: any }) => {
   });
 
   const handleClick = (name: string, race: string, nameOfClass: string) => {
-    setHero((hero) => ({
+    setHero({
       name: name,
       race: race,
       class: nameOfClass,
-    }));
+    }
+    );
   };
 
   return (
     <>
+      <UserSettings />
       <section className="">
         <div className={styles.container}>
           <div className={styles.heroDisplay}>
             <Image
+
                 className="rounded-lg"
                 src={`/${hero.race}.png`}
                 alt={`${hero.race}`}
                 width={200}
                 height={200}
               />
+
             <div className="">
               <p className="text-2xl">{hero.name}</p>
               <p>
-                  <span className="text-gray-400">
-                    {hero.race} {hero.class}
-                  </span>
+                <span className="text-gray-400">
+                  {hero.race} {hero.class}
+                </span>
               </p>
-              
+
             </div>
           </div>
           <Link className={styles.startGameButton} href="/character-creation">

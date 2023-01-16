@@ -57,8 +57,8 @@ export const exampleRouter = router({
           name: input.input.name,
           race: input.input.race,
           class: input.input.class,
-          maxHP:10,
-          currentHP:10,
+          maxHP:input.input.con,
+          currentHP:input.input.con,
           owner_id: input.input.user_id,
           str:input.input.str,
           dex:input.input.dex,
@@ -70,6 +70,7 @@ export const exampleRouter = router({
       });
       return 'ok';
     }),
+
   races: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async (input: any) => {
@@ -97,6 +98,7 @@ export const exampleRouter = router({
         int: 0,
         wis: 0,
         char: 0,
+        description: 'bla bla'
       };
       for (let i = 0; i < res.ability_bonuses.length; i++) {
         switch (res.ability_bonuses[i].ability_score.index) {
@@ -129,6 +131,7 @@ export const exampleRouter = router({
       await prisma?.race.create({ data: response });
       return response;
     }),
+
   registration: publicProcedure
     .input(
       z.object({ email: z.string(), password: z.string(), name: z.string(), match: z.boolean() }),
@@ -149,15 +152,15 @@ export const exampleRouter = router({
           },
         })) as User;
         const timeOfExpiration = new Date();
-        const tokenExpiration = '10min'; // set also one line below
-        timeOfExpiration.setMinutes(timeOfExpiration.getMinutes() + 10);
+        const tokenExpiration = '1min'; // set also one line below
+        timeOfExpiration.setMinutes(timeOfExpiration.getMinutes() + 1);
         const account: Account = (await prisma?.account.create({
           data: {
             userId: user.id,
             type: 'normal',
             provider: 'Credentials',
             providerAccountId: 'not important',
-            access_token: jwt.sign(
+            verification_token: jwt.sign(
               { email: user.email },
               process.env.JWT_ACCESS_SECRET as Secret,
               {
@@ -177,7 +180,7 @@ export const exampleRouter = router({
         ${
           (process.env.HOST +
             '/veryfiEmail?token=' +
-            account.access_token) as string
+            account.verification_token) as string
         }
         `;
         sendEmailVerificationToken(
@@ -205,7 +208,7 @@ export const exampleRouter = router({
       let user: User;
       try {
         account = (await prisma.account.findMany({
-          where: { access_token: token },
+          where: { verification_token: token },
         })) as Account[];
         user = (await prisma.user.findUnique({
           where: { id: account[0].userId },
@@ -227,14 +230,70 @@ export const exampleRouter = router({
         }
       } catch (error) {
         if (!user?.emailVerified) {
-          await prisma?.user.delete({ where: { id: account[0].userId } });
           return {
             message:
-              'Token has expired. You need to register again. Your email has been deleted from the database.',
+              'Token has expired',
           };
         } else {
           return { message: 'Email already verified' };
         }
       }
     }),
+
+    verifyEmailAgain: publicProcedure
+      .input(z.any())
+      .mutation(async ({ input }) => {
+        const date = new Date();
+
+        date.setDate(date.getSeconds() + 30);
+
+        const timeOfExpiration = new Date();
+
+        const tokenExpiration = '1min'; // set also one line below
+        timeOfExpiration.setMinutes(timeOfExpiration.getMinutes() + 1);
+
+        
+        const account: Account = await prisma.account.upsert({
+          where: {userId: input.data.user.id 
+          },
+          update : {
+            verification_token: jwt.sign(
+              { email: input.data.user.email },
+              process.env.JWT_ACCESS_SECRET as Secret,
+              {
+                expiresIn: tokenExpiration,
+              },
+              ),
+          },
+          create : {
+                userId: input.data.user.id,
+                type: 'normal',
+                provider: 'Credentials',
+                providerAccountId: 'not important',
+                verification_token: jwt.sign(
+                    { email: input.data.user.email },
+                    process.env.JWT_ACCESS_SECRET as Secret,
+                    {
+                        expiresIn: tokenExpiration,
+                      },
+                    ),
+                },
+          });
+
+        const message = `Token expires in ${tokenExpiration}, at  ${timeOfExpiration.toLocaleTimeString(
+          'Cs-cz',
+        )}
+        ${
+          (process.env.HOST +
+            '/veryfiEmail?token=' +
+            account.verification_token) as string
+        }
+        `;
+        sendEmailVerificationToken(
+            input.data?.user?.email as string,
+          'Verify your account',
+          message,
+        );
+      })
+
 });

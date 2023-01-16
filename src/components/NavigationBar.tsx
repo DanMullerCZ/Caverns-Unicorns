@@ -1,12 +1,8 @@
 import Image from 'next/image';
 import ArrowIcon from '../../public/iconsNavBar/arrow.svg';
 import Link from 'next/link';
-
 import React, { useState, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import { createProxySSGHelpers } from '@trpc/react-query/ssg';
-import { appRouter } from 'server/routers/_app';
-import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
 
 export function NavigationBar() {
@@ -119,7 +115,7 @@ function DropdownMenu() {
             <DropdownItem>All Races</DropdownItem>
           </Link>
           {races?.map((e: any) => (
-            <Link href={`/races/${e.name}`}>
+            <Link key={e} href={`/races/${e.name}`}>
               <DropdownItem>{e.name}</DropdownItem>
             </Link>
           ))}
@@ -141,7 +137,7 @@ function DropdownMenu() {
             <DropdownItem>All Classes</DropdownItem>
           </Link>
           {classes?.map((e: any) => (
-            <Link href={`/classes/${e.name}`}>
+            <Link key={e} href={`/classes/${e.name}`}>
               <DropdownItem>{e.name}</DropdownItem>
             </Link>
           ))}

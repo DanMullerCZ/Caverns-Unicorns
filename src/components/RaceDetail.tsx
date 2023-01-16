@@ -11,10 +11,11 @@ const RaceDetail = ({
 }: {
   name: string;
   desc: string;
-  click: Function;
+  click: (arg:string)=>void;
   creation: boolean;
   id: number;
 }) => {
+
   const handleClick = () => {
     click(name, id);
   };

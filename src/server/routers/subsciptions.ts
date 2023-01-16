@@ -1,7 +1,7 @@
 import { observable } from '@trpc/server/observable';
 //import { prisma } from '../prisma';
 import { z } from 'zod';
-import { protectedProcedure, publicProcedure, router } from 'server/trpc';
+import { protectedProcedure, publicProcedure, router } from '../trpc';
 import { Subject, fromEvent } from 'rxjs';
 
 const subject = new Subject<string>();

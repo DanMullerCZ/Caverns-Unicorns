@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import ClassList from 'components/ClassList';
 import RaceList from 'components/RaceList';
 import styles from '../styles/character-creation.module.css';
@@ -10,6 +10,7 @@ import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Head from 'next/head';
 import Attribute from 'components/Attribute';
 import VideoBackground from 'components/VideoBackground';
+
 
 const createNewChar = () => {
   const dataRaces = trpc.dbRouter.getAllRaces.useQuery();
@@ -111,6 +112,7 @@ const createNewChar = () => {
   };
   const setPoints = (x: number) => {
     setAtrPoints((atrPoints) => atrPoints + x);
+
   };
 
   if (addChar.isSuccess) {

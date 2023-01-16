@@ -3,7 +3,9 @@ import React,{useState} from 'react'
 import styles from '../styles/OneRace.module.css'
 
 
-const ClassDetail = ({name,desc,click,creation}:{name:string,desc:string,click:(x:string)=>void,creation:boolean}) => {
+
+
+const ClassDetail = ({name,desc,click,creation}:{name:string,desc:string,click:(arg:string)=>void,creation:boolean}) => {
   const handleClick = () => {
     click(name)
   }

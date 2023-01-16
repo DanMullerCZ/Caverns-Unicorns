@@ -21,16 +21,6 @@ export const getStaticProps = async (context: GetStaticPropsContext<{ class: str
     });
 
     const nameOfClass = context.params?.class as string;
-    //     const classDetail = await prisma.class.findFirst({
-    //         where: { name: nameOfClass }, orderBy: {
-    //             name: 'asc',
-    //         },
-    //     })
-
-    //     return {
-    //         props: { classDetail: classDetail }
-    //     }
-    // }
     await ssg.dbRouter.getClass.prefetch(nameOfClass);
     return {
         props: {

@@ -4,18 +4,12 @@ import styles from '../styles/Races.module.css';
 import PropTypes from 'prop-types';
 import { Race } from '@prisma/client';
 
-const RaceList = ({
-  races,
-  setRace = () => {},
-  creation = false,
-}: {
-  races: Race[];
-  setRace: Function;
-  creation: boolean;
-}) => {
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const RaceList = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:(arg:string)=>void,creation:boolean}) => {
   const handleClick = (e: string, i: number) => {
     setRace(e, i);
   };
+
 
   return (
     <div test-id="racesArr" className={styles.container}>
@@ -33,6 +27,7 @@ const RaceList = ({
   );
 };
 RaceList.defaultProps = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setRace: () => {},
   creation: false,
 };
