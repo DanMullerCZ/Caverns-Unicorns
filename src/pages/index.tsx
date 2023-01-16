@@ -18,7 +18,7 @@ const Home: NextPage = () => {
       </Head>
       <NavigationBar />
       <main className="goldeffect gold mx-auto flex flex-col items-center justify-center gap-10 px-6 py-8 font-LOTR md:h-screen">
-        <h1 className=" goldeffect gold text-[100px]">
+        <h1 test-id='succes delete' className=" goldeffect gold text-[100px]">
           Welcome to Greens & Foxes
         </h1>
         <AuthShowcase />
