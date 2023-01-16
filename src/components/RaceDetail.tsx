@@ -11,7 +11,7 @@ const RaceDetail = ({
 }: {
   name: string;
   desc: string;
-  click: (arg:string)=>void;
+  click: (arg:string,id:number)=>void;
   creation: boolean;
   id: number;
 }) => {

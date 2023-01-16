@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect,useState, useRef } from 'react';
 import ClassList from 'components/ClassList';
 import RaceList from 'components/RaceList';
 import styles from '../styles/character-creation.module.css';
 import { trpc } from 'utils/trpc';
-import { useSession } from 'next-auth/react';
+import {  useSession } from 'next-auth/react';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
