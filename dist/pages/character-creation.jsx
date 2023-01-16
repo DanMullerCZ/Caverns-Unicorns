@@ -30,37 +30,71 @@ exports.getStaticProps = void 0;
 const react_1 = __importStar(require("react"));
 const ClassList_1 = __importDefault(require("components/ClassList"));
 const RaceList_1 = __importDefault(require("components/RaceList"));
-const character_creation_module_css_1 = __importDefault(require("../styles/character-creation.module.css"));
 const trpc_1 = require("utils/trpc");
 const react_2 = require("next-auth/react");
 const _app_1 = require("server/routers/_app");
 const superjson_1 = __importDefault(require("superjson"));
 const ssg_1 = require("@trpc/react-query/ssg");
 const head_1 = __importDefault(require("next/head"));
+const Attribute_1 = __importDefault(require("components/Attribute"));
+const VideoBackground_1 = __importDefault(require("components/VideoBackground"));
 const createNewChar = () => {
     const dataRaces = trpc_1.trpc.dbRouter.getAllRaces.useQuery();
     const races = dataRaces.data;
+    console.log(races);
     const dataClasses = trpc_1.trpc.dbRouter.getAllClasses.useQuery();
     const classes = dataClasses.data;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const sessionData = (0, react_2.useSession)();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [confirmAtr, setConfirmAtr] = (0, react_1.useState)(false);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const nameOfChar = (0, react_1.useRef)(null);
+    const arr = [
+        'str',
+        'dex',
+        'con',
+        'wis',
+        'char',
+        'int',
+    ];
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [selectedRace, setSelectedRace] = (0, react_1.useState)(1);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [character, setCharacter] = (0, react_1.useState)({
         race: '',
         class: '',
+        str: 10,
+        con: 10,
+        dex: 10,
+        int: 10,
+        wis: 10,
+        char: 10,
     });
-    const setRace = (x) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [atrPoints, setAtrPoints] = (0, react_1.useState)(5);
+    const setRace = (x, i) => {
         const updatedRace = { race: x };
         setCharacter((character) => ({
             ...character,
             ...updatedRace,
         }));
+        setSelectedRace(i - 1);
     };
-    const delRace = () => {
-        const updatedRace = { race: '' };
-        setCharacter((character) => ({
-            ...character,
-            ...updatedRace,
-        }));
+    const confirmation = () => setConfirmAtr(true);
+    const resetChar = () => {
+        setCharacter({
+            class: '',
+            race: '',
+            str: 10,
+            con: 10,
+            dex: 10,
+            int: 10,
+            wis: 10,
+            char: 10,
+        });
+        setConfirmAtr(false);
+        setAtrPoints(5);
     };
     const setClass = (x) => {
         const updatedClass = { class: x };
@@ -69,21 +103,37 @@ const createNewChar = () => {
             ...updatedClass,
         }));
     };
-    const delClass = () => {
-        const updatedClass = { class: '' };
-        setCharacter((character) => ({
-            ...character,
-            ...updatedClass,
-        }));
-    };
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    (0, react_1.useEffect)(() => {
+        if (races) {
+            arr.forEach((e) => {
+                setCharacter((character) => ({
+                    ...character,
+                    ...{ [e]: 10 + races[selectedRace][e] },
+                }));
+            });
+        }
+    }, [character.race]);
     const addChar = trpc_1.trpc.backend.addChar.useMutation();
     const createChar = async () => {
-        addChar.mutate({
-            class: character.class,
-            race: character.race,
-            user_id: sessionData.data.user.id,
-            name: nameOfChar.current.value,
-        });
+        var _a, _b, _c;
+        if (((_b = (_a = sessionData.data) === null || _a === void 0 ? void 0 : _a.user) === null || _b === void 0 ? void 0 : _b.id) && ((_c = nameOfChar.current) === null || _c === void 0 ? void 0 : _c.value)) {
+            addChar.mutate({
+                class: character.class,
+                race: character.race,
+                user_id: sessionData.data.user.id,
+                name: nameOfChar.current.value,
+                str: character.str,
+                dex: character.dex,
+                con: character.con,
+                int: character.int,
+                wis: character.wis,
+                char: character.char,
+            });
+        }
+    };
+    const setPoints = (x) => {
+        setAtrPoints((atrPoints) => atrPoints + x);
     };
     if (addChar.isSuccess) {
         window.location.href = 'character-list';
@@ -95,27 +145,73 @@ const createNewChar = () => {
       <head_1.default>
         <title>Create new hero</title>
       </head_1.default>
-      {(!character.race || !character.class) && (<div test-id='creation-container' className={character_creation_module_css_1.default.container}>
-          {!character.race && races && (<div test-id='race-selection'>
-              <h1>SELECT RACE</h1>
-              <RaceList_1.default setRace={setRace} creation={true} races={races}/>
-            </div>)}
-          {!character.class && character.race && classes && (<div test-id='class-selection'>
-              <h1>SELECT CLASS</h1>
-              <ClassList_1.default creation={true} setClass={setClass} classes={classes}/>
-            </div>)}
-        </div>)}
-      {character.race && character.class && (<>
-          <input ref={nameOfChar} className="border-4" type="text"/>
-          <div>{character.race}</div>
-          <button onClick={delRace}>X</button>
-          <div>{character.class}</div>
-          <button onClick={delClass}>X</button>
-          <br />
-          <button className="border-4" onClick={createChar}>
-            create char
-          </button>
-        </>)}
+      <div className="flex h-screen w-screen flex-col items-center justify-center">
+        <VideoBackground_1.default />
+        {(!character.race || !character.class) && (<div test-id="creation-container">
+            {!character.race && races && (<div test-id="race-selection">
+                <h1>SELECT RACE</h1>
+                <RaceList_1.default setRace={setRace} creation={true} races={races}/>
+              </div>)}
+            {!character.class && character.race && classes && (<div test-id="class-selection">
+                <h1>Race: {character.race}</h1>
+                <h1>SELECT CLASS</h1>
+                <ClassList_1.default creation={true} setClass={setClass} classes={classes}/>
+              </div>)}
+          </div>)}
+        {character.race && character.class && !confirmAtr && (<>
+            <div className="w-1/5 rounded-xl bg-yellow-700 p-4 bg-contain bg-center bg-no-repeat bg-opacity-75" style={{ backgroundImage: `url(/${character.class}.png)` }}>
+              <h1 className="m-1 text-3xl">Race: {character.race}</h1>
+              <h1 className="m-1 text-3xl">Class: {character.class}</h1>
+              <label className="m-1 text-3xl">
+                Remaining atributte points:{' '}
+                <input value={atrPoints} readOnly className="mr-1 w-10 rounded border"/>
+              </label>
+
+              {arr.map((e) => (<Attribute_1.default key={e} defaultAtr={character[e]} name={e} setPoints={setPoints} remaining={atrPoints} change={(atrValue, atrName) => {
+                    setCharacter((character) => ({
+                        ...character,
+                        ...{ [atrName]: atrValue },
+                    }));
+                }}/>))}
+            </div>
+
+            <button className={atrPoints
+                ? 'invisible m-1 rounded border bg-white text-3xl'
+                : 'm-1  rounded border bg-white text-3xl'} type="button" onClick={confirmation}>
+              confirm attributes
+            </button>
+          </>)}
+        {character.race && character.class && confirmAtr && (<>
+            <div className="grid w-1/5 grid-cols-2 gap-2 rounded-xl bg-yellow-700 p-4 text-3xl bg-contain bg-center bg-no-repeat bg-opacity-75" style={{ backgroundImage: `url(/${character.class}.png)` }}>
+              <p>Race:</p>
+              <p className='align-items-end'>{character.race}</p>
+              <p>Class:</p>
+              <p>{character.class}</p>
+              <p>Strength:</p>
+              <p>{character.str}</p>
+              <p>Dexterity:</p>
+              <p>{character.dex}</p>
+              <p>Constitution:</p>
+              <p>{character.con}</p>
+              <p>Wisdom: </p>
+              <p>{character.wis}</p>
+              <p>Inteligence:</p>
+              <p>{character.int}</p>
+              <p>Charisma:</p>
+              <p>{character.char}</p>
+              <label className="col-start-1 col-end-3">
+                Name :{' '}
+                <input ref={nameOfChar} className="rounded border-4 " type="text"/>
+              </label>
+              <button onClick={resetChar} className="m-1  rounded border bg-white">
+                reset char
+              </button>
+              <button className="m-1  rounded border bg-white" onClick={createChar}>
+                create char
+              </button>
+            </div>
+          </>)}
+      </div>
     </>);
 };
 const getStaticProps = async () => {
@@ -124,7 +220,7 @@ const getStaticProps = async () => {
         ctx: { session: null },
         transformer: superjson_1.default, // optional - adds superjson serialization
     });
-    // prefetch `races`
+    // prefetch `races and classes`
     await ssg.dbRouter.getAllRaces.prefetch();
     await ssg.dbRouter.getAllClasses.prefetch();
     return {

@@ -29,7 +29,7 @@ export class Playground {
       return state;
     }
     interval = setInterval(() => {
-      this.players.forEach((value, key) => {
+      this.players.forEach((value) => {
         value.move();
       });
     }, 25);

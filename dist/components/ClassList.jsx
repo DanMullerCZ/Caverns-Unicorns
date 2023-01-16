@@ -15,7 +15,7 @@ const ClassList = ({ classes, setClass = () => { }, creation = false }) => {
     return (<>
         <div test-id='classesArr' className={Classes_module_css_1.default.container}>
 
-        {classes.map((e) => (<ClassDetail_1.default key={e.id} creation={creation} click={handleClick} desc={e.description} name={e.name}></ClassDetail_1.default>))}
+        {classes.map((e) => (<ClassDetail_1.default key={e.id} creation={creation} click={handleClick} desc={e.description || ''} name={e.name}></ClassDetail_1.default>))}
         </div>
     
     

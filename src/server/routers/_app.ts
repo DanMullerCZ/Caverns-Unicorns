@@ -6,6 +6,7 @@ import { dbRouter } from './dbRouter';
 import { userSettRouter } from './userSettings';
 import { playground } from './playground';
 
+
 export const appRouter = router({
   healthcheck: publicProcedure.query(() => 'yay!'),
   wsRouter: wsRouter,

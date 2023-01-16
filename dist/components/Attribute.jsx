@@ -22,28 +22,38 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const link_1 = __importDefault(require("next/link"));
 const react_1 = __importStar(require("react"));
-const OneRace_module_css_1 = __importDefault(require("../styles/OneRace.module.css"));
-const RaceDetail = ({ name, desc, click, creation, id, }) => {
-    const handleClick = () => {
-        click(name, id);
+const Attribute = ({ name, change, defaultAtr, setPoints, remaining, }) => {
+    const [atr, setAtr] = (0, react_1.useState)(defaultAtr);
+    const inputRef = (0, react_1.useRef)(null);
+    const minus = () => {
+        var _a;
+        if (atr > 0) {
+            setAtr(atr - 1);
+            change(Number((_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.value), name);
+            setPoints(1);
+        }
     };
-    const [mouseIn, setMouseIn] = (0, react_1.useState)(false);
-    const mouseEnter = () => setMouseIn(true);
-    const mouseLeave = () => setMouseIn(false);
-    return (<div test-id="race" className={OneRace_module_css_1.default.container} onClick={handleClick} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} style={{ backgroundImage: `url(/${name}.png)` }}>
-      {!creation && (<link_1.default href={`/races/${name}`}>
-          <h2>{name.toUpperCase()}</h2>
-        </link_1.default>)}
-      {creation && <h2>{name.toUpperCase()}</h2>}
-      <p className={mouseIn ? '' : OneRace_module_css_1.default.hidden}>
-        {desc || 'Lorem ipsum mozna'}
-      </p>
+    const plus = () => {
+        var _a;
+        if (remaining > 0) {
+            setAtr(atr + 1);
+            change(Number((_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.value), name);
+            setPoints(-1);
+        }
+    };
+    return (<div className="grid grid-cols-2 text-3xl w-60 m-1">
+      <p>{name} : </p>
+      <div className='flex'>
+        <input ref={inputRef} value={atr} readOnly className="w-10 border mr-1 rounded"/>
+        <button type="button" className="border w-8 rounded bg-white" onClick={minus}>
+          -
+        </button>
+        <button type="button" className="border w-8 rounded bg-white" onClick={plus}>
+          +
+        </button>
+      </div>
     </div>);
 };
-exports.default = RaceDetail;
+exports.default = Attribute;

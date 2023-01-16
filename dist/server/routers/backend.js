@@ -17,6 +17,12 @@ exports.exampleRouter = (0, trpc_1.router)({
         race: zod_1.z.string(),
         user_id: zod_1.z.string(),
         name: zod_1.z.string(),
+        str: zod_1.z.number(),
+        con: zod_1.z.number(),
+        dex: zod_1.z.number(),
+        int: zod_1.z.number(),
+        wis: zod_1.z.number(),
+        char: zod_1.z.number(),
     }))
         .mutation(async (input) => {
         if (!input.input.name) {
@@ -53,15 +59,15 @@ exports.exampleRouter = (0, trpc_1.router)({
                 name: input.input.name,
                 race: input.input.race,
                 class: input.input.class,
+                maxHP: input.input.con,
+                currentHP: input.input.con,
                 owner_id: input.input.user_id,
-                str: 0,
-                int: 0,
-                dex: 0,
-                con: 0,
-                wis: 0,
-                char: 0,
-                maxHP: 0,
-                currentHP: 0
+                str: input.input.str,
+                dex: input.input.dex,
+                con: input.input.con,
+                int: input.input.int,
+                wis: input.input.wis,
+                char: input.input.char,
             },
         });
         return 'ok';
@@ -90,6 +96,7 @@ exports.exampleRouter = (0, trpc_1.router)({
             int: 0,
             wis: 0,
             char: 0,
+            description: 'bla bla'
         };
         for (let i = 0; i < res.ability_bonuses.length; i++) {
             switch (res.ability_bonuses[i].ability_score.index) {
