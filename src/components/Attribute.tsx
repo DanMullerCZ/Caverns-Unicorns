@@ -1,29 +1,51 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react';
 
-const Attribute = ({bonus,name,change,defaultAtr}:{bonus:number,name:string,change:any,defaultAtr:number}) => {
-    const [atr, setAtr] = useState(defaultAtr + bonus);
-    const inputRef = useRef<HTMLInputElement>(null);
-    
-    const minus = async () => {
-        if (atr > 0) {
-            await setAtr(atr - 1);
-            change(inputRef.current?.value,name)
-        }
+const Attribute = ({
+  name,
+  change,
+  defaultAtr,
+  setPoints,
+  remaining,
+}: {
+  setPoints: (x: number) => void;
+  remaining: number;
+  name: string;
+  change: any;
+  defaultAtr: number;
+}) => {
+  const [atr, setAtr] = useState(defaultAtr);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const minus = () => {
+    if (atr > 0) {
+      setAtr(atr - 1);
+      change(Number(inputRef.current?.value), name);
+      setPoints(1);
     }
+  };
 
-    const plus = async () => {
-        await setAtr(atr + 1);
-        change(inputRef.current?.value,name)
+  const plus = () => {
+    if (remaining > 0) {
+      setAtr(atr + 1);
+      change(Number(inputRef.current?.value), name);
+      setPoints(-1);
     }
+  };
 
-    return (
-        <div>
-            <p>{name}</p>
-            <input ref={inputRef} value={atr} readOnly />
-            <button type='button' onClick={minus}>-</button>
-            <button type='button' onClick={plus}>+</button>
-        </div>
-    )
-}
+  return (
+    <div className="grid grid-cols-2 text-3xl w-60 m-1">
+      <p>{name} : </p>
+      <div className='flex'>
+        <input ref={inputRef} value={atr} readOnly className="w-10 border mr-1 rounded" />
+        <button type="button" className="border w-8 rounded bg-white" onClick={minus}>
+          -
+        </button>
+        <button type="button" className="border w-8 rounded bg-white" onClick={plus}>
+          +
+        </button>
+      </div>
+    </div>
+  );
+};
 
-export default Attribute
+export default Attribute;

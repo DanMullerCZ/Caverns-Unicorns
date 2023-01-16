@@ -1,14 +1,16 @@
-.hidden{
-    display: none;
+.hidden {
+  display: none;
 }
-.container{
-    padding: 10px;
-    border: 1px;
-    border-style: solid;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: grid;
-    justify-items: center;
-    border-radius: 50px;
+.container {
+  height: 30vh;
+  width: 100%;
+  padding: 10px;
+  border: 1px;
+  border-style: solid;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: grid;
+  justify-items: center;
+  border-radius: 50px;
 }

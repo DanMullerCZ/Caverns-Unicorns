@@ -27,18 +27,11 @@ export const getStaticProps = async (context: { req: NextApiRequest }) => {
     },
     select: {
       name: true,
-      race: {
-        select: {
-          name: true,
-        },
-      },
-      class: {
-        select: {
-          name: true
-        }
+      race:true,
+      class: true
       }
     },
-  });
+  );
 
   return {
     props: { response: characters },
