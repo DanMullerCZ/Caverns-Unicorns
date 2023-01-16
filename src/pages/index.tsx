@@ -21,8 +21,6 @@ const Home: NextPage = () => {
 
         <h1 test-id='succes delete' className=" goldeffect gold text-[100px]">
 
-        <VideoBackground />
-
           Welcome to Caverns & Unicorns
 
         </h1>
