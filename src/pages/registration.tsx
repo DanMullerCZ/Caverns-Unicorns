@@ -65,6 +65,7 @@ const Register: NextPage = () => {
               className=" w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2 "
               type="email"
               name="email"
+              required
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -78,6 +79,9 @@ const Register: NextPage = () => {
               className="w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="text"
               name="name"
+              required
+              minLength={6}
+              maxLength={25}
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -91,6 +95,9 @@ const Register: NextPage = () => {
               className=" w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="password"
               name="password1"
+              required
+              minLength={6}
+              maxLength={25}
             />
           </div>
           <div className=" flex flex-col space-y-2 bg-transparent">
@@ -101,6 +108,9 @@ const Register: NextPage = () => {
               className=" w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="password"
               name="password2"
+              required
+              minLength={6}
+              maxLength={25}
             />
           </div>
           <button

@@ -36,6 +36,7 @@ export default function userPage() {
         <hr />
 
         <p>{session.data?.user?.emailVerified ? 'Email was succesfully verified' : 'You have to verify your email'}</p>
+        <p>{session.data?.user?.premium ? 'VIP was succesfully bought' : 'You have to buy your premium membership'}</p>
 
         <hr />
 
