@@ -15,23 +15,34 @@ const RaceDetail = ({
 }) => {
   const handleClick = () => {
     click(name);
+    setFlip(!flip);
+    console.log(flip);
   };
-  const [mouseIn, setMouseIn] = useState(false);
-  const mouseEnter = () => setMouseIn(true);
-  const mouseLeave = () => setMouseIn(false);
+
+  const [flip, setFlip] = useState(false);
   return (
-    <li
-      test-id="race"
-      className={styles.li}
-      onClick={handleClick}
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
-    >
-      <div className={styles.details}>
-        <img src={`/${name}.png`}></img>
-        {!creation && <h2 className={styles.h2}>{name.toUpperCase()}</h2>}
-      </div>
-    </li>
+    <>
+      {!flip && (
+        <div
+          test-id="race"
+          className={styles.li}
+          onClick={handleClick}
+          style={{ backgroundImage: `url(/${name}.png)` }}
+        >
+          <div className={styles.details}>
+            <Link href={`/races/${name}`}>
+              <h2>{name.toUpperCase()}</h2>
+            </Link>
+            <h2>{name.toUpperCase()}</h2>
+          </div>
+        </div>
+      )}
+      {flip && (
+        <div>
+          <p>{desc || 'Lorem ipsum mozna'}</p>
+        </div>
+      )}
+    </>
   );
 };
 
