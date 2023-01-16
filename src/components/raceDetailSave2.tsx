@@ -8,21 +8,29 @@ const RaceDetail = ({
   desc,
   click,
   creation,
-  on
+  selectedRace = ""
 }: {
   name: string;
   desc: string;
   click: Function;
   creation: boolean;
-  on: boolean
+  selectedRace: string;
 }) => {
   const handleClick = () => {
     click(name);
+    setFlip(!flip);
   };
+  
+  const [flip, setFlip] = useState(false);
+  console.log(flip + " " + name)
+
+  // if (name != selectedRace) {
+  //   setFlip(false)
+  // } else setFlip(true)
 
   return (
     <>
-      {(!on ) && (
+      {(!flip || name != selectedRace) && (
         <li test-id="race" className={styles.li} onClick={handleClick}>
           <div className={styles.details}>
             <img src={`/${name}.png`}></img>
@@ -30,15 +38,23 @@ const RaceDetail = ({
           </div>
         </li>
       )}
-      {(on) && (
+      {(flip && name == selectedRace) && (
         <li test-id="race" className={styles.li} onClick={handleClick}>
-          <div className={styles.detailsON}>
+          <div className={styles.details}>
             <p>{desc || 'Lorem ipsum mozna'}</p>
           </div>
         </li>
       )}
     </>
   );
+};
+
+RaceDetail.defaultProps = {
+  selectedRace: ""
+};
+
+RaceDetail.propTypes = {
+  selectedRace: PropTypes.string
 };
 
 export default RaceDetail;
