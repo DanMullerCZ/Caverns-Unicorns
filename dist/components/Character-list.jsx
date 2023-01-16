@@ -27,6 +27,7 @@ const Characters = ({ characters }) => {
         <div className={Character_list_module_css_1.default.container}>
           <div className={Character_list_module_css_1.default.heroDisplay}>
             <image_1.default className="rounded-lg" src={`/${hero.race}.png`} alt={`${hero.race}`} width={200} height={200}/>
+
             <div className="">
               <p className="text-2xl">{hero.name}</p>
               <p>

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Race } from '@prisma/client';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const RaceList = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:(arg:string)=>void,creation:boolean}) => {
+const RaceList = ({races,setRace=()=>{},creation=false}:{races:Race[],setRace:(arg:string,id:number)=>void,creation:boolean}) => {
   const handleClick = (e: string, i: number) => {
     setRace(e, i);
   };

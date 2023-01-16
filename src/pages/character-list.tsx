@@ -35,7 +35,7 @@ export const getServerSideProps = async (context: { req: NextApiRequest }) => {
       race:true,
       class: true
     },
-  );
+});
 
   return {
     props: { response: characters },
