@@ -32,10 +32,10 @@ export const getServerSideProps = async (context: { req: NextApiRequest }) => {
     },
     select: {
       name: true,
-      race: true,
+      race:true,
       class: true
     },
-  });
+  );
 
   return {
     props: { response: characters },

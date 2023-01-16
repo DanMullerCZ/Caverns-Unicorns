@@ -27,12 +27,14 @@ const Characters = ({ characters }: { characters: any }) => {
         <div className={styles.container}>
           <div className={styles.heroDisplay}>
             <Image
-              className="rounded-lg"
-              src={`/${hero.race}.png`}
-              alt={`${hero.race}`}
-              width={200}
-              height={200}
-            />
+
+                className="rounded-lg"
+                src={`/${hero.race}.png`}
+                alt={`${hero.race}`}
+                width={200}
+                height={200}
+              />
+
             <div className="">
               <p className="text-2xl">{hero.name}</p>
               <p>
