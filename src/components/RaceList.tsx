@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import RaceDetail from './RaceDetail';
 import styles from '../styles/Races.module.css';
+import { race } from 'rxjs';
 
 type Race = {
   name: string;
@@ -39,14 +40,14 @@ const RaceList = ({
     });
   };
 
-  const allRaces = selectedRace.map((race: any) => (
+  const allRaces = selectedRace.filter(race => race.name != "half-elf").map((race: Race) => ( 
     <RaceDetail
       key={race.id}
       creation={creation}
       click={handleClick}
       desc={race.description!}
       name={race.name}
-      on={race.on}
+      on={race.on}s
     ></RaceDetail>
   ));
 

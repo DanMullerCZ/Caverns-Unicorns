@@ -6,6 +6,8 @@ import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
 import Head from 'next/head';
 import { useState } from 'react';
+import NavigationBar from 'components/NavigationBar';
+import VideoBackground from 'components/VideoBackground';
 
 export async function getStaticProps() {
   const ssg = await createProxySSGHelpers({
@@ -45,6 +47,8 @@ export default function GetAllRaces() {
       <Head>
         <title>Races</title>
       </Head>
+      <VideoBackground />
+      <NavigationBar />
       {/* <p>Data status: {data.status}</p> */}
       {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
       <div>{data.data && <RaceList races={data.data} setRace={setRace} selectedRace={selectedRace} />}</div>

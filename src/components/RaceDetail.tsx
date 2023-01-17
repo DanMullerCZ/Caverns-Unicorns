@@ -8,13 +8,13 @@ const RaceDetail = ({
   desc,
   click,
   creation,
-  on
+  on,
 }: {
   name: string;
   desc: string;
   click: Function;
   creation: boolean;
-  on: boolean
+  on: boolean;
 }) => {
   const handleClick = () => {
     click(name);
@@ -22,7 +22,7 @@ const RaceDetail = ({
 
   return (
     <>
-      {(!on ) && (
+      {!on && (
         <li test-id="race" className={styles.li} onClick={handleClick}>
           <div className={styles.details}>
             <img src={`/${name}.png`}></img>
@@ -30,7 +30,7 @@ const RaceDetail = ({
           </div>
         </li>
       )}
-      {(on) && (
+      {on && (
         <li test-id="race" className={styles.li} onClick={handleClick}>
           <div className={styles.detailsON}>
             <p>{desc || 'Lorem ipsum mozna'}</p>
