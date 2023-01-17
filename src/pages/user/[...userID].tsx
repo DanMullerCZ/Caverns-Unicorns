@@ -1,3 +1,5 @@
+import Header from "components/general/Header";
+import UserSettings from "components/userSettings/UserSettings";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -27,7 +29,9 @@ export default function userPage() {
     }
 
     return <>
-        <h1>Here is your user page</h1>
+        <Header title="User Page"/>
+        <h1 test-id='succes login'>Here is your user page</h1>
+        <UserSettings/>
         <hr />
         <p>{session.data?.user?.name}</p>
         <p>{session.data?.user?.id}</p>
@@ -36,6 +40,7 @@ export default function userPage() {
         <hr />
 
         <p>{session.data?.user?.emailVerified ? 'Email was succesfully verified' : 'You have to verify your email'}</p>
+        <p>{session.data?.user?.premium ? 'VIP was succesfully bought' : 'You have to buy your premium membership'}</p>
 
         <hr />
 

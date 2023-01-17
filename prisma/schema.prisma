@@ -48,14 +48,14 @@ model User {
 model Class {
   name        String
   id          Int                @id @default(autoincrement())
-  description String            @db.VarChar(255)
+  description String             @db.VarChar(255)
   spells      SpellsForClasses[]
 }
 
 model Race {
   name        String
-  id          Int          @id @default(autoincrement())
-  description String      @db.VarChar(255)
+  id          Int    @id @default(autoincrement())
+  description String @db.VarChar(255)
   dex         Int
   str         Int
   con         Int
@@ -81,9 +81,8 @@ model SpellsForClasses {
   @@id([spellId, classId])
 }
 
-
 model Characters {
-  id        Int     @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   name      String @db.VarChar(20)
   owner_id  String @db.VarChar(50)
   maxHP     Int

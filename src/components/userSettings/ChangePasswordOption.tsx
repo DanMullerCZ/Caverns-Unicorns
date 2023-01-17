@@ -1,27 +1,51 @@
 import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useSession } from "next-auth/react";
+import { useEffect, useRef, useState, } from "react";
 import { trpc } from "utils/trpc";
-import { string } from "zod";
-
-type passwordState = true | false | 'notprovided'
+ 
 
 
 const ChangePasswordOption: NextPage = () => {
-    const router = useRouter()
-    const passwordInput = useRef<HTMLInputElement>(null);
-    const userPassword = trpc.userSettings.changePassword.useMutation()
-    const handleClick = () => {    
-        userPassword.mutate(passwordInput.current!.value!)
+    const passwordInput = useRef<HTMLFormElement>(null);
+    const userPassword = trpc.userSettings.passwordCheck.useMutation();
+    const [passwordStatus, setPasswordStatus] = useState('');
+    const session = useSession()
+    const currentPass = passwordInput.current?.elements[0] as HTMLInputElement;
+    const newPass = passwordInput.current?.elements[1] as HTMLInputElement;
+    const confirmNewPass = passwordInput.current?.elements[2] as HTMLInputElement;
+
+    const handleClick = (ev: React.FormEvent<EventTarget>) => {
+
+        if(newPass.value === confirmNewPass.value && currentPass.value.length && confirmNewPass.value.length){
+            const currentPassword: any = { 
+                currentPassword:  currentPass.value,
+                newPassword: newPass.value,
+                userId: session.data?.user?.id
+            }
+                ev.preventDefault()
+                userPassword.mutate(currentPassword)
+        } else {
+            setPasswordStatus('invalid inputs')
+        }
     }
 
+    useEffect(() => {
+        setPasswordStatus(userPassword.data as any)
+    },[userPassword.data])
+
     return  (
-        <>
-            <input ref={passwordInput} type="text" />
-            <div>{userPassword.data ? 'correct pasword': 'wrong password'}</div>
-            <button onClick={handleClick}>change password</button>
+        <>  <form ref={passwordInput} onSubmit={handleClick} className='border '>
+                <input  type="text" placeholder="current password"/>
+                <input type='text' placeholder="new password" />
+                <input type='text' placeholder=" confirm new password"/>
+                <p test-id='success'>{passwordStatus}</p>
+                <button type="submit">change password</button>
+            </form>
         </>
+
     )
 }
 
 export default ChangePasswordOption
+
+
