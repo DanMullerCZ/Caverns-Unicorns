@@ -18,8 +18,10 @@ jobs:
       run: npm install
     - name: Run lint
       run: npm run lint -- --fix
-    - name: Run tests
-      run: npm run test
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run Playwright tests
+      run: npx playwright test
       
   build:
     runs-on: ubuntu-latest
