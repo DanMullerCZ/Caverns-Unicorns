@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions = {
             emailVerified: true
           }
         })
-       
+    
         session.user.emailVerified = verif?.emailVerified ? true : false
 
         const s: Prisma.BatchPayload = await prisma.session.updateMany({

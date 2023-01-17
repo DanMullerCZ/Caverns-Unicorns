@@ -7,6 +7,7 @@ import { Subject, fromEvent } from 'rxjs';
 const subject = new Subject<string>();
 const chatMsg = new Subject<string>();
 const online = new Subject<string>();
+const onlineChars = new Subject<any>();
 
 export const wsRouter = router({
   sub: protectedProcedure.subscription(() => {
@@ -52,4 +53,15 @@ export const wsRouter = router({
       });
     });
   }),
-});
+  onlinePlayersWithChars:protectedProcedure
+  .input(z.object({char_id:z.number(),hero_name:z.string(),class:z.string(),race:z.string()}))
+  .mutation(({input,ctx})=>{
+    onlineChars.next({char_id:input.char_id,name:ctx.session.user.name,hero_name:input.hero_name,class:input.class,race:input.race})
+  }),
+  onlinePlayersAfterLogin:protectedProcedure.subscription(()=>{
+    return observable<any>((emit) => {
+      onlineChars.subscribe((x:any) => {
+        emit.next(x);
+      });
+  })
+})})
