@@ -10,6 +10,7 @@ import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Head from 'next/head';
 import Attribute from 'components/Attribute';
 import VideoBackground from 'components/VideoBackground';
+import Header from 'components/general/Header';
 
 
 const createNewChar = () => {
@@ -123,9 +124,7 @@ const createNewChar = () => {
   }
   return (
     <>
-      <Head>
-        <title>Create new hero</title>
-      </Head>
+      <Header title='Create new hero'/>
       <div className="flex h-screen w-screen flex-col items-center justify-center">
         <VideoBackground/>
         {(!character.race || !character.class) && (

@@ -1,3 +1,4 @@
+import Header from "components/general/Header";
 import UserSettings from "components/userSettings/UserSettings";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -28,6 +29,7 @@ export default function userPage() {
     }
 
     return <>
+        <Header title="User Page"/>
         <h1 test-id='succes login'>Here is your user page</h1>
         <UserSettings/>
         <hr />

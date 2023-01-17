@@ -6,20 +6,37 @@ const client_1 = require("../db/client");
 const zod_1 = require("zod");
 const jwt_1 = require("../../pages/api/auth/jwt");
 exports.userSettRouter = (0, trpc_1.router)({
-    changePassword: trpc_1.publicProcedure
-        .input(zod_1.z.string())
-        .mutation(async ({ input, ctx }) => {
-        var _a, _b;
-        let correctPassword = null;
-        if (input === '') {
-            throw new Error('please provide new password');
+    passwordCheck: trpc_1.publicProcedure
+        .input(zod_1.z.object({
+        currentPassword: zod_1.z.string(),
+        newPassword: zod_1.z.string(),
+        userId: zod_1.z.string(),
+    }))
+        .mutation(async ({ input }) => {
+        try {
+            const userPass = await client_1.prisma.user.findUnique({
+                where: { id: input.userId },
+                select: { password: true }
+            });
+            const hashedInput = (0, jwt_1.hashToken)(input.currentPassword);
+            if (hashedInput === userPass.password) {
+                const hashedNewPass = (0, jwt_1.hashToken)(input.newPassword);
+                const newPassword = await client_1.prisma.user.update({
+                    where: {
+                        id: input.userId
+                    },
+                    data: {
+                        password: hashedNewPass
+                    }
+                });
+                return `Succesfully changed password`;
+            }
+            else {
+                return `HASH> ${hashedInput} and ${userPass.password} `;
+            }
         }
-        const userPass = await client_1.prisma.user.findUnique({
-            where: { id: (_b = (_a = ctx.session) === null || _a === void 0 ? void 0 : _a.user) === null || _b === void 0 ? void 0 : _b.id },
-            select: { password: true }
-        });
-        const hashedInput = (0, jwt_1.hashToken)(input);
-        hashedInput === userPass.password ? correctPassword = true : correctPassword = false;
-        return correctPassword;
+        catch (e) {
+            return `Cannot acces data from database, error:${e}`;
+        }
     })
 });

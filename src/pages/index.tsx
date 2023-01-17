@@ -2,19 +2,16 @@ import { type NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { Chat } from 'components/Chat';
 import { trpc } from '../utils/trpc';
 import { useState } from 'react';
 import VideoBackground from 'components/VideoBackground';
 import NavigationBar from 'components/NavigationBar';
+import Header from 'components/general/Header';
 
 const Home: NextPage = () => {
   return (
     <>
-      <Head>
-        <meta name="description" content="Caverns & Unicorns" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Header title='Home Page'/>
       <VideoBackground />
       <NavigationBar />
       <main className="goldeffect gold mx-auto flex flex-col items-center justify-center gap-10 px-6 py-8 font-LOTR md:h-screen">
@@ -35,6 +32,7 @@ export default Home;
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [message, setMessage] = useState<string>(
     'This is the subscription field',
   );

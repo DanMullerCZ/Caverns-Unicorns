@@ -65,10 +65,13 @@ exports.authOptions = {
                         id: session.user.id
                     },
                     select: {
-                        emailVerified: true
+                        emailVerified: true,
+                        premium: true
                     }
                 });
+                // updates session
                 session.user.emailVerified = (verif === null || verif === void 0 ? void 0 : verif.emailVerified) ? true : false;
+                session.user.premium = (verif === null || verif === void 0 ? void 0 : verif.premium) ? true : false;
                 const s = await client_1.prisma.session.updateMany({
                     where: { userId: token.sub },
                     data: {

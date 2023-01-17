@@ -8,7 +8,7 @@ import { trpc } from "utils/trpc";
 const ChangePasswordOption: NextPage = () => {
     const passwordInput = useRef<HTMLFormElement>(null);
     const userPassword = trpc.userSettings.passwordCheck.useMutation();
-    let [passwordStatus, setPasswordStatus] = useState('');
+    const [passwordStatus, setPasswordStatus] = useState('');
     const session = useSession()
     const currentPass = passwordInput.current?.elements[0] as HTMLInputElement;
     const newPass = passwordInput.current?.elements[1] as HTMLInputElement;

@@ -74,5 +74,22 @@ exports.dbRouter = (0, trpc_1.router)({
         catch (error) {
             return `Unable to delete user with id ${input}`;
         }
-    })
+    }),
+    createPremium: trpc_1.publicProcedure
+        .input(zod_1.z.string())
+        .mutation(async ({ input }) => {
+        try {
+            const newPremium = await client_1.prisma.premium_Membership.create({
+                data: {
+                    userId: input,
+                    paidDate: new Date(),
+                    status: 'active',
+                }
+            });
+            return newPremium;
+        }
+        catch (error) {
+            return 'error has occured';
+        }
+    }),
 });

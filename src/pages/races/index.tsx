@@ -5,6 +5,7 @@ import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
 import Head from 'next/head';
+import Header from 'components/general/Header';
 
 export async function getStaticProps() {
   const ssg = await createProxySSGHelpers({
@@ -36,9 +37,7 @@ export default function GetAllRaces() {
 
   return (
     <>
-      <Head>
-        <title>Races</title>
-      </Head>
+      <Header title='Races'/>
       {/* <p>Data status: {data.status}</p> */}
       {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
       <div>{data.data && <RaceList races={data.data} />}</div>

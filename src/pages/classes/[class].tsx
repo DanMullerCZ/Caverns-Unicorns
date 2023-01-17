@@ -11,6 +11,8 @@ import { trpc } from 'utils/trpc';
 import Head from 'next/head';
 
 import Image from 'next/image';
+import Header from 'components/general/Header';
+import ComponentFourOhFour from 'components/general/ComponentFourOhFour';
 
 
 export const getStaticProps = async (context: GetStaticPropsContext<{ class: string }>) => {
@@ -50,16 +52,16 @@ export default function GetRace(
     const data = trpc.dbRouter.getClass.useQuery(nameOfClass)
     return (
         <>
-            <Head>
-                <title>{data.data?.name}</title>
-            </Head>
-            {data.data && (
+            <Header title={data.data?.name as string} />
+            {data.data ? (
                 <>
                     <h1>{data.data.name}</h1>
                     <Image test-id={`image_${data.data.name}`} src={`/${data.data.name}.png`} alt={data.data.name} width={150} height={150} />
                     <p test-id='class_details'>{data.data.description}</p>
                 </>
-            )}
+            ): 
+            <ComponentFourOhFour />
+            }
         </>
     );
 
