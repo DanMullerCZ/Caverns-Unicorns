@@ -40,4 +40,23 @@ export const userSettRouter = router({
                 return `Cannot acces data from database, error:${e}`
             }
         })
-    })        
+    userImage: publicProcedure 
+        .input(z.object({
+            userImage: z.string(),
+            newImage: z.string(),
+            userId: z.string(),
+        }))
+        .mutation(async( {input} ) => {
+            try {
+                const getUserImage = await prisma.user.findUnique({
+                    where: {
+                        id: input.userId
+                    },
+                    select: {
+                        image: true
+                    }
+
+                })
+            }
+        })
+})        

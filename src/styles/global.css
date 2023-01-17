@@ -224,3 +224,13 @@
     transform: translateX(110%);
     transition: all var(--speed) ease;
   }
+/*
+trasparent input autofill 
+*/
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    /* transition: background-color 999999999999999999999999999999999999999999999999999999999999s ease-in-out 0s; */
+    transition: all 0s 50000000s; 
+}
