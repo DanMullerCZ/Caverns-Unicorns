@@ -9,7 +9,7 @@ const RaceList_1 = __importDefault(require("components/RaceList"));
 const _app_1 = require("server/routers/_app");
 const superjson_1 = __importDefault(require("superjson"));
 const trpc_1 = require("utils/trpc");
-const head_1 = __importDefault(require("next/head"));
+const Header_1 = __importDefault(require("components/general/Header"));
 async function getStaticProps() {
     const ssg = await (0, ssg_1.createProxySSGHelpers)({
         router: _app_1.appRouter,
@@ -34,9 +34,7 @@ function GetAllRaces() {
       </>);
     }
     return (<>
-      <head_1.default>
-        <title>Races</title>
-      </head_1.default>
+      <Header_1.default title='Races'/>
       {/* <p>Data status: {data.status}</p> */}
       {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
       <div>{data.data && <RaceList_1.default races={data.data}/>}</div>

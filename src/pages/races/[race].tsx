@@ -8,9 +8,9 @@ import {
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
-import RaceDetail from 'components/RaceDetail';
 import Image from 'next/image';
-import Head from 'next/head';
+import Header from 'components/general/Header';
+import ComponentFourOhFour from 'components/general/ComponentFourOhFour';
 
 
 export async function getStaticProps(
@@ -57,12 +57,11 @@ export default function GetRace(
   const data = trpc.dbRouter.getRace.useQuery(race)
 
   console.log(race)
+  console.log(data.data)
 
   return (
     <>
-      <Head>
-        <title>{data?.data?.name}</title>
-      </Head>
+      <Header title={data?.data?.name as string} />
       {/* <h1>{data.name}</h1>
       <p>Here is your race:::</p>
       <ul>
@@ -73,13 +72,15 @@ export default function GetRace(
       <li>Dexterity: {data?.dex}</li>
       <li>Intelligence: {data?.int}</li>
     </ul> */}
-      {data.data && (
+      {data.data ? (
         <>
           <h1>{data.data.name}</h1>
           <Image test-id={`image${data.data.name}`} src={`/${data.data.name.toLowerCase()}.png`} alt={data.data.name} width={150} height={150} />
           <p test-id='race_details'>{data.data.description}</p>
         </>
-      )}
+      ) : 
+      <ComponentFourOhFour />
+      }
 
     </>
   );

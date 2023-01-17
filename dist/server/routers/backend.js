@@ -176,7 +176,7 @@ exports.exampleRouter = (0, trpc_1.router)({
             }
         }
         catch (error) {
-            return 'Invalid inputs';
+            return 'Name or email is already used';
         }
     }),
     veryfiEmail: trpc_1.publicProcedure

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Header_1 = __importDefault(require("components/general/Header"));
 const UserSettings_1 = __importDefault(require("components/userSettings/UserSettings"));
 const react_1 = require("next-auth/react");
 const router_1 = require("next/router");
@@ -29,6 +30,7 @@ function userPage() {
         verification.mutate(session);
     };
     return <>
+        <Header_1.default title="User Page"/>
         <h1 test-id='succes login'>Here is your user page</h1>
         <UserSettings_1.default />
         <hr />

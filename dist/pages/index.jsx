@@ -3,19 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const head_1 = __importDefault(require("next/head"));
 const link_1 = __importDefault(require("next/link"));
 const react_1 = require("next-auth/react");
 const trpc_1 = require("../utils/trpc");
 const react_2 = require("react");
 const VideoBackground_1 = __importDefault(require("components/VideoBackground"));
 const NavigationBar_1 = __importDefault(require("components/NavigationBar"));
+const Header_1 = __importDefault(require("components/general/Header"));
 const Home = () => {
     return (<>
-      <head_1.default>
-        <meta name="description" content="Caverns & Unicorns"/>
-        <link rel="icon" href="/favicon.ico"/>
-      </head_1.default>
+      <Header_1.default title='Home Page'/>
       <VideoBackground_1.default />
       <NavigationBar_1.default />
       <main className="goldeffect gold mx-auto flex flex-col items-center justify-center gap-10 px-6 py-8 font-LOTR md:h-screen">
@@ -33,6 +30,7 @@ exports.default = Home;
 const AuthShowcase = () => {
     var _a;
     const { data: sessionData } = (0, react_1.useSession)();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [message, setMessage] = (0, react_2.useState)('This is the subscription field');
     trpc_1.trpc.wsRouter.sub.useSubscription(undefined, {
         onData(data) {

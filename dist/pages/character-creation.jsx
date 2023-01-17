@@ -35,9 +35,9 @@ const react_2 = require("next-auth/react");
 const _app_1 = require("server/routers/_app");
 const superjson_1 = __importDefault(require("superjson"));
 const ssg_1 = require("@trpc/react-query/ssg");
-const head_1 = __importDefault(require("next/head"));
 const Attribute_1 = __importDefault(require("components/Attribute"));
 const VideoBackground_1 = __importDefault(require("components/VideoBackground"));
+const Header_1 = __importDefault(require("components/general/Header"));
 const createNewChar = () => {
     const dataRaces = trpc_1.trpc.dbRouter.getAllRaces.useQuery();
     const races = dataRaces.data;
@@ -142,9 +142,7 @@ const createNewChar = () => {
         window.alert(addChar.error.message);
     }
     return (<>
-      <head_1.default>
-        <title>Create new hero</title>
-      </head_1.default>
+      <Header_1.default title='Create new hero'/>
       <div className="flex h-screen w-screen flex-col items-center justify-center">
         <VideoBackground_1.default />
         {(!character.race || !character.class) && (<div test-id="creation-container">

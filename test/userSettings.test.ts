@@ -12,7 +12,7 @@ test('registration ', async ({ page }) => {
     await page.locator('input[name="password1"]').press('Tab');
     await page.locator('input[name="password2"]').fill('test');
     await page.getByRole('button', { name: 'Submit' }).click();
-    await expect(page.getByTestId('registration-error-response')).toHaveText('Successfully registered');
+    await expect(page.getByText('Successfully registered. Now you can login')).toBeVisible()
   });
 
   test('log-in', async ({ page }) => {
@@ -23,7 +23,6 @@ test('registration ', async ({ page }) => {
     await page.getByLabel('Email').press('Tab');
     await page.getByLabel('Password').fill('test');
     await page.getByRole('button', { name: 'Login with Credentials' }).click();
-    await page.getByRole('heading', { name: 'Here is your user page' }).click();
     await expect(page.getByTestId('succes login')).toHaveText('Here is your user page')
   });
 
@@ -55,5 +54,12 @@ test('registration ', async ({ page }) => {
     await page.getByLabel('Password').fill('1234');
     await page.getByRole('button', { name: 'Login with Credentials' }).click();
     await page.getByRole('button', { name: 'DELETE USER' }).click();
-    await expect(page.getByTestId('succes delete')).toHaveText('Welcome to Greens & Foxes')
+    await expect(page.getByTestId('succes delete')).toHaveText('Welcome to Caverns & Unicorns')
+  });
+
+  test.afterEach(async ({ page }, testInfo) => {
+    console.log(`Finished ${testInfo.title} => ${testInfo.status?.toUpperCase()}`);
+  
+    if (testInfo.status !== testInfo.expectedStatus)
+      console.log(`Did not run as expected, ended up at ${page.url()}`);
   });

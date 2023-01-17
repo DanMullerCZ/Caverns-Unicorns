@@ -196,7 +196,7 @@ export const exampleRouter = router({
           return 'Internal error';
         }
       } catch (error: any) {
-        return 'Invalid inputs';
+        return 'Name or email is already used';
       }
     }),
 

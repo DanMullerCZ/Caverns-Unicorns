@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Header_1 = __importDefault(require("components/general/Header"));
 const react_1 = require("next-auth/react");
 const link_1 = __importDefault(require("next/link"));
 const router_1 = require("next/router");
@@ -25,6 +26,7 @@ function Result() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
     return (<>
+        <Header_1.default title="Payment Result"/>
         <h1>Payment Result</h1>
         <pre>{data ? data.session.status : 'Loading...'}</pre>
         <link_1.default href='/user'>

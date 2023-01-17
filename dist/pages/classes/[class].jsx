@@ -9,8 +9,9 @@ const ssg_1 = require("@trpc/react-query/ssg");
 const _app_1 = require("server/routers/_app");
 const superjson_1 = __importDefault(require("superjson"));
 const trpc_1 = require("utils/trpc");
-const head_1 = __importDefault(require("next/head"));
 const image_1 = __importDefault(require("next/image"));
+const Header_1 = __importDefault(require("components/general/Header"));
+const ComponentFourOhFour_1 = __importDefault(require("components/general/ComponentFourOhFour"));
 const getStaticProps = async (context) => {
     var _a;
     const ssg = await (0, ssg_1.createProxySSGHelpers)({
@@ -43,14 +44,13 @@ function GetRace(props) {
     const { nameOfClass } = props;
     const data = trpc_1.trpc.dbRouter.getClass.useQuery(nameOfClass);
     return (<>
-            <head_1.default>
-                <title>{(_a = data.data) === null || _a === void 0 ? void 0 : _a.name}</title>
-            </head_1.default>
-            {data.data && (<>
+            <Header_1.default title={(_a = data.data) === null || _a === void 0 ? void 0 : _a.name}/>
+            {data.data ? (<>
                     <h1>{data.data.name}</h1>
                     <image_1.default test-id={`image_${data.data.name}`} src={`/${data.data.name}.png`} alt={data.data.name} width={150} height={150}/>
                     <p test-id='class_details'>{data.data.description}</p>
-                </>)}
+                </>) :
+            <ComponentFourOhFour_1.default />}
         </>);
 }
 exports.default = GetRace;

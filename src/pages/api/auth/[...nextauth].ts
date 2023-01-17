@@ -6,11 +6,9 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { env } from '../../../env/server';
 import { prisma } from '../../../server/db/client';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { User, Session, Account, Prisma } from '@prisma/client';
+import { User, Prisma } from '@prisma/client';
 import { generateTokens, hashToken, expiresAt } from './jwt';
 import { randomBytes, randomUUID } from 'crypto';
-import jwt from 'jsonwebtoken';
-import { Secret } from 'next-auth/jwt/types.js';
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session

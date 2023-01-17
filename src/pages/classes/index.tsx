@@ -4,6 +4,7 @@ import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import Head from 'next/head';
+import Header from 'components/general/Header';
 
 
 export async function getStaticProps() {
@@ -36,9 +37,7 @@ export default function GetAllClasses() {
   }
   return (
     <>
-      <Head>
-        <title>Classes</title>
-      </Head>
+      <Header title='Classes' />
       <div >{data.data && <ClassList classes={data.data} />}</div>
     </>
   );

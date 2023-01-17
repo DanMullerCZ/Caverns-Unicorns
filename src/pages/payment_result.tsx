@@ -1,3 +1,4 @@
+import Header from "components/general/Header"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -27,6 +28,7 @@ export default function Result() {
     }, [data])
 
     return (<>
+        <Header title="Payment Result" />
         <h1>Payment Result</h1>
         <pre>{data ? data.session.status : 'Loading...'}</pre>
         <Link href='/user'>

@@ -1,50 +1,58 @@
 import { type NextPage } from 'next';
 import Head from 'next/head';
-import { useRef, useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 
 import { trpc } from '../utils/trpc';
 import VideoBackground from '../components/VideoBackground';
 import React from 'react';
+import { useRouter } from 'next/router';
+import { NavigationBar } from 'components/NavigationBar';
+import Header from 'components/general/Header';
 
 const Register: NextPage = () => {
+  const router = useRouter()
   const creation = trpc.backend.registration.useMutation();
   const regForm = useRef<HTMLFormElement>(null);
 
   const submitForm = async () => {
     if (regForm.current) {
-      const password = regForm.current[2] as HTMLInputElement;
-      const confirmPassword = regForm.current[3] as HTMLInputElement;
-      if (password.value == confirmPassword.value) {
-        const email = regForm.current[0] as HTMLInputElement;
-        const name = regForm.current[1] as HTMLInputElement;
-        creation.mutate({
-          email: email.value,
-          password: password.value,
-          name: name.value,
-          match: true
-        });
-        console.log(regForm, 'has been sent');
-    } else {
       const email = regForm.current[0] as HTMLInputElement;
       const name = regForm.current[1] as HTMLInputElement;
-      creation.mutate({
-        email: email.value,
-        password: password.value,
-        name: name.value,
-        match: false,
-      });
-    }
+      const password = regForm.current[2] as HTMLInputElement;
+      const confirmPassword = regForm.current[3] as HTMLInputElement;
+      if(password.checkValidity() && confirmPassword.checkValidity() && name.checkValidity() && email.checkValidity()){
+        if (password.value == confirmPassword.value) {
+          creation.mutate({
+            email: email.value,
+            password: password.value,
+            name: name.value,
+            match: true
+          });
+        } else {
+          creation.mutate({
+            email: email.value,
+            password: password.value,
+            name: name.value,
+            match: false,
+          });
+        }
+      } else {
+        alert('All inputs are required and must have between 4-30 characters and email must be valid')
+      }
 
   }};
 
+  useEffect(() => {
+    if(creation.data === 'Successfully registered'){
+      router.push('/login#registered')
+    }
+  }, [creation.data, router])
 
   return (
     <>
       <VideoBackground />
-      <Head>
-        <title>Register</title>
-      </Head>
+      <NavigationBar />
+      <Header title='Registration' />
       <div className='flex w-screen h-screen justify-center z-10 fixed items-center'>
         <div className='background '></div>
       </div>
@@ -65,7 +73,7 @@ const Register: NextPage = () => {
               className=" w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2 "
               type="email"
               name="email"
-              required
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -79,9 +87,8 @@ const Register: NextPage = () => {
               className="w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="text"
               name="name"
-              required
-              minLength={6}
-              maxLength={25}
+              minLength={4}
+              maxLength={30}
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -95,9 +102,8 @@ const Register: NextPage = () => {
               className=" w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="password"
               name="password1"
-              required
-              minLength={6}
-              maxLength={25}
+              minLength={4}
+              maxLength={30}
             />
           </div>
           <div className=" flex flex-col space-y-2 bg-transparent">
@@ -108,9 +114,8 @@ const Register: NextPage = () => {
               className=" w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="password"
               name="password2"
-              required
-              minLength={6}
-              maxLength={25}
+              minLength={4}
+              maxLength={30}
             />
           </div>
           <button

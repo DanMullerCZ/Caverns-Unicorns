@@ -10,7 +10,8 @@ const _app_1 = require("server/routers/_app");
 const superjson_1 = __importDefault(require("superjson"));
 const trpc_1 = require("utils/trpc");
 const image_1 = __importDefault(require("next/image"));
-const head_1 = __importDefault(require("next/head"));
+const Header_1 = __importDefault(require("components/general/Header"));
+const ComponentFourOhFour_1 = __importDefault(require("components/general/ComponentFourOhFour"));
 async function getStaticProps(context) {
     var _a;
     const ssg = await (0, ssg_1.createProxySSGHelpers)({
@@ -51,10 +52,9 @@ function GetRace(props) {
     const { race } = props;
     const data = trpc_1.trpc.dbRouter.getRace.useQuery(race);
     console.log(race);
+    console.log(data.data);
     return (<>
-      <head_1.default>
-        <title>{(_a = data === null || data === void 0 ? void 0 : data.data) === null || _a === void 0 ? void 0 : _a.name}</title>
-      </head_1.default>
+      <Header_1.default title={(_a = data === null || data === void 0 ? void 0 : data.data) === null || _a === void 0 ? void 0 : _a.name}/>
       {/* <h1>{data.name}</h1>
         <p>Here is your race:::</p>
         <ul>
@@ -65,11 +65,12 @@ function GetRace(props) {
         <li>Dexterity: {data?.dex}</li>
         <li>Intelligence: {data?.int}</li>
       </ul> */}
-      {data.data && (<>
+      {data.data ? (<>
           <h1>{data.data.name}</h1>
           <image_1.default test-id={`image${data.data.name}`} src={`/${data.data.name.toLowerCase()}.png`} alt={data.data.name} width={150} height={150}/>
           <p test-id='race_details'>{data.data.description}</p>
-        </>)}
+        </>) :
+            <ComponentFourOhFour_1.default />}
 
     </>);
 }
