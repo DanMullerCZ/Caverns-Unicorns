@@ -26,11 +26,11 @@ const Signin = () => {
               <label className="text-sm" htmlFor="email">
                 Email
               </label>
-              <input className="w-96 rounded-md border border-yellow-400 px-3 py-2 bg-transparent" type="email" name="email" id="email"/>
+              <input className="w-96 rounded-md border border-yellow-400 px-3 py-2 bg-transparent" type="email" name="email" id="email" required/>
               <label className="text-sm" htmlFor="password">
                 Password
               </label>
-              <input className="w-96 rounded-md border border-yellow-400 px-3 py-2 bg-transparent" type="password" name="password" id="password"/>
+              <input className="w-96 rounded-md border border-yellow-400 px-3 py-2 bg-transparent" type="password" name="password" id="password" required/>
             </form>
 
             <p className="text-center goldeffect ">
