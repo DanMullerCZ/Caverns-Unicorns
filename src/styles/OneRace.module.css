@@ -1,6 +1,6 @@
 .li {
   transform-origin: top left;
-  transform: skewY(4.398705355deg) rotatez(14.03624deg);
+  /* transform: skewY(4.398705355deg) rotatez(14.03624deg); */
   padding-top: 10%;
   z-index: 1;
   transition-property: z-index;
@@ -10,6 +10,8 @@
 
 .li p {
   margin: 45px;
+  font-size: 12px;
+  font-weight: 300;
 }
 
 .details {
@@ -27,35 +29,28 @@
   background-color: transparent;
   backdrop-filter: blur(10px);
   border-radius: 20vw;
-  /* box-sizing: border-box;
-  border: 10px solid transparent;
-  border-radius: 20vw;
-  border-image: url("/fonts-images/strip.jpg") 10 circle;
-  border-image-slice: 20; */
-
-  /* border: rgb(234, 178,92) solid 10px; */
+  
   webkit-filter: drop-shadow(2px 6px 3px rgba(0, 0, 0, 0.4));
   filter: drop-shadow(2px 6px 3px rgba(0, 0, 0, 0.4));
   transform: rotate(0deg) translate(0, 0);
   transition-property: transform;
-  transition-duration: 0.5s;
+  transition-duration: 1.5s;
 }
 
 .details::before {
-    position: absolute;
-    content:"";
-    inset: 0;
-    border-radius: 10vw;
+  position: absolute;
+  content: '';
+  inset: 0;
+  border-radius: 20vw;
   border: 10px solid transparent;
-  background: url("/fonts-images/strip.jpg") border-box;
+  background: url('/fonts-images/strip.jpg') border-box;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-
 }
 
 .detailsON {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -64,40 +59,53 @@
   width: 98%;
   height: 95%;
   top: 0;
-  background-color: #fcf8f4;
-  border-radius: 2vw;
-  box-shadow: inset 0px 0px 0px 7vw #fcf8f4;
-  box-sizing: border-box;
+  background-color: transparent;;
+  box-shadow: inset 0px 0px 0px 7vw transparent;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  border-radius: 20vw;
+  
   webkit-filter: drop-shadow(2px 6px 3px rgba(0, 0, 0, 0.4));
   filter: drop-shadow(2px 6px 3px rgba(0, 0, 0, 0.4));
   transform: rotate(0deg) translate(0, 0);
   transition-property: transform;
-  transition-duration: 1s;
+  transition-duration: 1.5s;
 }
 
-.h2,
+.detailsON::before {
+  position: absolute;
+  content: '';
+  inset: 0;
+  border-radius: 10vw;
+  border: 10px solid transparent;
+  background: url('/fonts-images/strip.jpg') border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
 .details img {
-  /* position: absolute; */
   z-index: 4;
 }
 
-.h2 {
+.detailsON p {
+  z-index: 4;
+}
+
+ .h2 {
+  z-index: 4;
   text-align: center;
+  font-size: 20px;
   width: 100%;
-  /* left: -11%; */
   top: 85%;
-  /* transform: rotatez(-45deg); */
-  /* background-color: #FCF8F4; */
   line-height: 140%;
   transition-property: top;
-  transition-duration: 1s;
+  transition-duration: 1.5s;
 }
 
 .details img {
   width: 44%;
-  /* top: 5%;
-    left: 13%; */
-  /* left: 50%; */
+  transition: 1.5s;
 }
 
 .li:hover {
@@ -107,72 +115,13 @@
   top: 85%;
 }
 .li:hover .details {
-  transform: rotate(-14.03624deg) translate(5.5%, 15%) scale(1.5);
+  transform: scale(1.5);
+}
+
+li:hover .details > img{
+  transform: scale(1.2);
 }
 
 .li:hover .detailsON {
-  transform: rotate(-374.03624deg) translate(5.5%, 15%) scale(1.5);
+  transform: rotate(-360deg) scale(1.5);
 }
-
-/* .liHOVER {
-  transform-origin: top left;
-  transform: skewY(4.398705355deg) rotatez(14.03624deg);
-  padding-top: 150%;
-  transition-property: z-index;
-  transition-duration: 0.3s;
-   z-index: 4;
-} */
-
-/* .liHOVER h2 {
-  z-index: 4;
-  top: 85%;
-  text-align: center;
-  width: 100%;
-  line-height: 140%;
-  transition-property: top;
-  transition-duration: 0.3s;
-} */
-
-/* .liHOVER .details {
-  width: 98%;
-  transform: rotate(-14.03624deg) translate(5.5%, 15%) scale(1.5);
-
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 4;
-  height: 95%;
-  top: 0;
-  background-color: #fcf8f4;
-  border-radius: 2vw;
-  box-shadow: inset 0px 0px 0px 7vw #fcf8f4;
-  box-sizing: border-box;
-  webkit-filter: drop-shadow(2px 6px 3px rgba(0, 0, 0, 0.4));
-  filter: drop-shadow(2px 6px 3px rgba(0, 0, 0, 0.4));
-  transition-property: transform;
-  transition-duration: 0.3s;
-} */
-
-/* .liHOVER .detailsON {
-  transform: rotate(-14.03624deg) translate(5.5%, 15%) scale(1.5);
-
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 4;
-  width: 98%;
-  height: 95%;
-  top: 0;
-  background-color: #fcf8f4;
-  border-radius: 2vw;
-  box-shadow: inset 0px 0px 0px 7vw #fcf8f4;
-  box-sizing: border-box;
-  webkit-filter: drop-shadow(2px 6px 3px rgba(0, 0, 0, 0.4));
-  filter: drop-shadow(2px 6px 3px rgba(0, 0, 0, 0.4));
-  transition-property: transform;
-  transition-duration: 0.3s;
-} */

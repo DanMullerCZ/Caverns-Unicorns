@@ -26,7 +26,7 @@ const RaceDetail = ({
         <li test-id="race" className={styles.li} onClick={handleClick}>
           <div className={styles.details}>
             <img src={`/${name}.png`}></img>
-            <h2>{name.toUpperCase()}</h2>
+            {/* <h2 className={styles.h2}>{name.toUpperCase()}</h2> */}
           </div>
         </li>
       )}
