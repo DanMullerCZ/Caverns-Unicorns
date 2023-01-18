@@ -7,11 +7,13 @@ import styles from '../styles/playground.module.css';
 import { mapArray } from 'components/array';
 import { Chat } from 'components/Chat';
 import Header from 'components/general/Header';
+import Battle from 'components/BattleLogic/Battle';
 
 
 const Playground: NextPage = () => {
   const controller = trpc.playground.remoteControl.useMutation();
   const main = useRef<HTMLDivElement>(null);
+  const [inCombat, setInCombat] = useState(false)
   const [moveMatrix, setMoveMatrix] = useState({
     up: false,
     left: false,
@@ -90,6 +92,9 @@ const Playground: NextPage = () => {
         </div>
         <Map />
         <Chat/>
+          {inCombat && (<Battle/>)}
+        <button onClick={() => {setInCombat(true)}} >start combat!</button>
+        
       </div>
     </>
   );
