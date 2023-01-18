@@ -92,7 +92,7 @@ const Playground: NextPage = () => {
         </div>
         <Map />
         <Chat/>
-          {inCombat && (<Battle/>)}
+          {inCombat && (<Battle exitBattle={() => setInCombat(false)}/>)}
         <button onClick={() => {setInCombat(true)}} >start combat!</button>
         
       </div>

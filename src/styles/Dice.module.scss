@@ -34,10 +34,12 @@ $translateLowerY: $faceHeight*0.78 + $translateRingY;
 
 .content {
   margin: auto auto;
-  position: relative;
+  position: absolute;
   width: $containerWidth;
   height: $containerHeight;
   perspective: 1500px;
+  left: 42%;
+  bottom: 42%;
 }
 
 .die {
