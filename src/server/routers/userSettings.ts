@@ -55,7 +55,7 @@ export const userSettRouter = router({
                         image: true
                     }
                 })
-                return getUserImage.image
+                return getUserImage?.image
             } catch (e) {
                 return `Cannot acces database, error: ${e}`
             }
