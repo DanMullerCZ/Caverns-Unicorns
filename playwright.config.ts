@@ -10,6 +10,11 @@ const opts = {
 };
 const config: PlaywrightTestConfig = {
   testDir: './test',
+  webServer: {
+    command: 'yarn start',
+    url: 'http://localhost:3000/',
+    timeout: 120000,
+  },
   use: {
     ...devices['Desktop Chrome'],
     baseURL: baseUrl,
