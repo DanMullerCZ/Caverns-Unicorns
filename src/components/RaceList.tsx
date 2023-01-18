@@ -29,7 +29,6 @@ const RaceList = ({
 
   const handleClick = (name: string) => {
     setRace(name);
-    console.log(name);
 
     setSelectedRace((prevRace) => {
       return prevRace.map((race) => {
@@ -47,7 +46,7 @@ const RaceList = ({
       click={handleClick}
       desc={race.description!}
       name={race.name}
-      on={race.on}s
+      on={race.on}
     ></RaceDetail>
   ));
 
