@@ -5,7 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import styles from '../styles/playground.module.css';
 import { mapArray } from 'components/array';
+import { Chat } from 'components/Chat';
 import Header from 'components/general/Header';
+
 
 const Playground: NextPage = () => {
   const controller = trpc.playground.remoteControl.useMutation();
@@ -87,6 +89,7 @@ const Playground: NextPage = () => {
           {mapArray.map((e,index) => (e.map(f => (<MapTile key={index} tileType={f} />))))}
         </div>
         <Map />
+        <Chat/>
       </div>
     </>
   );
