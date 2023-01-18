@@ -8,6 +8,7 @@ const react_1 = require("react");
 const trpc_1 = require("utils/trpc");
 const playground_module_css_1 = __importDefault(require("../styles/playground.module.css"));
 const array_1 = require("components/array");
+const Chat_1 = require("components/Chat");
 const Header_1 = __importDefault(require("components/general/Header"));
 const Playground = () => {
     const controller = trpc_1.trpc.playground.remoteControl.useMutation();
@@ -85,6 +86,7 @@ const Playground = () => {
           {array_1.mapArray.map((e, index) => (e.map(f => (<MapTile_1.default key={index} tileType={f}/>))))}
         </div>
         <Map />
+        <Chat_1.Chat />
       </div>
     </>);
 };

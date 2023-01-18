@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { trpc } from 'utils/trpc';
-import { string } from 'yargs';
 import styles from '../styles/lobby.module.css';
 
 const Lobby = () => {
