@@ -1,29 +1,29 @@
-import React, { useEffect,useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ClassList from 'components/ClassList';
 import RaceList from 'components/RaceList';
 import styles from '../styles/character-creation.module.css';
 import { trpc } from 'utils/trpc';
-import {  useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Head from 'next/head';
+
+import { prisma } from 'server/db/client';
+import NavigationBar from 'components/NavigationBar';
 import Attribute from 'components/Attribute';
 import VideoBackground from 'components/VideoBackground';
 import Header from 'components/general/Header';
 
-
 const createNewChar = () => {
   const dataRaces = trpc.dbRouter.getAllRaces.useQuery();
   const races = dataRaces.data;
-  console.log(races);
   const dataClasses = trpc.dbRouter.getAllClasses.useQuery();
   const classes = dataClasses.data;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
   const sessionData = useSession();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [confirmAtr, setConfirmAtr] = useState(false);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const nameOfChar = useRef<HTMLInputElement>(null);
   type CharacterProperties = 'str' | 'con' | 'dex' | 'int' | 'wis' | 'char';
   const arr: CharacterProperties[] = [
@@ -36,7 +36,7 @@ const createNewChar = () => {
   ];
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [selectedRace, setSelectedRace] = useState(1);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [character, setCharacter] = useState({
     race: '',
     class: '',
@@ -83,7 +83,7 @@ const createNewChar = () => {
   };
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    if (races){
+    if (races) {
       arr.forEach((e) => {
         setCharacter((character) => ({
           ...character,
@@ -96,7 +96,7 @@ const createNewChar = () => {
   const addChar = trpc.backend.addChar.useMutation();
 
   const createChar = async () => {
-    if (sessionData.data?.user?.id && nameOfChar.current?.value){
+    if (sessionData.data?.user?.id && nameOfChar.current?.value) {
       addChar.mutate({
         class: character.class,
         race: character.race,
@@ -113,7 +113,6 @@ const createNewChar = () => {
   };
   const setPoints = (x: number) => {
     setAtrPoints((atrPoints) => atrPoints + x);
-
   };
 
   if (addChar.isSuccess) {
@@ -124,79 +123,89 @@ const createNewChar = () => {
   }
   return (
     <>
-      <Header title='Create new hero'/>
-      <div className="flex h-screen w-screen flex-col items-center justify-center">
-        <VideoBackground/>
-        {(!character.race || !character.class) && (
-          <div test-id="creation-container">
-            {!character.race && races && (
-              <div test-id="race-selection">
-                <h1>SELECT RACE</h1>
-                <RaceList setRace={setRace} creation={true} races={races} />
-              </div>
-            )}
-            {!character.class && character.race && classes && (
-              <div test-id="class-selection">
-                <h1>Race: {character.race}</h1>
-                <h1>SELECT CLASS</h1>
-                <ClassList
-                  creation={true}
-                  setClass={setClass}
-                  classes={classes}
-                />
-              </div>
-            )}
-          </div>
-        )}
-        {character.race && character.class && !confirmAtr && (
-          <>
-            <div className="w-1/5 rounded-xl bg-yellow-700 p-4 bg-contain bg-center bg-no-repeat bg-opacity-75" style={{ backgroundImage: `url(/${character.class}.png)` }}>
-              <h1 className="m-1 text-3xl">Race: {character.race}</h1>
-              <h1 className="m-1 text-3xl">Class: {character.class}</h1>
-              <label className="m-1 text-3xl">
-                Remaining atributte points:{' '}
-                <input
-                  value={atrPoints}
-                  readOnly
-                  className="mr-1 w-10 rounded border"
-                />
-              </label>
-
-              {arr.map((e: CharacterProperties) => (
-                <Attribute
-                  key={e}
-                  defaultAtr={character[e]}
-                  name={e}
-                  setPoints={setPoints}
-                  remaining={atrPoints}
-                  change={(atrValue: number, atrName: CharacterProperties) => {
-                    setCharacter((character) => ({
-                      ...character,
-                      ...{ [atrName]: atrValue },
-                    }));
-                  }}
-                />
-              ))}
-            </div>
-
-            <button
-              className={
-                atrPoints
-                  ? 'invisible m-1 rounded border bg-white text-3xl'
-                  : 'm-1  rounded border bg-white text-3xl'
-              }
-              type="button"
-              onClick={confirmation}
+      <Head>
+        <title>Create new hero</title>
+      </Head>
+      <VideoBackground />
+      <NavigationBar />
+      {(!character.race || !character.class) && (
+        <div test-id="creation-container">
+          {!character.race && races && (
+            <div
+              test-id="race-selection"
+              className="h-screen w-screen text-center"
             >
-              confirm attributes
-            </button>
-          </>
-        )}
-        {character.race && character.class && confirmAtr && (
-          <>
-            <div className="grid w-1/5 grid-cols-2 gap-2 rounded-xl bg-yellow-700 p-4 text-3xl bg-contain bg-center bg-no-repeat bg-opacity-75" style={{ backgroundImage: `url(/${character.class}.png)`}}>
+              <RaceList setRace={setRace} creation={true} races={races} />
+            </div>
+          )}
+          {!character.class && character.race && classes && (
+            <div test-id="class-selection">
+              {/* <h1>SELECT CLASS</h1> */}
+              <ClassList
+                creation={true}
+                setClass={setClass}
+                classes={classes}
+              />
+            </div>
+          )}
+        </div>
+      )}
+      {character.race && character.class && !confirmAtr && (
+        <div className="flex h-screen w-screen flex-col items-center justify-center">
+          <div
+            className="transparent w-1/4 rounded-3xl bg-opacity-75 bg-contain bg-center bg-no-repeat p-4 backdrop-blur-xl"
+            style={{ backgroundImage: `url(/${character.class}.png)` }}
+          >
+            <h1 className="gold m-1 text-3xl">Race: {character.race}</h1>
+            <h1 className="gold m-1 text-3xl">Class: {character.class}</h1>
+            <label className="m-1 text-3xl">
+              <span className="gold">Remaining points: </span>
+              <input
+                value={atrPoints}
+                readOnly
+                className="mr-1 w-10 rounded border"
+              />
+            </label>
+
+            {arr.map((e: CharacterProperties) => (
+              <Attribute
+                key={e}
+                defaultAtr={character[e]}
+                name={e}
+                setPoints={setPoints}
+                remaining={atrPoints}
+                change={(atrValue: number, atrName: CharacterProperties) => {
+                  setCharacter((character) => ({
+                    ...character,
+                    ...{ [atrName]: atrValue },
+                  }));
+                }}
+              />
+            ))}
+          </div>
+
+          <button
+            className={
+              atrPoints
+                ? 'invisible m-1 rounded border bg-white text-3xl'
+                : 'm-1  rounded border bg-white text-3xl'
+            }
+            type="button"
+            onClick={confirmation}
+          >
+            confirm attributes
+          </button>
+        </div>
+      )}
+      {character.race && character.class && confirmAtr && (
+        <div className="flex h-screen w-screen flex-col items-center justify-center">
+          <div
+            className="transparent w-1/4 rounded-3xl bg-opacity-75 bg-contain bg-center bg-no-repeat p-4 backdrop-blur-xl"
+            style={{ backgroundImage: `url(/${character.class}.png)` }}
+          >
+            <div className="gold font-black">
               <p>Race:</p>
-              <p className='align-items-end'>{character.race}</p>
+              <p className="align-items-end">{character.race}</p>
               <p>Class:</p>
               <p>{character.class}</p>
               <p>Strength:</p>
@@ -215,26 +224,28 @@ const createNewChar = () => {
                 Name :{' '}
                 <input
                   ref={nameOfChar}
-                  className="rounded border-4 "
+                  className=" rounded-md border border-yellow-400 bg-transparent px-3 py-2"
                   type="text"
                 />
               </label>
+            </div>
+            <div className="flex mt-2">
               <button
                 onClick={resetChar}
-                className="m-1  rounded border bg-white"
+                className="gold w-full font-black rounded-md border border-yellow-400 px-10 py-2"
               >
-                reset char
+                Reset
               </button>
               <button
-                className="m-1  rounded border bg-white"
+                className="gold w-full font-black rounded-md border border-yellow-400 px-10 py-2"
                 onClick={createChar}
               >
-                create char
+                Create
               </button>
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

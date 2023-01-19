@@ -93,6 +93,7 @@
     height: var(--nav-size);
     /* background-color: var(--bg); */
     padding: 0 1rem;
+    z-index: 100;
     /* border-bottom: var(--border); */
   }
   
