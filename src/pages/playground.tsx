@@ -8,18 +8,30 @@ import { mapArray } from 'components/array';
 import { Chat } from 'components/Chat';
 import Header from 'components/general/Header';
 import Battle from 'components/BattleLogic/Battle';
-
+import { useSession } from 'next-auth/react';
 
 const Playground: NextPage = () => {
+  const [players, setPlayers] = useState<{ [k: string]: { [k: string]: any } }>(
+    {},
+  );
+  const t = trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
+    onData(data) {
+      setPlayers((prev) => {
+        return { ...prev, [data.name]: data };
+      });
+    },
+  });
+  console.log(players)
+  const session = useSession()
   const controller = trpc.playground.remoteControl.useMutation();
   const main = useRef<HTMLDivElement>(null);
-  const [inCombat, setInCombat] = useState(false)
+  const [inCombat, setInCombat] = useState(false);
   const [moveMatrix, setMoveMatrix] = useState({
     up: false,
     left: false,
     down: false,
     right: false,
-    orientation: true
+    orientation: true,
   });
 
   useEffect(() => {
@@ -42,7 +54,7 @@ const Playground: NextPage = () => {
           break;
         case 'a':
           if (action) {
-            setMoveMatrix({ ...moveMatrix, left: true, orientation:true });
+            setMoveMatrix({ ...moveMatrix, left: true, orientation: true });
           } else {
             setMoveMatrix({ ...moveMatrix, left: false });
           }
@@ -56,7 +68,7 @@ const Playground: NextPage = () => {
           break;
         case 'd':
           if (action) {
-            setMoveMatrix({ ...moveMatrix, right: true, orientation:false });
+            setMoveMatrix({ ...moveMatrix, right: true, orientation: false });
           } else {
             setMoveMatrix({ ...moveMatrix, right: false });
           }
@@ -78,7 +90,7 @@ const Playground: NextPage = () => {
   // arr[72]='city'
   return (
     <>
-      <Header title='Playground' />
+      <Header title="Playground" />
       <div
         ref={main}
         tabIndex={-1}
@@ -88,20 +100,47 @@ const Playground: NextPage = () => {
       >
         {/* <h1 className="text-[100px]">Welcome to the Wildlands</h1> */}
         <div className={styles.container}>
-          {mapArray.map((e,index) => (e.map(f => (<MapTile key={index} tileType={f} />))))}
+          {mapArray.map((e, index) =>
+            e.map((f) => <MapTile key={index} tileType={f} />),
+          )}
         </div>
         <Map />
-        <Chat/>
-          {inCombat && (<Battle exitBattle={() => setInCombat(false)}/>)}
-        <button onClick={() => {setInCombat(true)}} >start combat!</button>
-        
+        <Chat />
+        {inCombat && players[session.data?.user?.name as string] && players[session.data?.user?.name as string].hero_name && (
+          <Battle 
+            exitBattle={() => setInCombat(false)}
+            enemyInput={{
+              hp: 100,
+              attack: 20,
+              name: 'Dragon',
+              experience: 100,
+              power: 10,
+            }}
+            heroInput={{
+              name: players[session.data?.user?.name as string].hero_name,
+              hp: 100,
+              skillONe: { damage: 50, name: 'Soul chain', CD: 5},
+              skillTwo: { damage: 2, name: 'Fireball', CD: 0},
+              skillthree: { damage: 15, name: 'Flamethrower', CD: 3},
+            }}
+          />
+        )}
+        <button
+          onClick={() => {
+            setInCombat(true);
+          }}
+        >
+          start combat!
+        </button>
       </div>
     </>
   );
 };
 
 const Map = () => {
-  const [s, setS] = useState<{ [k: string]: { x: number; y: number,orientation:boolean } }>();
+  const [s, setS] = useState<{
+    [k: string]: { x: number; y: number; orientation: boolean };
+  }>();
   trpc.playground.sub.useSubscription(undefined, {
     onData(data) {
       setS(data);
@@ -111,30 +150,30 @@ const Map = () => {
   return (
     <div className="bg-yellow relative">
       {s
-        ? Object.entries(s).map(([k, { x, y,orientation }], index) => {
-          return (
-            <div
-              className="absolute"
-              style={{ top: `${y}px`, left: `${x}px` }}
-              key={index}
-            >
-              
-              <div style={{
-                transform: `scaleX(${orientation ? -1 : 1})`,
-                // transform: 'rotate(30deg)',
-                backgroundImage: `url(${k=='Jakub' ?'/npc/dragon.gif' :'/npc/rogue.gif'})`,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                height:(k=='Jakub')?'200px':'80px',
-                width:(k=='Jakub')?'250px':'60px'
-              }}></div>
-            <div>{k}</div>
-      
-
-            </div>
-
-          );
-        })
+        ? Object.entries(s).map(([k, { x, y, orientation }], index) => {
+            return (
+              <div
+                className="absolute"
+                style={{ top: `${y}px`, left: `${x}px` }}
+                key={index}
+              >
+                <div
+                  style={{
+                    transform: `scaleX(${orientation ? -1 : 1})`,
+                    // transform: 'rotate(30deg)',
+                    backgroundImage: `url(${
+                      k == 'Jakub' ? '/npc/dragon.gif' : '/npc/rogue.gif'
+                    })`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    height: k == 'Jakub' ? '200px' : '80px',
+                    width: k == 'Jakub' ? '250px' : '60px',
+                  }}
+                ></div>
+                <div>{k}</div>
+              </div>
+            );
+          })
         : 'nothing'}
     </div>
   );
