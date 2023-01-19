@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 const RaceDetail = ({
   name,
+  id,
   desc,
   click,
   creation,
@@ -14,10 +15,11 @@ const RaceDetail = ({
   desc: string;
   click: Function;
   creation: boolean;
+  id: number
   on: boolean;
 }) => {
   const handleClick = () => {
-    click(name);
+    click(name, id);
   };
 
   return (
