@@ -9,7 +9,6 @@
     display: grid;
     grid-template-columns: repeat(1,1fr);
     transform-origin: top right;
-    /* transform: skewY(-4.398705355deg); */
     /* margin: 0 6.4vw 0 28%; */
     margin: 0 6.4vw 0 28%;
     
@@ -46,6 +45,6 @@
       grid-template-rows: repeat(3, 250px);
       grid-column-gap: 1vw;
       margin: 0 2.2vw 0 2.2vw;
-      padding: 7.5vw 0 0 2.2vw;
+      padding: 5.5vw 0 0 2.2vw;
     }
   }

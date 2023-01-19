@@ -52,6 +52,7 @@ const ClassList = ({
   return (
     <>
       <div className={styles.body}>
+        <h1 className="gold font-LOTR text-center text-4xl pt-20 tracking-widest">CHOOSE YOUR CLASS</h1>
         <ul test-id="classesArr" className={styles.ul}>
           {allClasses}
         </ul>

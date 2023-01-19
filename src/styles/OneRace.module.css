@@ -1,6 +1,5 @@
 .li {
   transform-origin: top left;
-  /* transform: skewY(4.398705355deg) rotatez(14.03624deg); */
   padding-top: 10%;
   z-index: 1;
   transition-property: z-index;

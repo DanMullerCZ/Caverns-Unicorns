@@ -53,6 +53,7 @@ const RaceList = ({
   return (
     <>
       <div className={styles.body}>
+        <h1 className="gold font-LOTR text-center text-4xl pt-20 tracking-widest">CHOOSE YOUR RACE</h1>
         <ul test-id="racesArr" className={styles.ul}>
           {allRaces}
         </ul>
