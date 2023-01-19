@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { contextProps } from '@trpc/react-query/dist/internals/context';
 
 const Characters = ({ characters }: { characters: any }) => {
+  console.log(characters)
   const [hero, setHero] = useState({
     name: characters[0]?.name || '',
     race: characters[0]?.race || '',
@@ -16,12 +17,17 @@ const Characters = ({ characters }: { characters: any }) => {
   
   useEffect(()=>{
     if (localStorage.getItem("char_id")){
-    setHero({
-      name: localStorage.getItem("name"),
-      race: localStorage.getItem("race"),
-      class: localStorage.getItem("class"),
-      id: localStorage.getItem("char_id"),
-    })}
+    for (let i=0;i<characters.length;i++){
+      if (characters[i].id.toString()==localStorage.getItem("char_id")){
+        setHero({
+        name: characters[i].name,
+        race: characters[i].race,
+        class: characters[i].class,
+        id: characters[i].id,
+      })}
+
+      }
+    }
   },[])
 
   const handleClick = (
@@ -37,9 +43,6 @@ const Characters = ({ characters }: { characters: any }) => {
       id: id,
     });
     localStorage.setItem('char_id', id.toString());
-    localStorage.setItem('class', nameOfClass);
-    localStorage.setItem('race', race);
-    localStorage.setItem('name', name);
   };
 
   return (
