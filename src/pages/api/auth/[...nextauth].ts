@@ -1,15 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { env } from '../../../env/server.mjs';
+import { env } from '../../../env/server';
 import { prisma } from '../../../server/db/client';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { User, Session, Account, Prisma } from '@prisma/client';
+import { User, Prisma } from '@prisma/client';
 import { generateTokens, hashToken, expiresAt } from './jwt';
 import { randomBytes, randomUUID } from 'crypto';
-import jwt from 'jsonwebtoken';
-import { Secret } from 'next-auth/jwt/types.js';
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -63,6 +62,21 @@ export const authOptions: NextAuthOptions = {
           return randomUUID?.() ?? randomBytes(32).toString('hex');
         };
         session.user.id = token.sub as string;
+
+        const verif = await prisma.user.findUnique({
+          where: {
+            id: session.user.id
+          },
+          select: {
+            emailVerified: true,
+            premium: true
+          }
+        })
+       
+        // updates session
+        session.user.emailVerified = verif?.emailVerified ? true : false
+        session.user.premium = verif?.premium ? true : false
+
         const s: Prisma.BatchPayload = await prisma.session.updateMany({
           where: { userId: token.sub },
           data: {
@@ -81,7 +95,6 @@ export const authOptions: NextAuthOptions = {
             id_token: token.jti as string,
           },
         });
-        console.log(a, s);
       }
       return session;
     },

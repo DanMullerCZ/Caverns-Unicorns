@@ -1,0 +1,38 @@
+.startButton{
+    height: 100px;
+    width: 100px;
+    color: black;
+    background-color: aquamarine;
+    font-size: 25px;
+    border: solid;
+    border-radius: 9999px;
+    position: fixed;
+    left: 45%;
+    bottom: 20px;
+}
+.startLink{
+    color: black;
+}
+.backLink{
+    color: black;
+}
+.backButton{
+    height: 100px;
+    width: 100px;
+    color: black;
+    background-color: aquamarine;
+    font-size: 25px;
+    border: solid;
+    border-radius: 9999px;
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+}
+.container{
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) 15vw;
+    grid-template-rows: 1fr 1fr;
+}

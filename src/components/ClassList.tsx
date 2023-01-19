@@ -60,15 +60,5 @@ const ClassList = ({
     </>
   );
 };
-// ClassList.defaultProps = {
-//   setClass: () => {},
-//   creation: false,
-//   on: false,
-// };
-
-// ClassList.propTypes = {
-//   setClass: PropTypes.func,
-//   creation: PropTypes.bool,
-// };
 
 export default ClassList;

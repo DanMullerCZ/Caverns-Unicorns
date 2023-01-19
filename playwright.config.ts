@@ -9,7 +9,12 @@ const opts = {
   // collectCoverage: !!process.env.PLAYWRIGHT_HEADLESS
 };
 const config: PlaywrightTestConfig = {
-  testDir: './test',
+  testDir: './test',  
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:3000/',
+    timeout: 120000,
+  },
   use: {
     ...devices['Desktop Chrome'],
     baseURL: baseUrl,

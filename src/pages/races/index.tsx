@@ -5,9 +5,13 @@ import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
 import Head from 'next/head';
+<<<<<<< HEAD
 import { useState } from 'react';
 import NavigationBar from 'components/NavigationBar';
 import VideoBackground from 'components/VideoBackground';
+=======
+import Header from 'components/general/Header';
+>>>>>>> c76aa6e0801c590e07adcb02fc850629df346fa4
 
 export async function getStaticProps() {
   const ssg = await createProxySSGHelpers({

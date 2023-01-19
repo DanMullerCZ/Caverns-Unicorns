@@ -1,4 +1,3 @@
-import { Class } from '@prisma/client';
 import ClassList from 'components/ClassList';
 import { trpc } from 'utils/trpc';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
