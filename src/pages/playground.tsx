@@ -9,20 +9,83 @@ import { Chat } from 'components/Chat';
 import Header from 'components/general/Header';
 import Battle from 'components/BattleLogic/Battle';
 import { useSession } from 'next-auth/react';
+import { NPC, Characters, Spell } from '@prisma/client';
 
 const Playground: NextPage = () => {
   const [players, setPlayers] = useState<{ [k: string]: { [k: string]: any } }>(
     {},
   );
+const spellOne: Spell = {
+  name: 'Soul chain',
+  id: 1,
+  description: 'fucing badass chain with souls',
+  damage: 50,
+  cooldown: 5,
+}
+const spellTwo: Spell = {
+  name: 'fireball',
+  id: 2,
+  description: 'fucking little candle',
+  damage: 20,
+  cooldown: 0,
+}
+const spellthree: Spell = {
+  name: 'immolation',
+  id: 3,
+  description: 'flames wreathe one creature you can see within your range',
+  damage: 15,
+  cooldown: 3,
+}
+  const heroInfo: Characters = {
+    id: 0,
+    name: 'test hero name',
+    owner_id: 'test owner ',
+    maxHP: 1000,
+    currentHP: 1000,
+    str: 1,
+    dex: 1,
+    con: 1,
+    wis: 1,
+    int: 1,
+    char: 1,
+    class: 'paladin',
+    race: 'human',
+    skillOne_id: 1,
+    skillTwo_id: 2,
+    skillThree_id: 3,
+  };
+  const enemy: NPC = {
+    id: 'id1',
+    name: 'dragon',
+    posX: 0,
+    posY: 0,
+    img: '/npc/dragon.gif',
+    dmg: 20,
+    power: 10,
+    exp: 50,
+    hp: 100,
+    cur_hp: 100,
+  };
   const t = trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
     onData(data) {
+      console.log(data);
       setPlayers((prev) => {
         return { ...prev, [data.name]: data };
       });
     },
   });
-  console.log(players)
-  const session = useSession()
+  const session = useSession();
+  //checks that u can only enter PG after login and selection character
+  useEffect(() => {
+    if (session.status === 'unauthenticated') {
+      window.location.href = '/login';
+    } else if (localStorage.getItem('char_id') === null) {
+      window.location.href = '/character-list';
+    }
+  });
+  console.log(players);
+  console.log(players[session.data?.user?.name as string], 'session name');
+
   const controller = trpc.playground.remoteControl.useMutation();
   const main = useRef<HTMLDivElement>(null);
   const [inCombat, setInCombat] = useState(false);
@@ -35,6 +98,7 @@ const Playground: NextPage = () => {
   });
 
   useEffect(() => {
+    console.log(players);
     if (main.current) {
       main.current.focus();
     }
@@ -100,29 +164,25 @@ const Playground: NextPage = () => {
       >
         {/* <h1 className="text-[100px]">Welcome to the Wildlands</h1> */}
         <div className={styles.container}>
-          {mapArray.map((e, index) =>
-            e.map((f) => <MapTile key={index} tileType={f} />),
+          {mapArray.map((e, indexE) =>
+            e.map((f, indexF) => (
+              <MapTile
+                key={indexE.toString() + indexF.toString()}
+                tileType={f}
+              />
+            )),
           )}
         </div>
         <Map />
         <Chat />
-        {inCombat && players[session.data?.user?.name as string] && players[session.data?.user?.name as string].hero_name && (
-          <Battle 
+        {inCombat && players[session.data?.user?.name as string] && (
+          <Battle
             exitBattle={() => setInCombat(false)}
-            enemyInput={{
-              hp: 100,
-              attack: 20,
-              name: 'Dragon',
-              experience: 100,
-              power: 10,
-            }}
-            heroInput={{
-              name: players[session.data?.user?.name as string].hero_name,
-              hp: 100,
-              skillONe: { damage: 50, name: 'Soul chain', CD: 5},
-              skillTwo: { damage: 2, name: 'Fireball', CD: 0},
-              skillthree: { damage: 15, name: 'Flamethrower', CD: 3},
-            }}
+            enemyInput={enemy}
+            heroInput={heroInfo}
+            skillOne={spellOne}
+            skillTwo={spellTwo}
+            skillthree={spellthree}
           />
         )}
         <button

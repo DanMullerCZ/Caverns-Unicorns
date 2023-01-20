@@ -51,7 +51,7 @@ const AuthShowcase: React.FC = () => {
 
       <button
         className="goldeffect mr-12 "
-        onClick={sessionData ? () => signOut() : () => signIn()}
+        onClick={sessionData ? () => { signOut(), localStorage.clear() } : () => signIn()}
       >
         {sessionData ? 'Log Out' : 'Log In'}
       </button>

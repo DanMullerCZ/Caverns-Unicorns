@@ -1,6 +1,7 @@
 import Header from "components/general/Header";
 import UserSettings from "components/userSettings/UserSettings";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { trpc } from "utils/trpc";
@@ -54,7 +55,9 @@ export default function userPage() {
         <p>Response from deletion: {deletion.data?.toString()}</p>
 
         <hr />
-
+        <Link href='/character-list'>
+            <button>Choose character</button>
+        </Link>
         <button onClick={() => {
                 signOut()
                 router.push('/')

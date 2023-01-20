@@ -78,6 +78,7 @@ model SpellsForClasses {
   classId Int
   spell   Spell @relation(fields: [spellId], references: [id])
   class   Class @relation(fields: [classId], references: [id])
+
   @@id([spellId, classId])
 }
 
@@ -95,12 +96,16 @@ model Characters {
   char      Int
   class     String
   race      String
+  skillOne_id   Int
+skillTwo_id   Int
+skillThree_id   Int
 }
 
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
+
   @@unique([identifier, token])
 }
 
@@ -110,4 +115,17 @@ model Premium_Membership {
   paidDate DateTime
   status   String
   user     User     @relation(fields: [userId], references: [id])
+}
+
+model NPC {
+  id     String @id
+  name   String
+  posX   Int
+  posY   Int
+  img    String
+  dmg    Int
+  power  Int
+  cur_hp Int
+  exp    Int
+  hp     Int
 }
