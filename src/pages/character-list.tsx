@@ -9,7 +9,7 @@ const CharacterList = ({ response }: { response: any }) => {
 
   
   useEffect(()=>{
-    if (!sessionData.data?.user?.id){
+    if (sessionData.status == 'unauthenticated'){
         window.location.href='/login'
     }
   },[])
