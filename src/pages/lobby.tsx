@@ -1,4 +1,6 @@
 import { Chat } from 'components/Chat';
+import NavigationBar from 'components/NavigationBar';
+import VideoBackground from 'components/VideoBackground';
 import { Session } from 'inspector';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -18,31 +20,32 @@ const Lobby = () => {
     },
   });
 
-  return (
-    <div className={styles.container}>
+  return (<div>
+    <VideoBackground />
+      <NavigationBar/>
       <Chat />
+    <div className={styles.container}>
       {Object.keys(players).map((e: any, index: number) => {
         return (
           <div
             key={index}
-            className="bg-contain bg-center bg-no-repeat"
+            className={styles.character}
             style={{ backgroundImage: `url(/${players[e].class}.png)` }}
           >
+            {' '}
             {players[e].hero_name} : {players[e].race} {players[e].class}
+            <h2>{players[e].name}</h2>
           </div>
         );
       })}
 
-      <button className={styles.startButton}>
-        <Link className={styles.startLink} href="/playground">
-          Start
-        </Link>
-      </button>
-      <button className={styles.backButton}>
-        <Link className={styles.backLink} href="/character-list">
-          {'<-'}
-        </Link>
-      </button>
+      <Link className={styles.startLink} href="/playground">
+        <button className={styles.startButton}>Start</button>
+      </Link>
+      <Link className={styles.backLink} href="/character-list">
+        <button className={styles.backButton}>{'<-'}</button>
+      </Link>
+    </div>
     </div>
   );
 };

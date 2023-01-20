@@ -4,6 +4,8 @@ import Link from 'next/link';
 import React, { useState, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { trpc } from 'utils/trpc';
+import session from 'pages/api/stripe/checkout/session';
+import { getSession, useSession } from 'next-auth/react';
 
 export function NavigationBar() {
   return (
@@ -78,6 +80,7 @@ function DropdownMenu() {
     );
   }
 
+  const sessionData = useSession();
   return (
     // <div ref={ref}>
     //   {isComponentVisible && (
@@ -92,11 +95,18 @@ function DropdownMenu() {
         <div className="menu">
           <DropdownItem goToMenu="races">Races</DropdownItem>
           <DropdownItem goToMenu="classes">Classes</DropdownItem>
+          
           {/* <DropdownItem goToMenu="quests">Quests</DropdownItem>
           <DropdownItem goToMenu="races">Spells</DropdownItem> */}
           <Link href="/shop">
             <DropdownItem>Shop</DropdownItem>
           </Link>
+          {sessionData.data?.user?.id &&(<Link href="/character-list">
+            <DropdownItem>Character List</DropdownItem>
+          </Link>)}
+          {sessionData.data?.user?.id &&(<Link href={`/user/${sessionData.data.user.id}`}>
+            <DropdownItem>User Settings</DropdownItem>
+          </Link>)}
         </div>
       </CSSTransition>
 
