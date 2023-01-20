@@ -64,4 +64,20 @@ export const wsRouter = router({
         emit.next(x);
       });
   })
-})})
+  
+}),
+inGameRecieveMessage: protectedProcedure.subscription(() => {
+    return observable<string>((emit) => {
+      chatMsg.subscribe((x: string) => {
+        emit.next(x);
+      });
+    });
+  }),
+  inGameSendMessage: protectedProcedure
+    .input(z.object({ typing: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+     chatMsg.next(`${ctx.session.user.name}: ${input.typing}`);
+    }),
+}
+
+)
