@@ -4,7 +4,7 @@ import VideoBackground from 'components/VideoBackground';
 import { Session } from 'inspector';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import styles from '../styles/lobby.module.css';
 
@@ -19,7 +19,9 @@ const Lobby = () => {
       });
     },
   });
-
+  useEffect(()=>{
+    console.log(players)
+  },[])
   return (<div>
     <VideoBackground />
       <NavigationBar/>
