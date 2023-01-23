@@ -63,8 +63,8 @@ const spellthree: Spell = {
     dmg: 20,
     power: 10,
     exp: 50,
-    hp: 100,
-    cur_hp: 100,
+    hp: 1000,
+    cur_hp: 1000,
   };
   const t = trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
     onData(data) {
