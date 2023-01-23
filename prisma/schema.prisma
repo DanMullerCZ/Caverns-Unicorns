@@ -19,10 +19,12 @@ model Account {
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String?
+  id_token           String? @db.VarChar(10000)
   session_state      String?
   verification_token String? @db.VarChar(300)
   user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
@@ -35,7 +37,7 @@ model Session {
 
 model User {
   id            String              @id @default(cuid())
-  name          String              @unique
+  name          String              
   email         String              @unique
   emailVerified DateTime?
   image         String?
@@ -112,4 +114,17 @@ model Premium_Membership {
   paidDate DateTime
   status   String
   user     User     @relation(fields: [userId], references: [id])
+}
+
+model NPC {
+  id     String @id @default(cuid())
+  name   String
+  posX   Int
+  posY   Int
+  img    String
+  dmg    Int
+  power  Int
+  cur_hp Int
+  exp    Int
+  hp     Int
 }

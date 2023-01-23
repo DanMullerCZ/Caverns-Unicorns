@@ -2,6 +2,7 @@ import { type NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import { useRef } from 'react';
+import styles from '../styles/Chat.module.css';
 
 //import {EOL} from "os"
 
@@ -19,9 +20,16 @@ export const Chat: NextPage = () => {
     },
   });
   const online = trpc.wsRouter.imOnline.useMutation();
+  const onlineChars = trpc.wsRouter.onlinePlayersWithChars.useMutation();
   useEffect(() => {
+    onlineChars.mutate({
+      char_id: Number(localStorage.getItem('char_id')),
+    });
     const onlineCheck = setInterval(() => {
       online.mutate();
+      onlineChars.mutate({
+        char_id: Number(localStorage.getItem('char_id')),
+      });
       setPlayers((prev) => {
         for (const p in prev) {
           prev[p] = prev[p] + 5;
@@ -47,8 +55,10 @@ export const Chat: NextPage = () => {
       clearInterval(onlineCheck);
       clearInterval(usersCheck);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const t = trpc.wsRouter.onlinePlayers.useSubscription(undefined, {
     onData(data) {
       setPlayers((prev) => {
@@ -58,46 +68,49 @@ export const Chat: NextPage = () => {
   });
 
   return (
-    <>
-      <div>
-        Online Players:
-        {Object.keys(players).map((key, index) => {
-          return <div key={index}>{key}</div>;
-        })}
-      </div>
-      <div>
-        {messages.map((m, index: number) => (
-          // eslint-disable-next-line react/jsx-key
-          <p key={index}>{m}</p>
-        ))}
-      </div>
-      <input
-        type="text"
-        className="border-8"
-        ref={inputElement}
-        onChange={(ev: React.FormEvent<EventTarget>) => {
-          const target: HTMLInputElement = ev.target as HTMLInputElement;
-          setMessage(target.value);
-        }}
-        onKeyDown={(ev: any) => {
-          if (ev.key == 'Enter') {
+    <div className='bg-cover bg-transparent' style={{backgroundImage: `url(/wallpers/morigate.svg)`}}>
+      <div className="container-chat gold font-LOTR">
+        <div className="row-span-1 p-1">
+          Online Players:
+          {Object.keys(players).map((key, index) => {
+            return <div key={index}>{key}</div>;
+          })}
+        </div>
+        <div className={styles.messages}>
+          {messages.map((m, index: number) => (
+            // eslint-disable-next-line react/jsx-key
+            <p key={index}>{m}</p>
+          ))}
+        </div>
+        <input
+          type="text"
+          className={styles.input}
+          ref={inputElement}
+          onChange={(ev: React.FormEvent<EventTarget>) => {
+            const target: HTMLInputElement = ev.target as HTMLInputElement;
+            setMessage(target.value);
+          }}
+          onKeyDown={(ev: any) => {
+            if (ev.key == 'Enter') {
+              messenger.mutate({ typing: message });
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              inputElement.current!.value = '';
+              setMessage('');
+            }
+          }}
+        />
+        <button
+          className={styles.buttton}
+          onClick={() => {
             messenger.mutate({ typing: message });
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             inputElement.current!.value = '';
             setMessage('');
-          }
-        }}
-      />
-      <button
-        onClick={() => {
-          messenger.mutate({ typing: message });
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          inputElement.current!.value = '';
-          setMessage('');
-        }}
-      >
-        Send
-      </button>
-    </>
+          }}
+        >
+          Send
+        </button>
+      </div>
+    </div>
   );
 };

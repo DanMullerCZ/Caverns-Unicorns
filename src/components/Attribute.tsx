@@ -34,7 +34,7 @@ const Attribute = ({
 
   return (
     <div className="grid grid-cols-2 text-3xl w-60 m-1">
-      <p>{name} : </p>
+      <p className="gold">{name} : </p>
       <div className='flex'>
         <input ref={inputRef} value={atr} readOnly className="w-10 border mr-1 rounded" />
         <button type="button" className="border w-8 rounded bg-white" onClick={minus}>

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
+import GoogleProvider from 'next-auth/providers/google';
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { env } from '../../../env/server';
@@ -9,6 +10,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { User, Prisma } from '@prisma/client';
 import { generateTokens, hashToken, expiresAt } from './jwt';
 import { randomBytes, randomUUID } from 'crypto';
+
+
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -20,8 +23,12 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+    }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     CredentialsProvider({
       //type: "credentials",
@@ -100,7 +107,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   debug: process.env.NODE_ENV === 'development',
-  session: {
+   session: {
     // Set to jwt in order to CredentialsProvider works properly
     strategy: 'jwt',
   },

@@ -5,12 +5,12 @@ import { z } from 'zod';
 export const dbRouter = router({
     getCharacters:publicProcedure
         .input(z.string())
-        .query(async ({ input }) => {
+        .mutation(async ({ input }) => {
             const characters = await prisma.characters.findMany({
                 where: {
                     owner_id: input
                 }
-            })
+            }) || []
             return characters;
         }),
     getRace: publicProcedure

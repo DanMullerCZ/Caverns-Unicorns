@@ -1,29 +1,36 @@
 import MapTile from 'components/MapTile';
 import { NextPage } from 'next';
-import Head from 'next/head';
-import { useEffect, useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import styles from '../styles/playground.module.css';
 import { mapArray } from 'components/array';
+import { Chat } from 'components/Chat';
 import Header from 'components/general/Header';
+import { width } from '@mui/system';
+import { relative } from 'path';
+import { InGameChat } from 'components/InGameChat';
 
 const Playground: NextPage = () => {
   const controller = trpc.playground.remoteControl.useMutation();
   const main = useRef<HTMLDivElement>(null);
+  const chat = useRef<HTMLDivElement>(null);
   const [moveMatrix, setMoveMatrix] = useState({
     up: false,
     left: false,
     down: false,
     right: false,
-    orientation: true
+    orientation: true,
   });
 
   useEffect(() => {
-    if (main.current) {
-      main.current.focus();
+    if (document.activeElement === main.current) {
+      // main.current.focus();
+      controller.mutate(moveMatrix);
     }
-    controller.mutate(moveMatrix);
   }, [moveMatrix]);
+
+
+
   const handleKey = (e: React.KeyboardEvent<HTMLElement>, action: boolean) => {
     if (e.repeat) {
       return;
@@ -38,7 +45,7 @@ const Playground: NextPage = () => {
           break;
         case 'a':
           if (action) {
-            setMoveMatrix({ ...moveMatrix, left: true, orientation:true });
+            setMoveMatrix({ ...moveMatrix, left: true, orientation: true });
           } else {
             setMoveMatrix({ ...moveMatrix, left: false });
           }
@@ -52,7 +59,7 @@ const Playground: NextPage = () => {
           break;
         case 'd':
           if (action) {
-            setMoveMatrix({ ...moveMatrix, right: true, orientation:false });
+            setMoveMatrix({ ...moveMatrix, right: true, orientation: false });
           } else {
             setMoveMatrix({ ...moveMatrix, right: false });
           }
@@ -70,64 +77,167 @@ const Playground: NextPage = () => {
   const handleKeyUp = (e: React.KeyboardEvent<HTMLElement>) => {
     handleKey(e, false);
   };
-  // const arr:string[] = Array(144).fill('grass')
-  // arr[72]='city'
+
   return (
     <>
-      <Header title='Playground' />
+      <Header title="Playground" />
       <div
+        id='mainContent'
         ref={main}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
-        className="mx-auto flex flex-col items-center justify-center gap-10 px-6 py-8 md:h-screen lg:py-0"
+        className = "relative select-none"
+        style={{
+          display: 'flex',
+          background: '#92884A',
+          aspectRatio: 16/9
+        }}
+        draggable={false}
       >
-        {/* <h1 className="text-[100px]">Welcome to the Wildlands</h1> */}
-        <div className={styles.container}>
-          {mapArray.map((e,index) => (e.map(f => (<MapTile key={index} tileType={f} />))))}
+        {/* THIS IS OUR GREAT MAP */}
+        <div
+          id='map'
+          style={{
+            position:"relative",
+            height: '80vh',
+            width: '80vw',
+          }}
+        >
+          <div
+            id='mapTiles'
+            className={styles.container}
+              style={{
+            position:"absolute"}}>
+
+            {mapArray.map((e, indexE) =>
+              e.map((f, indexF) => <MapTile key={`${indexE.toString()} + ${indexF.toString()}`} tileType={f} />),
+            )}
+          </div>
+          <Map /> 
         </div>
-        <Map />
+        <div 
+          id='chat'
+          ref={chat}
+          style={{
+            backgroundColor: 'gray',
+            height: '100vh',
+            width: '20vw',
+          }}
+        >
+          <InGameChat />
+        </div>
       </div>
     </>
   );
 };
 
 const Map = () => {
-  const [s, setS] = useState<{ [k: string]: { x: number; y: number,orientation:boolean } }>();
+  const enemies = trpc.playground.loadEnemies.useMutation()
+  const [bp, setBp] = useState("no data")
+
+  const battlePair = trpc.playground.somethingLikeBattle.useMutation();
+  const map = useRef<HTMLDivElement>(null)
+  const [s, setS] = useState<{
+    [k: string]: { x: number; y: number; orientation: boolean, status: { battle: boolean; alive: boolean; } };
+  }>();
   trpc.playground.sub.useSubscription(undefined, {
     onData(data) {
       setS(data);
     },
   });
 
+  useEffect(() => {
+    enemies.mutate()
+  }, [])
+
+  const startBattle = (): void => {
+    battlePair.mutate();
+    setBp(battlePair.data?.enemy as string)
+  }
   return (
-    <div className="bg-yellow relative">
-      {s
-        ? Object.entries(s).map(([k, { x, y,orientation }], index) => {
+    <div
+      id='characters' 
+      ref={map}
+        style={{
+        position:'absolute',
+        top: '0',
+        left: '0',
+        height: "auto",
+        width: "80vw"
+      }}
+    >
+      {s // RENDERS PLAYERS IN RT
+        ? Object.entries(s).map(([k, { x, y, orientation, status: { battle, alive } }], index) => {
+            return (
+              <div
+                id='player-container'
+                style={{ 
+                  position: 'absolute',
+                  top: `${y*map.current!.clientWidth/1600}px`,
+                  left: `${x*map.current!.clientWidth/1600}px`,
+                  width: `${map.current!.clientWidth/50}px`,
+                  height: `${map.current!.clientWidth/25}px`,
+                }}
+                key={index}
+              >
+                <div
+                  style={{
+                    transform: `scaleX(${orientation ? -1 : 1})`,
+                    backgroundImage: `url('/npc/rogue.gif')`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                ></div>
+                <div>{k}</div>
+                <div>PosX: {x}</div>
+                <div>PosY: {y}</div>
+                <div>CW: {map.current?.clientWidth}</div>
+                <div>CH: {map.current?.clientHeight}</div>
+                <button 
+                  disabled={false}
+                  onClick={startBattle}
+                >
+                  Start Battle
+                </button>
+              </div>
+            );
+          })
+        : 'nothing'}
+
+      {/* RENDER NPCs */}
+        {enemies.data?.map((npc, index) => {
           return (
             <div
-              className="absolute"
-              style={{ top: `${y}px`, left: `${x}px` }}
-              key={index}
+              id='npc-container'
+              style={{ 
+                position: 'absolute',
+                top: `${npc.posY*map.current!.clientWidth/1600}px`,
+                left: `${npc.posX*map.current!.clientWidth/1600}px`,
+                width: `${map.current!.clientWidth/50}px`,
+                height: `${map.current!.clientWidth/25}px`,
+              }}
+              key={index + npc.name}
             >
+              <div
+                style={{
+                  backgroundImage: `url(${npc.img})`,
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  height:'100%',
+                  width:'100%',
+                }}
+              ></div>
+              <div>{npc.name}</div>
+              <div>HP: {npc.stats.cur_hp}</div>
               
-              <div style={{
-                transform: `scaleX(${orientation ? -1 : 1})`,
-                // transform: 'rotate(30deg)',
-                backgroundImage: `url(${k=='Jakub' ?'/npc/dragon.gif' :'/npc/rogue.gif'})`,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                height:(k=='Jakub')?'200px':'80px',
-                width:(k=='Jakub')?'250px':'60px'
-              }}></div>
-            <div>{k}</div>
-      
 
             </div>
-
-          );
-        })
-        : 'nothing'}
+          )
+        })}
+        <div id='tuu jsem' className='text-500-red'>{battlePair.data?.enemy}</div>
     </div>
   );
 };

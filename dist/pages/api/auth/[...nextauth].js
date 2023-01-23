@@ -7,6 +7,7 @@ exports.authOptions = void 0;
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const next_auth_1 = __importDefault(require("next-auth"));
 const discord_1 = __importDefault(require("next-auth/providers/discord"));
+const google_1 = __importDefault(require("next-auth/providers/google"));
 // Prisma adapter for NextAuth, optional and can be removed
 const prisma_adapter_1 = require("@next-auth/prisma-adapter");
 const server_1 = require("../../../env/server");
@@ -23,8 +24,12 @@ exports.authOptions = {
     adapter: (0, prisma_adapter_1.PrismaAdapter)(client_1.prisma),
     providers: [
         (0, discord_1.default)({
-            clientId: server_1.env.DISCORD_CLIENT_ID,
-            clientSecret: server_1.env.DISCORD_CLIENT_SECRET,
+            clientId: process.env.DISCORD_CLIENT_ID,
+            clientSecret: process.env.DISCORD_CLIENT_SECRET,
+        }),
+        (0, google_1.default)({
+            clientId: server_1.env.GOOGLE_CLIENT_ID,
+            clientSecret: server_1.env.GOOGLE_CLIENT_SECRET,
         }),
         (0, credentials_1.default)({
             //type: "credentials",

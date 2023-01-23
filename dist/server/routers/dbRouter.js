@@ -7,12 +7,12 @@ const zod_1 = require("zod");
 exports.dbRouter = (0, trpc_1.router)({
     getCharacters: trpc_1.publicProcedure
         .input(zod_1.z.string())
-        .query(async ({ input }) => {
+        .mutation(async ({ input }) => {
         const characters = await client_1.prisma.characters.findMany({
             where: {
                 owner_id: input
             }
-        });
+        }) || [];
         return characters;
     }),
     getRace: trpc_1.publicProcedure

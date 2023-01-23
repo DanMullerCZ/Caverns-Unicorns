@@ -1,12 +1,13 @@
 import { observable } from '@trpc/server/observable';
-//import { prisma } from '../prisma';
+import { prisma } from '../db/client';
 import { z } from 'zod';
-import { protectedProcedure, publicProcedure, router } from '../trpc';
-import { Subject, fromEvent } from 'rxjs';
+import { protectedProcedure, router } from '../trpc';
+import { Subject } from 'rxjs';
 
 const subject = new Subject<string>();
 const chatMsg = new Subject<string>();
 const online = new Subject<string>();
+const onlineChars = new Subject<any>();
 
 export const wsRouter = router({
   sub: protectedProcedure.subscription(() => {
@@ -20,7 +21,7 @@ export const wsRouter = router({
 
   input: protectedProcedure
     .input(z.object({ typing: z.string() }))
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       //console.log('ctx:', ctx);
       console.log(input.typing);
       subject.next(input.typing);
@@ -52,4 +53,32 @@ export const wsRouter = router({
       });
     });
   }),
-});
+  onlinePlayersWithChars:protectedProcedure
+  .input(z.object({char_id:z.number()}))
+  .mutation(async({input,ctx})=>{
+     const result = await prisma.characters.findFirst({where:{id:input.char_id,owner_id:ctx.session.user.id}})
+    onlineChars.next({char_id:input.char_id,name:ctx.session.user.name,hero_name:result?.name,class:result?.class,race:result?.race})
+  }),
+  onlinePlayersAfterLogin:protectedProcedure.subscription(()=>{
+    return observable<any>((emit) => {
+      onlineChars.subscribe((x:any) => {
+        emit.next(x);
+      });
+  })
+  
+}),
+inGameRecieveMessage: protectedProcedure.subscription(() => {
+    return observable<string>((emit) => {
+      chatMsg.subscribe((x: string) => {
+        emit.next(x);
+      });
+    });
+  }),
+  inGameSendMessage: protectedProcedure
+    .input(z.object({ typing: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+     chatMsg.next(`${ctx.session.user.name}: ${input.typing}`);
+    }),
+}
+
+)
