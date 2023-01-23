@@ -24,7 +24,7 @@ model Account {
   verification_token String? @db.VarChar(300)
   user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
