@@ -10,16 +10,14 @@ const UserImage: NextPage = () => {
     const session = useSession()
     const onHovertext: string = 'Change icon'
     const userImage = trpc.userSettings.userImage.useMutation()
-    const defaultImages: string[] = [
-        '/defaultUserImages/first.jpg', 
-        '/defaultUserImages/second.jpg', 
-        '/defaultUserImages/third.png',
-        '/defaultUserImages/forth.jpg'
-    ]
+   
+    // 1.0 usestate na zobrazovani obrazku
     const [showPics, setShowPics] = useState(false)
     
     const handleClick =() => {
-        setShowPics(!showPics)
+        // 1.1 zobrazeni obrazku na vyber pod aktualnim obrazkem
+        // setShowPics(!showPics)
+        window.location.href = '/changeUserPicture'
     }
 
     useEffect(() => {
@@ -40,7 +38,7 @@ const UserImage: NextPage = () => {
                     {}
                  </span>
             
-            { showPics ? defaultImages.map((image, index) => <Image src={image} width='100' height='100' alt={image} key={index} onClick={handleClick}/>) : null}
+            {/* 1.2 { showPics ? defaultImages.map((image, index) => <Image src={image} width='100' height='100' alt={image} key={index} onClick={handleClick}/>) : null} */}
         </>
     )
 }
