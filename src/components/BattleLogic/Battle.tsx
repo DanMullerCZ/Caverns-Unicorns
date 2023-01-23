@@ -196,7 +196,6 @@ const Battle = ({
   const [enemyDead, setEnemyDead] = useState(false);
   const [heroDead, setHeroDead] = useState(false);
   useEffect(() => {
-    setHealthBar((enemy.cur_hp / enemy.hp) * 100)
     if (enemy.cur_hp === 0) {
       setHealthBar(0);
       setEnemyDead(true);
@@ -225,7 +224,6 @@ const Battle = ({
     }, 2000);
   };
   const sessionData = useSession();
-  const [healthBar, setHealthBar] = useState(100)
 
   return (
     <div key={sessionData.data?.user?.id} className={styles.container}>
@@ -234,7 +232,7 @@ const Battle = ({
           <h1>fighting</h1>
           <h2>Name:{enemy.name}</h2>
           <h2>HP:{enemy.cur_hp}</h2>
-          <progress  value={healthBar} className={styles.healthbar} max="100"></progress>
+          <progress  value={enemy.cur_hp} className={styles.healthbar} max={enemy.hp}></progress>
         </div>
         <Image
           src="/npc/dragon.gif"
@@ -278,6 +276,7 @@ const Battle = ({
       </button>
       <div className={styles.stats}>
         <h2>HP:{hero.currentHP}</h2>
+        <progress  value={hero.currentHP} className={styles.healthbar} max={hero.maxHP}>{hero.currentHP}/{hero.maxHP}</progress>
       </div>
       <div className={styles.hero}>
         <Image
