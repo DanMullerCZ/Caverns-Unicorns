@@ -31,7 +31,7 @@ export class NPC extends Entity {
     const playerArr = Array.from(players.values());
     const nearbyPlayers = playerArr.filter((player) => {
       return (
-        this.calcDist(this._x, this._y, player.coords.x, player.coords.y) < 100
+        this.calcDist(this._x, this._y, player.coords.x, player.coords.y) < 10
       );
     });
     if (this.opponent && nearbyPlayers.length === 0) {
