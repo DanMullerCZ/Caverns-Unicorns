@@ -13,7 +13,7 @@ model Account {
   userId             String  @unique
   type               String
   provider           String
-  providerAccountId  String
+  providerAccountId  String  @default(uuid())
   refresh_token      String? @db.VarChar(300)
   access_token       String? @db.VarChar(300)
   expires_at         Int?
@@ -24,7 +24,7 @@ model Account {
   verification_token String? @db.VarChar(300)
   user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
+  @@unique([providerAccountId])
 }
 
 model Session {
@@ -37,7 +37,7 @@ model Session {
 
 model User {
   id            String              @id @default(cuid())
-  name          String              
+  name          String
   email         String              @unique
   emailVerified DateTime?
   image         String?
