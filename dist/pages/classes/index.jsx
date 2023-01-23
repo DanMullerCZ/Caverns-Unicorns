@@ -9,7 +9,9 @@ const trpc_1 = require("utils/trpc");
 const ssg_1 = require("@trpc/react-query/ssg");
 const _app_1 = require("server/routers/_app");
 const superjson_1 = __importDefault(require("superjson"));
-const Header_1 = __importDefault(require("components/general/Header"));
+const head_1 = __importDefault(require("next/head"));
+const VideoBackground_1 = __importDefault(require("components/VideoBackground"));
+const NavigationBar_1 = __importDefault(require("components/NavigationBar"));
 async function getStaticProps() {
     const ssg = await (0, ssg_1.createProxySSGHelpers)({
         router: _app_1.appRouter,
@@ -34,7 +36,13 @@ function GetAllClasses() {
       </>);
     }
     return (<>
-      <Header_1.default title='Classes'/>
+      <head_1.default>
+        <title>Classes</title>
+      </head_1.default>
+      <VideoBackground_1.default />
+      <NavigationBar_1.default />
+      {/* <p>Data status: {data.status}</p> */}
+      {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
       <div>{data.data && <ClassList_1.default classes={data.data}/>}</div>
     </>);
 }

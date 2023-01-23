@@ -3,8 +3,9 @@ import RaceDetail from './RaceDetail';
 import styles from '../styles/Races.module.css';
 import { race } from 'rxjs';
 import PropTypes from  'prop-types';
+import { Race } from '@prisma/client';
 
-type Race = {
+type RaceDetail = {
   name: string;
   id: number;
   description: string;
@@ -19,6 +20,7 @@ type Race = {
 
 const RaceList = ({
   races,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setRace = () => {},
   creation = false,
 }: {
@@ -26,8 +28,8 @@ const RaceList = ({
   setRace: (arg: string, id: number) => void;
   creation: boolean;
 }) => {
-  const [selectedRace, setSelectedRace] = useState(races);
-
+  const racesWithBoolean:RaceDetail[]=races.map((e:Race)=>{return {...e,on:false}})
+  const [selectedRace, setSelectedRace] = useState(racesWithBoolean);
   const handleClick = (name: string, i: number) => {
     setRace(name, i);
 
@@ -40,15 +42,15 @@ const RaceList = ({
     });
   };
 
-  const allRaces = selectedRace.filter(race => race.name != "half-elf").map((race: Race) => ( 
+  const allRaces = selectedRace.filter(race => race.name != "half-elf").map((raceBoolean: RaceDetail) => ( 
     <RaceDetail
-      key={race.id}
-      id={race.id}
+      key={raceBoolean.id}
+      id={raceBoolean.id}
       creation={creation}
       click={handleClick}
-      desc={race.description!}
-      name={race.name}
-      on={race.on}
+      desc={raceBoolean.description!}
+      name={raceBoolean.name}
+      on={raceBoolean.on}
     ></RaceDetail>
   ));
 
@@ -65,6 +67,7 @@ const RaceList = ({
 };
 
 RaceList.defaultProps = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setRace: () => {},
   creation: false,
 }

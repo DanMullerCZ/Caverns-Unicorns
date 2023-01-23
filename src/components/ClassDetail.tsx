@@ -12,7 +12,7 @@ const ClassDetail = ({
 }: {
   name: string;
   desc: string;
-  click: Function;
+  click: (a:string)=>void;
   creation: boolean;
   on: boolean;
 }) => {

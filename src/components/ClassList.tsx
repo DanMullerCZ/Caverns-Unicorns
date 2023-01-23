@@ -2,30 +2,28 @@ import React, { useState } from 'react';
 import styles from '../styles/Classes.module.css';
 import ClassDetail from './ClassDetail';
 import PropTypes from 'prop-types';
+import { Class } from '@prisma/client';
 
-type Class = {
+
+type ClassList = {
   name: string;
   id: number;
   description: string;
-  dex: number;
-  str: number;
-  con: number;
-  int: number;
-  wis: number;
-  char: number;
   on: boolean;
 };
 
 const ClassList = ({
   classes,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setClass = () => {},
   creation = false,
 }: {
   classes: Class[];
-  setClass: Function;
+  setClass: (arg:string)=>void;
   creation: boolean;
 }) => {
-  const [selectedClass, setSelectedClass] = useState(classes);
+  const classesWithBoolean:ClassList[]=classes.map((e:Class)=>{return {...e,on:false}})
+  const [selectedClass, setSelectedClass] = useState(classesWithBoolean);
   
   const handleClick = (name: string) => {
     setClass(name);
@@ -39,7 +37,7 @@ const ClassList = ({
     });
   };
 
-  const allClasses = selectedClass.map((oneClass: Class) => ( 
+  const allClasses = selectedClass.map((oneClass: ClassList) => ( 
     <ClassDetail
       key={oneClass.id}
       creation={creation}
@@ -59,6 +57,16 @@ const ClassList = ({
       </div>
     </>
   );
+};
+ClassList.defaultProps = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setClass: () => {},
+  creation: false,
+}
+
+ClassList.propTypes = {
+  setClass: PropTypes.func,
+  creation: PropTypes.bool,
 };
 
 export default ClassList;

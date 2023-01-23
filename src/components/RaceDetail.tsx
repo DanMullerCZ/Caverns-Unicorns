@@ -13,7 +13,7 @@ const RaceDetail = ({
 }: {
   name: string;
   desc: string;
-  click: Function;
+  click: (a:string,b:number)=>void;
   creation: boolean;
   id: number
   on: boolean;
