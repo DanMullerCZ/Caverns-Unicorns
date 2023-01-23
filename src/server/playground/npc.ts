@@ -1,24 +1,57 @@
-import { Entity } from "./entity";
-import { Player } from "./player";
+import { Entity } from './entity';
+import { Player } from './player';
 
-export class NPC extends Entity{
-    constructor(_name: string, _x: number, _y: number) {
-        super(_name, _x, _y);
-        // add some npc data aj data draka
+export class NPC extends Entity {
+  opponent: Player | undefined;
+
+  constructor(
+    _name: string,
+    _x: number,
+    _y: number,
+    _hp: number,
+    _cur_hp: number,
+    protected dmg: number,
+    protected pwr: number,
+    protected img: string,
+    protected exp: number,
+  ) {
+    super(_name, _x, _y, _hp, _cur_hp);
+    this.opponent = undefined;
+  }
+
+  get getStats() {
+    return { hp: this._hp, cur_hp: this._cur_hp, dmg: this.dmg, pwr: this.pwr };
+  }
+
+  get image() {
+    return this.img;
+  }
+
+  getNearbies(players: Map<string, Player>) {
+    const playerArr = Array.from(players.values());
+    const nearbyPlayers = playerArr.filter((player) => {
+      return (
+        this.calcDist(this._x, this._y, player.coords.x, player.coords.y) < 100
+      );
+    });
+    if (this.opponent && nearbyPlayers.length === 0) {
+      this.opponent = undefined;
+    } else {
+        if(nearbyPlayers.length === 1){
+            this.opponent = nearbyPlayers[0];
+        }
     }
-
-    getNearbies(players: Map<string, Player>){
-        const playerArr = Array.from(players.values())
-        return playerArr.filter((player) => {
-            return this.calcDist(this._x, this._y, player.coords.x, player.coords.y) < 199
-        })
+    if(this.opponent){
+       this.opponent.findOpponent(this)
     }
+    
+    
+  }
 
-    calcDist(x1: number, y1: number, x2: number, y2: number) {
-        const distX = Math.abs(x1 - x2)
-        const distY = Math.abs(y1 - y2)
-        const result = Math.sqrt((distX)**2 + (distY)**2)
-        console.log(result)
-        return result
-      }
+  calcDist(x1: number, y1: number, x2: number, y2: number) {
+    const distX = Math.abs(x1 - x2);
+    const distY = Math.abs(y1 - y2);
+    const result = Math.sqrt(distX ** 2 + distY ** 2);
+    return result;
+  }
 }

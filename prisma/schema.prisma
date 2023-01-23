@@ -117,7 +117,7 @@ model Premium_Membership {
 }
 
 model NPC {
-  id     String @id
+  id     String @id @default(cuid())
   name   String
   posX   Int
   posY   Int

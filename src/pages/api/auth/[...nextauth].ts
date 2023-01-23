@@ -23,8 +23,8 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
     }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -107,7 +107,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   debug: process.env.NODE_ENV === 'development',
-  session: {
+   session: {
     // Set to jwt in order to CredentialsProvider works properly
     strategy: 'jwt',
   },
