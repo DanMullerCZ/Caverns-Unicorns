@@ -51,7 +51,7 @@ export default function GetAllRaces() {
       <NavigationBar />
       {/* <p>Data status: {data.status}</p> */}
       {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
-      <div>{data.data && <RaceList races={data.data} setRace={setRace} selectedRace={selectedRace} />}</div>
+      <div>{data.data && <RaceList races={data.data} setRace={setRace}  />}</div>
     </>
   );
 }

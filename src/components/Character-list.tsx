@@ -6,7 +6,7 @@ import UserSettings from './userSettings/UserSettings';
 import { useSession } from 'next-auth/react';
 import { contextProps } from '@trpc/react-query/dist/internals/context';
 
-const Characters = ({ characters }: { characters: any }) => {
+const CharactersDetail = ({ characters }: { characters: any }) => {
   console.log(characters)
   const [hero, setHero] = useState({
     name: characters[0]?.name || '',
@@ -47,7 +47,7 @@ const Characters = ({ characters }: { characters: any }) => {
 
   return (
     <>
-      <UserSettings />
+      {/* <UserSettings /> */}
       <section className="">
         <div className={styles.container}>
           <div className={styles.heroDisplay}>
@@ -114,4 +114,4 @@ const Characters = ({ characters }: { characters: any }) => {
   );
 };
 
-export default Characters;
+export default CharactersDetail;

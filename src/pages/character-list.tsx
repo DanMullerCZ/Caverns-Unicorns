@@ -1,12 +1,23 @@
-import Characters from 'components/Character-list';
 import { getSession, useSession } from 'next-auth/react';
 import { NextApiRequest } from 'next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createProxySSGHelpers } from '@trpc/react-query/ssg';
+import { appRouter } from 'server/routers/_app';
+import superjson from 'superjson';
+import { trpc } from 'utils/trpc';
+import { Characters } from '@prisma/client';
+import CharactersDetail from 'components/Character-list';
 
 
-const CharacterList = ({ response }: { response: any }) => {
+const CharacterList = () => {
   const sessionData = useSession();
-
+  const res = trpc.dbRouter.getCharacters.useMutation()
+  //const [characters,setCharacters]=useState<Characters[]>([])
+  useEffect(()=>{ 
+    if (sessionData.data?.user?.id) res.mutate(sessionData.data.user.id);
+  },[sessionData])
+  //if(res.isSuccess){setCharacters(res.data)}
+  
   
   useEffect(()=>{
     if (sessionData.status == 'unauthenticated'){
@@ -17,11 +28,12 @@ const CharacterList = ({ response }: { response: any }) => {
   return (
     <>
       <div className="w-full">
-        {response && <Characters characters={response} />}
+        {res.data && <CharactersDetail characters={res.data} />}
         {sessionData.data && (
-          <p>
+              <p>
             {sessionData.data?.user?.name}: {sessionData.data?.user?.id}
           </p>
+
         )}
       </div>
     </>
@@ -29,28 +41,46 @@ const CharacterList = ({ response }: { response: any }) => {
 };
 export default CharacterList;
 
-export const getServerSideProps = async (context: { req: NextApiRequest }) => {
-  const sessionData = await getSession(context);
-  let characters
-  if(sessionData?.user?.id){
+// export async function getServerSideProps() {
+//   const ssg = await createProxySSGHelpers({
+//     router: appRouter,
+//     ctx: { session: null },
+//     transformer: superjson, // optional - adds superjson serialization
+//   });
 
-     characters = await prisma?.characters.findMany({
-      where: {
-        owner_id: sessionData?.user?.id,
-      },
-      select: {
-        name: true,
-        race:true,
-        class: true,
-        id:true
-      },
-  });
-  }else {characters=[]}
+  
+//   const sessionData = await getSession();
+//   await ssg.dbRouter.getCharacters.prefetch(sessionData?.user?.id);
+//   return {
+//     props: {
+//       trpcState: ssg.dehydrate(),
+//     },
+//     revalidate: 1,
+//   };
+// }
 
-  return {
-    props: { response: characters },
-  };
-};
+// export const getServerSideProps = async (context: { req: NextApiRequest }) => {
+//   const sessionData = await getSession(context);
+//   let characters
+//   if(sessionData?.user?.id){
+
+//      characters = await prisma?.characters.findMany({
+//       where: {
+//         owner_id: sessionData?.user?.id,
+//       },
+//       select: {
+//         name: true,
+//         race:true,
+//         class: true,
+//         id:true
+//       },
+//   });
+//   }else {characters=[]}
+
+//   return {
+//     props: { response: characters },
+//   };
+// };
 // const ssg = await createProxySSGHelpers({
 //   router: appRouter,
 //   ctx: { session: null },

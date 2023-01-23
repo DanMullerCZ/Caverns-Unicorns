@@ -35,16 +35,15 @@ const react_2 = require("next-auth/react");
 const _app_1 = require("server/routers/_app");
 const superjson_1 = __importDefault(require("superjson"));
 const ssg_1 = require("@trpc/react-query/ssg");
+const head_1 = __importDefault(require("next/head"));
+const NavigationBar_1 = __importDefault(require("components/NavigationBar"));
 const Attribute_1 = __importDefault(require("components/Attribute"));
 const VideoBackground_1 = __importDefault(require("components/VideoBackground"));
-const Header_1 = __importDefault(require("components/general/Header"));
 const createNewChar = () => {
     const dataRaces = trpc_1.trpc.dbRouter.getAllRaces.useQuery();
     const races = dataRaces.data;
-    console.log(races);
     const dataClasses = trpc_1.trpc.dbRouter.getAllClasses.useQuery();
     const classes = dataClasses.data;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const sessionData = (0, react_2.useSession)();
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [confirmAtr, setConfirmAtr] = (0, react_1.useState)(false);
@@ -142,47 +141,48 @@ const createNewChar = () => {
         window.alert(addChar.error.message);
     }
     return (<>
-      <Header_1.default title='Create new hero'/>
-      <div className="flex h-screen w-screen flex-col items-center justify-center">
-        <VideoBackground_1.default />
-        {(!character.race || !character.class) && (<div test-id="creation-container">
-            {!character.race && races && (<div test-id="race-selection">
-                <h1>SELECT RACE</h1>
-                <RaceList_1.default setRace={setRace} creation={true} races={races}/>
-              </div>)}
-            {!character.class && character.race && classes && (<div test-id="class-selection">
-                <h1>Race: {character.race}</h1>
-                <h1>SELECT CLASS</h1>
-                <ClassList_1.default creation={true} setClass={setClass} classes={classes}/>
-              </div>)}
-          </div>)}
-        {character.race && character.class && !confirmAtr && (<>
-            <div className="w-1/5 rounded-xl bg-yellow-700 p-4 bg-contain bg-center bg-no-repeat bg-opacity-75" style={{ backgroundImage: `url(/${character.class}.png)` }}>
-              <h1 className="m-1 text-3xl">Race: {character.race}</h1>
-              <h1 className="m-1 text-3xl">Class: {character.class}</h1>
-              <label className="m-1 text-3xl">
-                Remaining atributte points:{' '}
-                <input value={atrPoints} readOnly className="mr-1 w-10 rounded border"/>
-              </label>
+      <head_1.default>
+        <title>Create new hero</title>
+      </head_1.default>
+      <VideoBackground_1.default />
+      <NavigationBar_1.default />
+      {(!character.race || !character.class) && (<div test-id="creation-container">
+          {!character.race && races && (<div test-id="race-selection" className="h-screen w-screen text-center">
+              <RaceList_1.default setRace={setRace} creation={true} races={races}/>
+            </div>)}
+          {!character.class && character.race && classes && (<div test-id="class-selection">
+              {/* <h1>SELECT CLASS</h1> */}
+              <ClassList_1.default creation={true} setClass={setClass} classes={classes}/>
+            </div>)}
+        </div>)}
+      {character.race && character.class && !confirmAtr && (<div className="flex h-screen w-screen flex-col items-center justify-center">
+          <div className="transparent w-1/4 rounded-3xl bg-opacity-75 bg-contain bg-center bg-no-repeat p-4 backdrop-blur-xl" style={{ backgroundImage: `url(/${character.class}.png)` }}>
+            <h1 className="gold m-1 text-3xl">Race: {character.race}</h1>
+            <h1 className="gold m-1 text-3xl">Class: {character.class}</h1>
+            <label className="m-1 text-3xl">
+              <span className="gold">Remaining points: </span>
+              <input value={atrPoints} readOnly className="mr-1 w-10 rounded border"/>
+            </label>
 
-              {arr.map((e) => (<Attribute_1.default key={e} defaultAtr={character[e]} name={e} setPoints={setPoints} remaining={atrPoints} change={(atrValue, atrName) => {
+            {arr.map((e) => (<Attribute_1.default key={e} defaultAtr={character[e]} name={e} setPoints={setPoints} remaining={atrPoints} change={(atrValue, atrName) => {
                     setCharacter((character) => ({
                         ...character,
                         ...{ [atrName]: atrValue },
                     }));
                 }}/>))}
-            </div>
+          </div>
 
-            <button className={atrPoints
+          <button className={atrPoints
                 ? 'invisible m-1 rounded border bg-white text-3xl'
                 : 'm-1  rounded border bg-white text-3xl'} type="button" onClick={confirmation}>
-              confirm attributes
-            </button>
-          </>)}
-        {character.race && character.class && confirmAtr && (<>
-            <div className="grid w-1/5 grid-cols-2 gap-2 rounded-xl bg-yellow-700 p-4 text-3xl bg-contain bg-center bg-no-repeat bg-opacity-75" style={{ backgroundImage: `url(/${character.class}.png)` }}>
+            confirm attributes
+          </button>
+        </div>)}
+      {character.race && character.class && confirmAtr && (<div className="flex h-screen w-screen flex-col items-center justify-center">
+          <div className="transparent w-1/4 rounded-3xl bg-opacity-75 bg-contain bg-center bg-no-repeat p-4 backdrop-blur-xl" style={{ backgroundImage: `url(/${character.class}.png)` }}>
+            <div className="gold font-black">
               <p>Race:</p>
-              <p className='align-items-end'>{character.race}</p>
+              <p className="align-items-end">{character.race}</p>
               <p>Class:</p>
               <p>{character.class}</p>
               <p>Strength:</p>
@@ -199,17 +199,19 @@ const createNewChar = () => {
               <p>{character.char}</p>
               <label className="col-start-1 col-end-3">
                 Name :{' '}
-                <input ref={nameOfChar} className="rounded border-4 " type="text"/>
+                <input ref={nameOfChar} className=" rounded-md border border-yellow-400 bg-transparent px-3 py-2" type="text"/>
               </label>
-              <button onClick={resetChar} className="m-1  rounded border bg-white">
-                reset char
+            </div>
+            <div className="flex mt-2">
+              <button onClick={resetChar} className="gold w-full font-black rounded-md border border-yellow-400 px-10 py-2">
+                Reset
               </button>
-              <button className="m-1  rounded border bg-white" onClick={createChar}>
-                create char
+              <button className="gold w-full font-black rounded-md border border-yellow-400 px-10 py-2" onClick={createChar}>
+                Create
               </button>
             </div>
-          </>)}
-      </div>
+          </div>
+        </div>)}
     </>);
 };
 const getStaticProps = async () => {
