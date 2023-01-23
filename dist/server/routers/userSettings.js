@@ -38,5 +38,46 @@ exports.userSettRouter = (0, trpc_1.router)({
         catch (e) {
             return `Cannot acces data from database, error:${e}`;
         }
+    }),
+    userImage: trpc_1.publicProcedure
+        .input(zod_1.z.object({
+        userId: zod_1.z.string(),
+    }))
+        .mutation(async ({ input }) => {
+        try {
+            const getUserImage = await client_1.prisma.user.findUnique({
+                where: {
+                    id: input.userId
+                },
+                select: {
+                    image: true
+                }
+            });
+            return getUserImage === null || getUserImage === void 0 ? void 0 : getUserImage.image;
+        }
+        catch (e) {
+            return `Cannot acces database, error: ${e}`;
+        }
+    }),
+    changeUserImage: trpc_1.publicProcedure
+        .input(zod_1.z.object({
+        newImage: zod_1.z.string(),
+        userId: zod_1.z.string(),
+    }))
+        .mutation(async ({ input }) => {
+        try {
+            const changeUserImage = await client_1.prisma.user.update({
+                where: {
+                    id: input.userId
+                },
+                data: {
+                    image: input.newImage
+                }
+            });
+            return 'succesfully changed image';
+        }
+        catch (e) {
+            return `Cannot update database, Error: ${e}`;
+        }
     })
 });

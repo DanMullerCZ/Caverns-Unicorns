@@ -137,7 +137,6 @@ const Map = () => {
         }}>
       {s // RENDERS PLAYERS IN RT
             ? Object.entries(s).map(([k, { x, y, orientation, status: { battle, alive } }], index) => {
-                var _a, _b;
                 return (<div id='player-container' style={{
                         position: 'absolute',
                         top: `${y * map.current.clientWidth / 1600}px`,
@@ -146,6 +145,9 @@ const Map = () => {
                         height: `${map.current.clientWidth / 25}px`,
                     }} key={index}>
                 <div style={{
+                        position: "relative",
+                        left: `-${12 * map.current.clientWidth / 1600}px`,
+                        top: `-${25 * map.current.clientWidth / 1600}px`,
                         transform: `scaleX(${orientation ? -1 : 1})`,
                         backgroundImage: `url('/npc/rogue.gif')`,
                         backgroundSize: 'cover',
@@ -154,10 +156,8 @@ const Map = () => {
                         height: '100%',
                     }}></div>
                 <div>{k}</div>
-                <div>PosX: {x}</div>
-                <div>PosY: {y}</div>
-                <div>CW: {(_a = map.current) === null || _a === void 0 ? void 0 : _a.clientWidth}</div>
-                <div>CH: {(_b = map.current) === null || _b === void 0 ? void 0 : _b.clientHeight}</div>
+                <div>PosX: {x.toFixed(1)}</div>
+                <div>PosY: {y.toFixed(1)}</div>
                 <button disabled={false} onClick={startBattle}>
                   Start Battle
                 </button>

@@ -14,11 +14,13 @@ const ChangePasswordOption = () => {
     const confirmNewPass = (_c = passwordInput.current) === null || _c === void 0 ? void 0 : _c.elements[2];
     const handleClick = (ev) => {
         var _a, _b;
-        if (newPass.value === confirmNewPass.value && currentPass.value.length && confirmNewPass.value.length) {
+        if (newPass.value === confirmNewPass.value &&
+            currentPass.value.length &&
+            confirmNewPass.value.length) {
             const currentPassword = {
                 currentPassword: currentPass.value,
                 newPassword: newPass.value,
-                userId: (_b = (_a = session.data) === null || _a === void 0 ? void 0 : _a.user) === null || _b === void 0 ? void 0 : _b.id
+                userId: (_b = (_a = session.data) === null || _a === void 0 ? void 0 : _a.user) === null || _b === void 0 ? void 0 : _b.id,
             };
             ev.preventDefault();
             userPassword.mutate(currentPassword);
@@ -30,13 +32,18 @@ const ChangePasswordOption = () => {
     (0, react_2.useEffect)(() => {
         setPasswordStatus(userPassword.data);
     }, [userPassword.data]);
-    return (<>  <form ref={passwordInput} onSubmit={handleClick} className='border '>
-                <input type="text" placeholder="current password"/>
-                <input type='text' placeholder="new password"/>
-                <input type='text' placeholder=" confirm new password"/>
-                <p test-id='success'>{passwordStatus}</p>
-                <button type="submit">change password</button>
-            </form>
-        </>);
+    return (<>
+      <form ref={passwordInput} onSubmit={handleClick} className="flex flex-col">
+        <div className="flex gap-1">
+          <input className="rounded-md border bg-transparent px-3 py-2" type="text" placeholder="current password"/>
+          <input className="rounded-md border bg-transparent px-3 py-2" type="text" placeholder="new password"/>
+          <input className="rounded-md border bg-transparent px-3 py-2" type="text" placeholder=" confirm new password"/>
+        </div>
+        <p test-id="success">{passwordStatus}</p>
+        <div className="self-center">
+          <button type="submit">change password</button>
+        </div>
+      </form>
+    </>);
 };
 exports.default = ChangePasswordOption;

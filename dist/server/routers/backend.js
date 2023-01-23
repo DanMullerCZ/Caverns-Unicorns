@@ -153,7 +153,6 @@ exports.exampleRouter = (0, trpc_1.router)({
                     userId: user.id,
                     type: 'normal',
                     provider: 'Credentials',
-                    providerAccountId: 'not important',
                     verification_token: jsonwebtoken_1.default.sign({ email: user.email }, process.env.JWT_ACCESS_SECRET, {
                         expiresIn: tokenExpiration,
                     }),
