@@ -38,13 +38,25 @@ const ChangePasswordOption: NextPage = () => {
 
   return (
     <>
-        <form ref={passwordInput} onSubmit={handleClick} className="border ">
-          <input type="text" placeholder="current password" />
-          <input type="text" placeholder="new password" />
-          <input type="text" placeholder=" confirm new password" />
-          <p test-id="success">{passwordStatus}</p>
+      <form
+        ref={passwordInput}
+        onSubmit={handleClick}
+        className="flex flex-col"
+      >
+        <div className="flex gap-1">
+          <input
+            className="rounded-md border bg-transparent px-3 py-2"
+            type="text"
+            placeholder="current password"
+          />
+          <input className="rounded-md border bg-transparent px-3 py-2" type="text" placeholder="new password" />
+          <input className="rounded-md border bg-transparent px-3 py-2" type="text" placeholder=" confirm new password" />
+        </div>
+        <p test-id="success">{passwordStatus}</p>
+        <div className="self-center">
           <button type="submit">change password</button>
-        </form>
+        </div>
+      </form>
     </>
   );
 };

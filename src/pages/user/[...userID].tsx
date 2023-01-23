@@ -32,55 +32,61 @@ export default function userPage() {
 
   return (
     <>
+      <Header title="User Page" />
       <NavigationBar />
       <VideoBackground />
+
       <div className="flex h-screen flex-col items-center justify-center text-white">
-        <Header title="User Page" />
-        <h1 test-id="succes login">Here is your user page</h1>
-        <UserSettings />
-        <hr />
-        <p>{session.data?.user?.name}</p>
-        <p>{session.data?.user?.id}</p>
-        <p>{session.data?.user?.email}</p>
+        <div className="fixed z-10 flex h-screen w-screen items-center justify-center">
+          <div className="backgroundSettings "></div>
+        </div>
+        <div className="flex flex-col items-center rounded-x gold font-LOTR goldnohover z-30 space-y-5  p-10 drop-shadow-lg">
+          <h1 className="" test-id="succes login">USERS PAGE</h1>
+          <UserSettings />
+          <hr />
+          <p>{session.data?.user?.name}</p>
+          {/* <p>{session.data?.user?.id}</p> */}
+          <p>{session.data?.user?.email}</p>
 
-        <hr />
+          <hr />
 
-        <p>
-          {session.data?.user?.emailVerified
-            ? 'Email was succesfully verified'
-            : 'You have to verify your email'}
-        </p>
-        <p>
-          {session.data?.user?.premium
-            ? 'VIP was succesfully bought'
-            : 'You have to buy your premium membership'}
-        </p>
+          <p>
+            {session.data?.user?.emailVerified
+              ? 'Email was succesfully verified'
+              : 'Please, verify your email'}
+          </p>
+          <p>
+            {session.data?.user?.premium
+              ? 'VIP was succesfully bought'
+              : 'Buy premium membership'}
+          </p>
 
-        <hr />
+          <hr />
 
-        <h2>URL Query as a string: {urlQuery.join('/')}</h2>
+          {/* <h2>URL Query as a string: {urlQuery.join('/')}</h2>
 
-        <hr />
+          <hr /> */}
 
-        <button onClick={handleDelete}>DELETE USER</button>
-        <p>Response from deletion: {deletion.data?.toString()}</p>
+          <button onClick={handleDelete}>DELETE USER</button>
+          {/* <p>Response from deletion: {deletion.data?.toString()}</p> */}
 
-        <hr />
+          <hr />
 
-        <button
-          onClick={() => {
-            signOut();
-            router.push('/');
-          }}
-        >
-          LOG OUT
-        </button>
+          <button
+            onClick={() => {
+              signOut();
+              router.push('/');
+            }}
+          >
+            LOG OUT
+          </button>
 
-        <hr />
+          <hr />
 
-        <button onClick={handleSendingMail}>
-          Send verification email once more
-        </button>
+          <button onClick={handleSendingMail}>
+            Send verification email once more
+          </button>
+        </div>
       </div>
     </>
   );
