@@ -4,7 +4,8 @@ import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import Head from 'next/head';
-import Header from 'components/general/Header';
+import VideoBackground from 'components/VideoBackground';
+import NavigationBar from 'components/NavigationBar';
 
 
 export async function getStaticProps() {
@@ -37,7 +38,13 @@ export default function GetAllClasses() {
   }
   return (
     <>
-      <Header title='Classes' />
+      <Head>
+        <title>Classes</title>
+      </Head>
+      <VideoBackground />
+      <NavigationBar />
+      {/* <p>Data status: {data.status}</p> */}
+      {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
       <div >{data.data && <ClassList classes={data.data} />}</div>
     </>
   );

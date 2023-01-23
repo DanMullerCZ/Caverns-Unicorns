@@ -13,17 +13,21 @@
     grid-row: 1/3;
 }
 .button{
-    border-color: black;
+    border-color: goldenrod;
     border-top: solid;
 }
 .input{
     border-top: solid;
     border-bottom: solid;
+    border-color: goldenrod;
+    background-color: transparent;
 }
 .messages{
     border-top: solid;
-    border-color: black;
+    border-color: goldenrod;
+    padding: 4px;
 }
+
 /* InGame chat */
 .inGameContainer{
     box-sizing: border-box;
