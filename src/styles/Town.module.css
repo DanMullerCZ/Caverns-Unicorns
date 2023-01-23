@@ -1,0 +1,12 @@
+.container{
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+}
+.container div{
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+}
