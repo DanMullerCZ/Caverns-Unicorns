@@ -1,37 +1,43 @@
-import Header from "components/general/Header";
-import UserSettings from "components/userSettings/UserSettings";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { trpc } from "utils/trpc";
+import Header from 'components/general/Header';
+import NavigationBar from 'components/NavigationBar';
+import UserSettings from 'components/userSettings/UserSettings';
+import VideoBackground from 'components/VideoBackground';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { trpc } from 'utils/trpc';
 
 export default function userPage() {
-    const session = useSession()
-    const router = useRouter()
-    const urlQuery = (router.query.userID as string[]) || []
+  const session = useSession();
+  const router = useRouter();
+  const urlQuery = (router.query.userID as string[]) || [];
 
-    const deletion = trpc.dbRouter.deleteUser.useMutation()
-    const verification = trpc.backend.verifyEmailAgain.useMutation()
+  const deletion = trpc.dbRouter.deleteUser.useMutation();
+  const verification = trpc.backend.verifyEmailAgain.useMutation();
 
-    const handleDelete = () => {
-        deletion.mutate(session.data?.user?.id as string)
-        signOut()
+  const handleDelete = () => {
+    deletion.mutate(session.data?.user?.id as string);
+    signOut();
+  };
+
+  useEffect(() => {
+    if (session.status === 'unauthenticated') {
+      router.push('/');
     }
+  });
 
-    useEffect(() => {
-        if (session.status === "unauthenticated"){
-            router.push('/')
-        }
-    });
+  const handleSendingMail = async () => {
+    verification.mutate(session);
+  };
 
-    const handleSendingMail = async () => {
-        verification.mutate(session)
-    }
-
-    return <>
-        <Header title="User Page"/>
-        <h1 test-id='succes login'>Here is your user page</h1>
-        <UserSettings/>
+  return (
+    <>
+      <NavigationBar />
+      <VideoBackground />
+      <div className="flex h-screen flex-col items-center justify-center text-white">
+        <Header title="User Page" />
+        <h1 test-id="succes login">Here is your user page</h1>
+        <UserSettings />
         <hr />
         <p>{session.data?.user?.name}</p>
         <p>{session.data?.user?.id}</p>
@@ -39,8 +45,16 @@ export default function userPage() {
 
         <hr />
 
-        <p>{session.data?.user?.emailVerified ? 'Email was succesfully verified' : 'You have to verify your email'}</p>
-        <p>{session.data?.user?.premium ? 'VIP was succesfully bought' : 'You have to buy your premium membership'}</p>
+        <p>
+          {session.data?.user?.emailVerified
+            ? 'Email was succesfully verified'
+            : 'You have to verify your email'}
+        </p>
+        <p>
+          {session.data?.user?.premium
+            ? 'VIP was succesfully bought'
+            : 'You have to buy your premium membership'}
+        </p>
 
         <hr />
 
@@ -48,24 +62,26 @@ export default function userPage() {
 
         <hr />
 
-        <button onClick={handleDelete}>
-            DELETE USER
-        </button>
+        <button onClick={handleDelete}>DELETE USER</button>
         <p>Response from deletion: {deletion.data?.toString()}</p>
 
         <hr />
 
-        <button onClick={() => {
-                signOut()
-                router.push('/')
-            }}>
-            LOG OUT
+        <button
+          onClick={() => {
+            signOut();
+            router.push('/');
+          }}
+        >
+          LOG OUT
         </button>
 
         <hr />
 
         <button onClick={handleSendingMail}>
-            Send verification email once more
+          Send verification email once more
         </button>
+      </div>
     </>
+  );
 }
