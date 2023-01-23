@@ -37,7 +37,7 @@ test('log-in', async ({ page }) => {
   await page.getByLabel('Password').fill('test');
   await page.getByRole('button', { name: 'Login with Credentials' }).click();
   await expect(page.getByTestId('succes login')).toHaveText(
-    'Here is your user page',
+    'USERS PAGE',
   );
 });
 
