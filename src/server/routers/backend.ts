@@ -159,7 +159,6 @@ export const exampleRouter = router({
             userId: user.id,
             type: 'normal',
             provider: 'Credentials',
-            providerAccountId: 'not important',
             verification_token: jwt.sign(
               { email: user.email },
               process.env.JWT_ACCESS_SECRET as Secret,
