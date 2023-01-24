@@ -149,6 +149,7 @@ export const exampleRouter = router({
             email: input.input.email,
             password: hashToken(input.input.password),
             name: input.input.name,
+            image: "/defaultUserImages/default.png"
           },
         })) as User;
         const timeOfExpiration = new Date();
@@ -159,7 +160,6 @@ export const exampleRouter = router({
             userId: user.id,
             type: 'normal',
             provider: 'Credentials',
-            providerAccountId: 'not important',
             verification_token: jwt.sign(
               { email: user.email },
               process.env.JWT_ACCESS_SECRET as Secret,

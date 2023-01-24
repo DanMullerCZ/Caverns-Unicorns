@@ -5,12 +5,12 @@ import { z } from 'zod';
 export const dbRouter = router({
     getCharacters:publicProcedure
         .input(z.string())
-        .query(async ({ input }) => {
+        .mutation(async ({ input }) => {
             const characters = await prisma.characters.findMany({
                 where: {
                     owner_id: input
                 }
-            })
+            }) || []
             return characters;
         }),
     getRace: publicProcedure
@@ -85,6 +85,19 @@ export const dbRouter = router({
                 return newPremium
             } catch (error) {
                 return 'error has occured'
+            }
+        }),
+        deleteTestingUnit: publicProcedure
+        .mutation(async () => {
+            try {
+                const deletedUser = await prisma.user.delete({
+                    where: {
+                        email: 'test@test.cz'
+                    }
+                })
+                return deletedUser 
+            } catch (error: any) {
+                return `Unable to delete tester: ${error.message}`
             }
         }),
 });
