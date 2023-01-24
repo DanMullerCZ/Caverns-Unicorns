@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 // import { deleteTestUser } from './functions';
 
 // It is imposibble to test specific trpc procedures on backend, 
-// if you want to test something it must go through frontend
+// if you want to test something it must go through frontend or API
 
 // RACES
 

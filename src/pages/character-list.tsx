@@ -27,14 +27,14 @@ const CharacterList = () => {
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-screen h-screen">
         {res.data && <CharactersDetail characters={res.data} />}
-        {sessionData.data && (
+        {/* {sessionData.data && (
               <p>
             {sessionData.data?.user?.name}: {sessionData.data?.user?.id}
           </p>
 
-        )}
+        )} */}
       </div>
     </>
   );

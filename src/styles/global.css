@@ -338,3 +338,10 @@ trasparent input autofill
     overflow: hidden;
 }
 
+.oneHero {
+  border: solid;
+  border-color:rgb(234, 178, 92);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+}
+
