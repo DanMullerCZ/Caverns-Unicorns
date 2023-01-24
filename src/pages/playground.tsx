@@ -273,44 +273,21 @@ const Map = ({setInCombat, setHero, setEnemy}: {setInCombat:(x: boolean) => void
   useEffect(() => {
     enemies.mutate()
   }, [])
-  const hero = {
-    id: 0,
-    name: 'test hero name',
-    owner_id: 'test owner ',
-    maxHP: 1000,
-    currentHP: 1000,
-    str: 1,
-    dex: 1,
-    con: 1,
-    wis: 1,
-    int: 1,
-    char: 1,
-    class: 'paladin',
-    race: 'human',
-  }
-  const enemy = {
-    id: 'id1',
-    name: 'dragon',
-    posX: 0,
-    posY: 0,
-    img: '/npc/dragon.gif',
-    dmg: 20,
-    power: 10000,
-    exp: 50,
-    hp: 1,
-    cur_hp: 1,
-  }
+  
   const startBattle = (): void => {
     setInCombat(true)
     battlePair.mutate();
-    setEnemy(enemy)
-    setHero(hero)
+    //input from DB 
+    
+    // setEnemy(enemy)
+    // setHero(hero)
     setBp(battlePair.data?.enemy as string)
 
   }
-  const getChar = trpc.dbRouter.getCharacter.useMutation()
-  const getNpc = trpc.dbRouter.getNpc.useMutation()
-  const localStorcharId = Number(localStorage.getItem('char_id')) 
+  //seaching in DB for enemy and hero infos
+  // const getChar = trpc.dbRouter.getCharacter.useMutation()
+  // const getNpc = trpc.dbRouter.getNpc.useMutation()
+  // const localStorcharId = Number(localStorage.getItem('char_id')) 
   
   
   // if(battlePair.isSuccess && localStorage.getItem('char_id')!=null){
