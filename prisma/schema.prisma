@@ -98,9 +98,6 @@ model Characters {
   char      Int
   class     String
   race      String
-  skillOne_id   Int
-skillTwo_id   Int
-skillThree_id   Int
 }
 
 model VerificationToken {

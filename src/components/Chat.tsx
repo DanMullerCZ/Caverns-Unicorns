@@ -21,35 +21,41 @@ export const Chat: NextPage = () => {
   });
   const online = trpc.wsRouter.imOnline.useMutation();
   const onlineChars = trpc.wsRouter.onlinePlayersWithChars.useMutation();
+  const removePlayer = trpc.wsRouter.removePlayer.useMutation();
   useEffect(() => {
     onlineChars.mutate({
       char_id: Number(localStorage.getItem('char_id')),
+      ready: localStorage.getItem('ready') == 'true',
     });
     const onlineCheck = setInterval(() => {
       online.mutate();
       onlineChars.mutate({
         char_id: Number(localStorage.getItem('char_id')),
+        ready: localStorage.getItem('ready') == 'true',
       });
       setPlayers((prev) => {
         for (const p in prev) {
-          prev[p] = prev[p] + 5;
+          prev[p] = prev[p] + 0.5;
         }
         return prev;
       });
-    }, 5000);
+    }, 500);
+
+   
 
     const usersCheck = setInterval(() => {
       console.log(players);
 
       setPlayers((prev) => {
         for (const p in prev) {
-          if (prev[p] > 15) {
+          if (prev[p] > 1.5) {
+            removePlayer.mutate({name:p})
             delete prev[p];
           }
         }
         return prev;
       });
-    }, 20000);
+    }, 2000);
     online.mutate();
     return () => {
       clearInterval(onlineCheck);

@@ -40,7 +40,7 @@ const Playground: NextPage = () => {
     damage: 15,
     cooldown: 3,
   };
-  const heroInfo: Characters = {
+  const heroInfo: any = {
     id: 0,
     name: 'test hero name',
     owner_id: 'test owner ',
@@ -88,7 +88,7 @@ const Playground: NextPage = () => {
     }
   });
   console.log(players);
-  console.log(players[session.data?.user?.name as string], 'session name');
+  console.log(session.data?.user?.name as string, 'session name');
 
   const controller = trpc.playground.remoteControl.useMutation();
   const main = useRef<HTMLDivElement>(null);
