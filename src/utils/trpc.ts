@@ -1,3 +1,4 @@
+import { createTRPCProxyClient } from '@trpc/client';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { loggerLink } from '@trpc/client/links/loggerLink';
 import { wsLink, createWSClient } from '@trpc/client/links/wsLink';
@@ -6,6 +7,7 @@ import type { inferProcedureOutput } from '@trpc/server';
 import { NextPageContext } from 'next';
 import getConfig from 'next/config';
 import type { AppRouter } from 'server/routers/_app';
+import SuperJSON from 'superjson';
 import superjson from 'superjson';
 
 // ℹ️ Type-only import:
@@ -88,3 +90,12 @@ export const trpc = createTRPCNext<AppRouter>({
 export type inferQueryOutput<
   TRouteKey extends keyof AppRouter['_def']['queries'],
 > = inferProcedureOutput<AppRouter['_def']['queries'][TRouteKey]>;
+
+export const trpcClient = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: `${APP_URL}/api/trpc`,
+    })
+  ],
+  transformer: SuperJSON
+})

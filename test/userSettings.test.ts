@@ -1,15 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
-
-test.beforeAll(async () => {
-  console.log(
-    `Before all userSettings tests => Deleting Test Unit from database`,
-  );
-  const browser = await chromium.launch();
-  const page = await browser.newPage();
-  await page.goto('/');
-  await page.goto('/test/admin-functions');
-  await page.getByRole('button', { name: 'delete testing unit' }).click();
-});
+import { test, expect } from '@playwright/test';
 
 test('registration ', async ({ page }) => {
   await page.goto('/');
@@ -73,11 +62,19 @@ test.afterEach(async ({ page }, testInfo) => {
     console.log(`Did not run as expected, ended up because ${testInfo.error}`);
 });
 
-test.afterAll(async ({ page }) => {
+test.afterAll(async ({ request }) => {
   console.log(
     `Finished all userSettings tests => Deleting Test Unit from database`,
   );
-  await page.goto('/');
-  await page.goto('/test/admin-functions');
-  await page.getByRole('button', { name: 'delete testing unit' }).click();
+
+  const response = await request.post('/api/admin/testing', {
+    data: {
+        user: 'Admin',
+        password: 'veryComplicatedPasswordAndHardToHack'
+    }
+  })  
+
+  expect(JSON.stringify(await response.json())).toBe(JSON.stringify({
+      "body": "success"
+  }));
 });
