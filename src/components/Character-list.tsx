@@ -5,6 +5,8 @@ import styles from '../styles/Character-list.module.css';
 import UserSettings from './userSettings/UserSettings';
 import { useSession } from 'next-auth/react';
 import { contextProps } from '@trpc/react-query/dist/internals/context';
+import NavigationBar from './NavigationBar';
+import VideoBackground from './VideoBackground';
 
 const CharactersDetail = ({ characters }: { characters: any }) => {
   console.log(characters)
@@ -47,19 +49,20 @@ const CharactersDetail = ({ characters }: { characters: any }) => {
 
   return (
     <>
-      {/* <UserSettings /> */}
-      <section className="">
+      <NavigationBar />
+      <VideoBackground />
+      <section className="font-LOTR">
         <div className={styles.container}>
           <div className={styles.heroDisplay}>
-            <Image
+            {hero.race && <Image
               className="rounded-lg"
               src={`/${hero.race}.png`}
               alt={`${hero.race}`}
               width={200}
               height={200}
             />
-
-            <div className="">
+            }
+            <div className="gold">
               <p className="text-2xl">{hero.name}</p>
               <p>
                 <span className="text-gray-400">
@@ -70,8 +73,7 @@ const CharactersDetail = ({ characters }: { characters: any }) => {
           </div>
           <Link className={styles.startGameButton} href="/lobby">
             <button
-              className="w-full rounded-md bg-blue-600 px-10 py-4 text-white
-                duration-300 ease-in hover:bg-blue-500 hover:drop-shadow-md"
+              className="gold"
             >
               Start the Game
             </button>
@@ -80,7 +82,7 @@ const CharactersDetail = ({ characters }: { characters: any }) => {
             characters.map((e: any) => (
               <div
                 onClick={() => handleClick(e.name, e.race, e.class, e.id)}
-                className="col-start-4 col-end-5 row-span-1 flex cursor-pointer items-center justify-around rounded-xl bg-white p-4 drop-shadow"
+                className="gold oneHero col-start-4 col-end-5 row-span-1 flex cursor-pointer items-center justify-between pl-10 pr-20 rounded-xl bg-white p-4 drop-shadow"
                 key={e.id}
               >
                 <div>
@@ -102,8 +104,7 @@ const CharactersDetail = ({ characters }: { characters: any }) => {
             ))}
           <Link className={styles.createButton} href="/character-creation">
             <button
-              className="w-full rounded-md bg-blue-600 px-10 py-4 text-white
-                duration-300 ease-in hover:bg-blue-500 hover:drop-shadow-md"
+              className="gold"
             >
               Create new character
             </button>
