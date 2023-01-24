@@ -8,6 +8,7 @@ import { useRouter } from "next/router"
 
 const ChangeUserPicture: NextPage = () => {
     const defaultImages: string[] = [
+        '/defaultUserImages/default.png',
         '/defaultUserImages/first.jpg', 
         '/defaultUserImages/second.jpg', 
         '/defaultUserImages/third.png',
