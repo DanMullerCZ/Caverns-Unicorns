@@ -100,4 +100,30 @@ export const dbRouter = router({
                 return `Unable to delete tester`
             }
         }),
+        getCharacter: publicProcedure
+        .input(z.object({
+            charId: z.number(),
+        }))
+        .mutation(async (input) => {
+                const response = await prisma.characters.findFirst({
+                    where: {
+                        id: input.input.charId
+                    }
+                })
+
+                return response
+        }),
+        getNpc: publicProcedure
+        .input(z.object({
+            name: z.string(),
+        }))
+        .mutation(async (input) => {
+                const response = await prisma.nPC.findFirst({
+                    where: {
+                        name: input.input.name
+                    }
+                })
+
+                return response
+        })
 });
