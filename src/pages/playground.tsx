@@ -40,36 +40,44 @@ const Playground: NextPage = () => {
     damage: 15,
     cooldown: 3,
   };
-  const heroInfo: Characters = {
-    id: 0,
-    name: 'test hero name',
-    owner_id: 'test owner ',
-    maxHP: 1000,
-    currentHP: 1000,
-    str: 1,
-    dex: 1,
-    con: 1,
-    wis: 1,
-    int: 1,
-    char: 1,
-    class: 'paladin',
-    race: 'human',
-    skillOne_id: 1,
-    skillTwo_id: 2,
-    skillThree_id: 3,
-  };
-  const enemy: NPC = {
-    id: 'id1',
-    name: 'dragon',
-    posX: 0,
-    posY: 0,
-    img: '/npc/dragon.gif',
-    dmg: 20,
-    power: 10000,
-    exp: 50,
-    hp: 1,
-    cur_hp: 1,
-  };
+  // const heroInfo: Characters = {
+  //   id: 0,
+  //   name: 'test hero name',
+  //   owner_id: 'test owner ',
+  //   maxHP: 1000,
+  //   currentHP: 1000,
+  //   str: 1,
+  //   dex: 1,
+  //   con: 1,
+  //   wis: 1,
+  //   int: 1,
+  //   char: 1,
+  //   class: 'paladin',
+  //   race: 'human',
+  //   skillOne_id: 1,
+  //   skillTwo_id: 2,
+  //   skillThree_id: 3,
+  // };
+  // const enemy: NPC = {
+  //   id: 'id1',
+  //   name: 'dragon',
+  //   posX: 0,
+  //   posY: 0,
+  //   img: '/npc/dragon.gif',
+  //   dmg: 20,
+  //   power: 10000,
+  //   exp: 50,
+  //   hp: 1,
+  //   cur_hp: 1,
+  // };
+  const [heroInfo, setHeroInfo] = useState<Characters>()
+  const [enemy, setEnemy] = useState<NPC>()
+  const setHero = (x: Characters) => {
+    setHeroInfo(x)
+  }
+  const setNpc = ( y: NPC) => {
+    setEnemy(y)
+  }
   const t = trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
     onData(data) {
       console.log(data);
@@ -209,8 +217,17 @@ const Playground: NextPage = () => {
               e.map((f, indexF) => <MapTile key={`${indexE.toString()} + ${indexF.toString()}`} tileType={f} />),
             )}
           </div>
-          <Map /> 
-    
+          <Map setHero={setHero} setEnemy={setNpc} setInCombat={setInCombat}/> 
+          {inCombat && enemy && heroInfo && (
+          <Battle
+            exitBattle={exitBattle}
+            enemyInput={enemy}
+            heroInput={heroInfo}
+            skillOne={spellOne}
+            skillTwo={spellTwo}
+            skillthree={spellthree}
+          />
+        )}
         </div>
         <div 
           id='chat'
@@ -222,16 +239,7 @@ const Playground: NextPage = () => {
           }}
         >
           <InGameChat />
-           {inCombat && players[session.data?.user?.name as string] && (
-          <Battle
-            exitBattle={exitBattle}
-            enemyInput={enemy}
-            heroInput={heroInfo}
-            skillOne={spellOne}
-            skillTwo={spellTwo}
-            skillthree={spellthree}
-          />
-        )}
+           
         <button
           onClick={() => {
             setInCombat(true);
@@ -246,8 +254,7 @@ const Playground: NextPage = () => {
   );
 };
 
-const Map = () => {
-
+const Map = ({setInCombat, setHero, setEnemy}: {setInCombat:(x: boolean) => void, setHero:(x:Characters)=>void, setEnemy:(x:NPC)=>void}) => {
   const enemies = trpc.playground.loadEnemies.useMutation()
   const [bp, setBp] = useState("no data")
 
@@ -266,11 +273,55 @@ const Map = () => {
   useEffect(() => {
     enemies.mutate()
   }, [])
-
-  const startBattle = (): void => {
-    battlePair.mutate();
-    setBp(battlePair.data?.enemy as string)
+  const hero = {
+    id: 0,
+    name: 'test hero name',
+    owner_id: 'test owner ',
+    maxHP: 1000,
+    currentHP: 1000,
+    str: 1,
+    dex: 1,
+    con: 1,
+    wis: 1,
+    int: 1,
+    char: 1,
+    class: 'paladin',
+    race: 'human',
   }
+  const enemy = {
+    id: 'id1',
+    name: 'dragon',
+    posX: 0,
+    posY: 0,
+    img: '/npc/dragon.gif',
+    dmg: 20,
+    power: 10000,
+    exp: 50,
+    hp: 1,
+    cur_hp: 1,
+  }
+  const startBattle = (): void => {
+    setInCombat(true)
+    battlePair.mutate();
+    setEnemy(enemy)
+    setHero(hero)
+    setBp(battlePair.data?.enemy as string)
+
+  }
+  const getChar = trpc.dbRouter.getCharacter.useMutation()
+  const getNpc = trpc.dbRouter.getNpc.useMutation()
+  const localStorcharId = Number(localStorage.getItem('char_id')) 
+  
+  
+  // if(battlePair.isSuccess && localStorage.getItem('char_id')!=null){
+  //   getChar.mutate({charId: localStorcharId})
+  //   getNpc.mutate({name: 'dragon'})
+  // }
+  // if(getChar.isSuccess && getNpc.isSuccess && getNpc.data!=null && getChar.data){
+
+  //   setEnemy(getNpc.data)
+  //   setHero(getChar.data)
+  // }
   return (
 
     <div
