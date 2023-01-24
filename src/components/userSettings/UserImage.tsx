@@ -8,7 +8,7 @@ import { trpc } from "utils/trpc"
 
 const UserImage: NextPage = () => {
     const session = useSession()
-    const onHovertext: string = 'Change icon'
+    const onHovertext = 'Change icon'
     const userImage = trpc.userSettings.userImage.useMutation()
    
     // 1.0 usestate na zobrazovani obrazku

@@ -8,6 +8,7 @@ import { useRouter } from "next/router"
 
 const ChangeUserPicture: NextPage = () => {
     const defaultImages: string[] = [
+        '/defaultUserImages/default.png',
         '/defaultUserImages/first.jpg', 
         '/defaultUserImages/second.jpg', 
         '/defaultUserImages/third.png',
@@ -16,11 +17,11 @@ const ChangeUserPicture: NextPage = () => {
     const router = useRouter()
     const session = useSession()
     const changePic = trpc.userSettings.changeUserImage.useMutation()
-    const handleClick = (ev: React.FormEvent<EventTarget>) => {
-        console.log(ev.target.alt);
+    const handleClick = (ev:React.MouseEvent<HTMLElement>) => {
+        const img  = ev.target as HTMLImageElement
         changePic.mutate({
             userId: session.data?.user?.id as string,
-            newImage: ev.target.alt as string
+            newImage: img.alt as string
         })
         router.push('/user/')
     }
