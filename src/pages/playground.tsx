@@ -1,19 +1,18 @@
 import MapTile from 'components/MapTile';
 import { NextPage } from 'next';
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import styles from '../styles/playground.module.css';
 import { mapArray } from 'components/array';
-import { Chat } from 'components/Chat';
 import Header from 'components/general/Header';
-
 import Battle from 'components/BattleLogic/Battle';
 import { useSession } from 'next-auth/react';
 import { NPC, Characters, Spell } from '@prisma/client';
-
 import { width } from '@mui/system';
 import { relative } from 'path';
 import { InGameChat } from 'components/InGameChat';
+import HumanTown from './town';
+
 
 
 const Playground: NextPage = () => {
@@ -211,6 +210,7 @@ const Playground: NextPage = () => {
             )}
           </div>
           <Map /> 
+    
         </div>
         <div 
           id='chat'
