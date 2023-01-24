@@ -6,14 +6,98 @@ import styles from '../styles/playground.module.css';
 import { mapArray } from 'components/array';
 import { Chat } from 'components/Chat';
 import Header from 'components/general/Header';
+
+import Battle from 'components/BattleLogic/Battle';
+import { useSession } from 'next-auth/react';
+import { NPC, Characters, Spell } from '@prisma/client';
+
 import { width } from '@mui/system';
 import { relative } from 'path';
 import { InGameChat } from 'components/InGameChat';
 
+
 const Playground: NextPage = () => {
+  const [players, setPlayers] = useState<{ [k: string]: { [k: string]: any } }>(
+    {},
+  );
+  const spellOne: Spell = {
+    name: 'Soul chain',
+    id: 1,
+    description: 'fucing badass chain with souls',
+    damage: 50,
+    cooldown: 5,
+  };
+  const spellTwo: Spell = {
+    name: 'fireball',
+    id: 2,
+    description: 'fucking little candle',
+    damage: 20,
+    cooldown: 0,
+  };
+  const spellthree: Spell = {
+    name: 'immolation',
+    id: 3,
+    description: 'flames wreathe one creature you can see within your range',
+    damage: 15,
+    cooldown: 3,
+  };
+  const heroInfo: Characters = {
+    id: 0,
+    name: 'test hero name',
+    owner_id: 'test owner ',
+    maxHP: 1000,
+    currentHP: 1000,
+    str: 1,
+    dex: 1,
+    con: 1,
+    wis: 1,
+    int: 1,
+    char: 1,
+    class: 'paladin',
+    race: 'human',
+    skillOne_id: 1,
+    skillTwo_id: 2,
+    skillThree_id: 3,
+  };
+  const enemy: NPC = {
+    id: 'id1',
+    name: 'dragon',
+    posX: 0,
+    posY: 0,
+    img: '/npc/dragon.gif',
+    dmg: 20,
+    power: 10000,
+    exp: 50,
+    hp: 1,
+    cur_hp: 1,
+  };
+  const t = trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
+    onData(data) {
+      console.log(data);
+      setPlayers((prev) => {
+        return { ...prev, [data.name]: data };
+      });
+    },
+  });
+  const session = useSession();
+  //checks that u can only enter PG after login and selection character
+  useEffect(() => {
+    if (session.status === 'unauthenticated') {
+      window.location.href = '/login';
+    } else if (localStorage.getItem('char_id') === null) {
+      window.location.href = '/character-list';
+    }
+  });
+  console.log(players);
+  console.log(players[session.data?.user?.name as string], 'session name');
+
   const controller = trpc.playground.remoteControl.useMutation();
   const main = useRef<HTMLDivElement>(null);
+
+  const [inCombat, setInCombat] = useState(false);
+
   const chat = useRef<HTMLDivElement>(null);
+
   const [moveMatrix, setMoveMatrix] = useState({
     up: false,
     left: false,
@@ -23,9 +107,16 @@ const Playground: NextPage = () => {
   });
 
   useEffect(() => {
+
+    console.log(players);
+    if (main.current) {
+      main.current.focus();
+
     if (document.activeElement === main.current) {
       // main.current.focus();
       controller.mutate(moveMatrix);
+
+    }
     }
   }, [moveMatrix]);
 
@@ -78,6 +169,10 @@ const Playground: NextPage = () => {
     handleKey(e, false);
   };
 
+  const exitBattle = (hero: Characters) => {
+    setInCombat(false);
+  };
+ 
   return (
     <>
       <Header title="Playground" />
@@ -95,6 +190,7 @@ const Playground: NextPage = () => {
         }}
         draggable={false}
       >
+
         {/* THIS IS OUR GREAT MAP */}
         <div
           id='map'
@@ -126,13 +222,32 @@ const Playground: NextPage = () => {
           }}
         >
           <InGameChat />
+           {inCombat && players[session.data?.user?.name as string] && (
+          <Battle
+            exitBattle={exitBattle}
+            enemyInput={enemy}
+            heroInput={heroInfo}
+            skillOne={spellOne}
+            skillTwo={spellTwo}
+            skillthree={spellthree}
+          />
+        )}
+        <button
+          onClick={() => {
+            setInCombat(true);
+          }}
+        >
+          start combat!
+        </button>
         </div>
+
       </div>
     </>
   );
 };
 
 const Map = () => {
+
   const enemies = trpc.playground.loadEnemies.useMutation()
   const [bp, setBp] = useState("no data")
 
@@ -140,6 +255,7 @@ const Map = () => {
   const map = useRef<HTMLDivElement>(null)
   const [s, setS] = useState<{
     [k: string]: { x: number; y: number; orientation: boolean, status: { battle: boolean; alive: boolean; } };
+
   }>();
   trpc.playground.sub.useSubscription(undefined, {
     onData(data) {
@@ -156,6 +272,7 @@ const Map = () => {
     setBp(battlePair.data?.enemy as string)
   }
   return (
+
     <div
       id='characters' 
       ref={map}
@@ -179,10 +296,12 @@ const Map = () => {
                   width: `${map.current!.clientWidth/50}px`,
                   height: `${map.current!.clientWidth/25}px`,
                 }}
+
                 key={index}
               >
                 <div
                   style={{
+
                     position:"relative",
                     left:`-${12* map.current!.clientWidth/1600}px`,
                     top:`-${25* map.current!.clientWidth/1600}px`,
@@ -207,6 +326,7 @@ const Map = () => {
             );
           })
         : 'nothing'}
+
 
       {/* RENDER NPCs */}
         {enemies.data?.map((npc, index) => {
@@ -239,6 +359,7 @@ const Map = () => {
           )
         })}
         <div id='tuu jsem' className='text-500-red'>{battlePair.data?.enemy}</div>
+
     </div>
   );
 };

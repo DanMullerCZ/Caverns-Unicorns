@@ -1,3 +1,4 @@
+
 import Header from 'components/general/Header';
 import NavigationBar from 'components/NavigationBar';
 import UserSettings from 'components/userSettings/UserSettings';
@@ -6,6 +7,7 @@ import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { trpc } from 'utils/trpc';
+
 
 export default function userPage() {
   const session = useSession();
@@ -24,6 +26,7 @@ export default function userPage() {
     if (session.status === 'unauthenticated') {
       router.push('/');
     }
+
   });
 
   const handleSendingMail = async () => {
@@ -78,6 +81,7 @@ export default function userPage() {
               router.push('/');
             }}
           >
+
             LOG OUT
           </button>
 

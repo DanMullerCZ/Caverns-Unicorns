@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import styles from '../styles/Dice.module.scss'
 // stolen from https://codepen.io/vicentemundim/pen/nXNvBw
-const Dice = () => {
+const Dice = ({setLuck, rolled, setRolled}: {setLuck: (n: number) => void, rolled: boolean, setRolled: () => void}) => {
     const die = useRef<HTMLDivElement>(null)
 
     let lastFace:number
@@ -9,6 +9,7 @@ const Dice = () => {
    //let transitionDuration:number = 500
     const animationDuration  = 300
     const handleClick = () => {
+        setRolled()
             die.current?.classList.add('rolling')
             clearTimeout(timeoutId)
             timeoutId = setTimeout(function () {
@@ -19,7 +20,7 @@ const Dice = () => {
      }
      const rollTo=(face:number) => {
         clearTimeout(timeoutId)
-        console.log(face);
+        setLuck(face)
         
         die.current?.setAttribute('data-face', face.toString());
       }
@@ -32,7 +33,7 @@ const Dice = () => {
 
     return (
         <div className={styles.content}>
-            <div ref={die} onClick={handleClick} className={styles.die}>
+            <div ref={die} onClick={rolled ? () => {} : handleClick} className={styles.die}>
                 <figure className={`${styles.face} ${styles['face-1']}`} ></figure>
                 <figure className={`${styles.face} ${styles['face-2']}`}></figure>
                 <figure className={`${styles.face} ${styles['face-3']}`}></figure>
