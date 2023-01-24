@@ -2,7 +2,7 @@ import { Characters } from '@prisma/client';
 import { useState } from 'react';
 import styles from '../styles/Town.module.css';
 
-const Town = ({
+const HumanTown = ({
   hero,
   setHero,
 }: {
@@ -26,36 +26,81 @@ const Town = ({
   };
   return (
     <>
-      <div className={styles.container}>
-        <div style={{ backgroundImage: `url(/maps/town/market.jpg)` }}>
-          <h2>Marketplace</h2>
-          <button onClick={showMarket}>Shop</button>
+      <div
+        className={styles.container}
+        style={{ backgroundImage: `url(/maps/town/city.jpg)` }}
+      >
+        <div className={styles.inn}>
+          <h2 className="parttitle font-LOTR">Inn</h2>
+          <button
+            onClick={sleep}
+            title="Rest and heal yourself."
+            className="town-button font-LOTR"
+          >
+            Sleep
+          </button>
         </div>
-        <div style={{ backgroundImage: `url(/maps/town/cathedral.jpg)` }}>
-          <h2>Cathedral</h2>
+
+        <div className={styles.cathedral}>
+          <h2 className="parttitle font-LOTR">Cathedral</h2>
+          <h2 className="parttitle font-LOTR">Town Hall</h2>
         </div>
-        <div style={{ backgroundImage: `url(/maps/town/inn.jpg)` }}>
-          <h2>Inn</h2>
-          <button onClick={sleep}>Sleep</button>
+        <div className={styles.marketplace}>
+          <h2 className="parttitle font-LOTR">Marketplace</h2>
+          <button
+            onClick={showMarket}
+            className="town-button font-LOTR"
+            title="Visit marketplace to buy awesome gear and potions."
+          >
+            Shop
+          </button>
         </div>
-        <div style={{ backgroundImage: `url(/maps/town/townhall.jpg)` }}>
-          <h2>Town Hall</h2>
-          <button onClick={() => setQuestVisibility(true)}>Quests</button>
+        <div className={styles.townhall}>
+          <button
+            onClick={() => setQuestVisibility(true)}
+            className="town-button font-LOTR"
+            title="If you are looking for job, enter town hall."
+          >
+            Quests
+          </button>
         </div>
+        <button
+          onClick={leaveTown}
+          className="leavebutton font-LOTR"
+          title="Just get out, we never wanted you here!"
+        >
+          Leave Town
+        </button>
+
+        {questVisibility && (
+          <div className={styles.questList}>
+            <p className="font-LOTR">Missing list of quests.</p>
+            <button
+              className={styles.closeButton}
+              onClick={() => setQuestVisibility(false)}
+            >
+              ×
+            </button>
+          </div>
+        )}
+        {marketVisibility && (
+          <div className={styles.shop}>
+            <button
+              className={styles.closeButton}
+              onClick={() => setMarketVisibility(false)}
+            >
+              ×
+            </button>
+            <p className="font-LOTR">
+              Marketplace will be implemented in future, just wait a few
+              decades.
+            </p>
+          </div>
+        )}
       </div>
-      {questVisibility && <div><p>Missing list of quests.</p><button onClick={()=>setQuestVisibility(false)}>X</button></div>}
-      {marketVisibility && (
-        <div>
-          <p>
-            Marketplace will be implemented in future, just wait a few decades.
-          </p>
-          <button onClick={()=>setMarketVisibility(false)}>X</button>
-        </div>
-      )}
       <div>{heroInTown.currentHP}</div>
-      <button onClick={leaveTown}>Leave Town</button>
     </>
   );
 };
 
-export default Town;
+export default HumanTown;

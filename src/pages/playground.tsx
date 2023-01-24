@@ -6,7 +6,7 @@ import styles from '../styles/playground.module.css';
 import { mapArray } from 'components/array';
 import Header from 'components/general/Header';
 import { InGameChat } from 'components/InGameChat';
-import Town from './town';
+import HumanTown from './town';
 
 
 const Playground: NextPage = () => {

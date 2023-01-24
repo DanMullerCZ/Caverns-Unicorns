@@ -1,12 +1,85 @@
-.container{
-    width: 500px;
-    height: 500px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
+.container {
+  width: 100vh;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  background-size: contain;
 }
-.container div{
-    background-size: cover;
-    display: flex;
-    justify-content: center;
+
+.marketplace {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 25%;
+  padding-top: 25%;
+}
+.townhall {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: top;
+  padding-left: 20%;
+  padding-top: 10%;
+}
+.cathedral {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  padding-left: 20%;
+  padding-bottom: 20%;
+  padding-top: 15%;
+}
+.inn {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  padding-left: 30%;
+  padding: 25%;
+  padding-bottom: 20%;
+}
+.shop {
+  width: 40%;
+  height: 90%;
+  position: absolute;
+  left: 3%;
+  top: 3%;
+  /* background-color: burlywood;
+    border: groove black; */
+  background-image: url('/maps/town/parchment.png');
+  background-size: cover;
+  border-radius: 10px;
+  padding: 10px;
+  padding-top: 40px;
+}
+.closeButton {
+  height: 30px;
+  width: 30px;
+  border-radius: 9999px;
+  background-color: brown;
+  border: solid black;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.questList {
+  width: 40%;
+  height: 90%;
+  position: absolute;
+  left: 3%;
+  top: 3%;
+  background-image: url('/maps/town/parchment2.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  padding: 10px;
 }
