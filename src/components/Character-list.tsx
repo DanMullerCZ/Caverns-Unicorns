@@ -54,14 +54,14 @@ const CharactersDetail = ({ characters }: { characters: any }) => {
       <section className="font-LOTR">
         <div className={styles.container}>
           <div className={styles.heroDisplay}>
-            <Image
+            {hero.race && <Image
               className="rounded-lg"
               src={`/${hero.race}.png`}
               alt={`${hero.race}`}
               width={200}
               height={200}
             />
-
+            }
             <div className="gold">
               <p className="text-2xl">{hero.name}</p>
               <p>
@@ -82,7 +82,7 @@ const CharactersDetail = ({ characters }: { characters: any }) => {
             characters.map((e: any) => (
               <div
                 onClick={() => handleClick(e.name, e.race, e.class, e.id)}
-                className="col-start-4 col-end-5 row-span-1 flex cursor-pointer items-center justify-around rounded-xl bg-white p-4 drop-shadow"
+                className="gold oneHero col-start-4 col-end-5 row-span-1 flex cursor-pointer items-center justify-between pl-10 pr-20 rounded-xl bg-white p-4 drop-shadow"
                 key={e.id}
               >
                 <div>

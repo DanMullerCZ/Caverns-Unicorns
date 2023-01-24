@@ -15,7 +15,7 @@
     width: 160px; */
     height: 80px;
     border-radius: 50%;
-    color: goldenrod;
+    color: rgb(234, 178, 92);
     font-weight: bold;
     background-color: transparent;
     font-size: 35px;
@@ -33,7 +33,7 @@
     width: 160px; */
     height: 80px;
     border-radius: 50%;
-    color: goldenrod;
+    color: rgb(234, 178, 92);
     font-weight: bold;
     background-color: transparent;
     font-size: 35px;
@@ -47,15 +47,23 @@
     grid-row: 2/9;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
+    gap: 20px;
+    
+    
+    background-color: transparent;
+    border: solid;
+    color: rgb(234, 178, 92);
+    border-radius:40px;
+    backdrop-filter: blur(10px);
 
 }
 
 .backButton{
     height: 100px;
     width: 100px;
-    color: goldenrod;
+    color: rgb(234, 178, 92);
     font-weight: bold;
     background-color: transparent;
     font-size: 50px;
