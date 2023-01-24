@@ -302,8 +302,8 @@ const Battle = ({
         <h2>combat log</h2>
         <div className={styles.combattext} ref={combatlog}></div>
       </div>
-      {heroDead && <ResultScreen handleClick={handleClick} />}
-      {enemyDead && <ResultScreen handleClick={handleClick} />}
+      {heroDead && <ResultScreen handleClick={handleClick} whosIsDead={'hero'}/>}
+      {enemyDead && <ResultScreen handleClick={handleClick} whosIsDead={'enemy'}/>}
     </div>
   );
 };

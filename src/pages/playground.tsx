@@ -63,8 +63,8 @@ const Playground: NextPage = () => {
     dmg: 20,
     power: 10000,
     exp: 50,
-    hp: 1000,
-    cur_hp: 1000,
+    hp: 1,
+    cur_hp: 1,
   };
   const t = trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
     onData(data) {
