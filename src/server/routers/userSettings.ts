@@ -39,5 +39,46 @@ export const userSettRouter = router({
             } catch (e) {
                 return `Cannot acces data from database, error:${e}`
             }
+        }),
+
+    userImage: publicProcedure 
+        .input(z.object({
+            userId: z.string(),
+        }))
+        .mutation(async( {input} ) => {
+            try {
+                const getUserImage = await prisma.user.findUnique({
+                    where: {
+                        id: input.userId
+                    },
+                    select: {
+                        image: true
+                    }
+                })
+                return getUserImage?.image
+            } catch (e) {
+                return `Cannot acces database, error: ${e}`
+            }
+        }),
+
+    changeUserImage: publicProcedure
+        .input(z.object({
+            newImage: z.string(),
+            userId: z.string(),
+        }))    
+        .mutation(async({input}) => {
+            try {
+                const changeUserImage = await prisma.user.update({
+                    where: {
+                        id: input.userId
+                    },
+                    data: {
+                        image: input.newImage
+                    }
+                })
+                return 'succesfully changed image'
+            } catch (e) {
+                return `Cannot update database, Error: ${e}`
+            }
         })
-    })        
+})        

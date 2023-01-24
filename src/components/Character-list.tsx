@@ -5,8 +5,11 @@ import styles from '../styles/Character-list.module.css';
 import UserSettings from './userSettings/UserSettings';
 import { useSession } from 'next-auth/react';
 import { contextProps } from '@trpc/react-query/dist/internals/context';
+import NavigationBar from './NavigationBar';
+import VideoBackground from './VideoBackground';
 
-const Characters = ({ characters }: { characters: any }) => {
+const CharactersDetail = ({ characters }: { characters: any }) => {
+  console.log(characters)
   const [hero, setHero] = useState({
     name: characters[0]?.name || '',
     race: characters[0]?.race || '',
@@ -16,12 +19,17 @@ const Characters = ({ characters }: { characters: any }) => {
   
   useEffect(()=>{
     if (localStorage.getItem("char_id")){
-    setHero({
-      name: localStorage.getItem("name"),
-      race: localStorage.getItem("race"),
-      class: localStorage.getItem("class"),
-      id: localStorage.getItem("char_id"),
-    })}
+    for (let i=0;i<characters.length;i++){
+      if (characters[i].id.toString()==localStorage.getItem("char_id")){
+        setHero({
+        name: characters[i].name,
+        race: characters[i].race,
+        class: characters[i].class,
+        id: characters[i].id,
+      })}
+
+      }
+    }
   },[])
 
   const handleClick = (
@@ -37,26 +45,24 @@ const Characters = ({ characters }: { characters: any }) => {
       id: id,
     });
     localStorage.setItem('char_id', id.toString());
-    localStorage.setItem('class', nameOfClass);
-    localStorage.setItem('race', race);
-    localStorage.setItem('name', name);
   };
 
   return (
     <>
-      <UserSettings />
-      <section className="">
+      <NavigationBar />
+      <VideoBackground />
+      <section className="font-LOTR">
         <div className={styles.container}>
           <div className={styles.heroDisplay}>
-            <Image
+            {hero.race && <Image
               className="rounded-lg"
               src={`/${hero.race}.png`}
               alt={`${hero.race}`}
               width={200}
               height={200}
             />
-
-            <div className="">
+            }
+            <div className="gold">
               <p className="text-2xl">{hero.name}</p>
               <p>
                 <span className="text-gray-400">
@@ -67,8 +73,7 @@ const Characters = ({ characters }: { characters: any }) => {
           </div>
           <Link className={styles.startGameButton} href="/lobby">
             <button
-              className="w-full rounded-md bg-blue-600 px-10 py-4 text-white
-                duration-300 ease-in hover:bg-blue-500 hover:drop-shadow-md"
+              className="gold"
             >
               Start the Game
             </button>
@@ -77,7 +82,7 @@ const Characters = ({ characters }: { characters: any }) => {
             characters.map((e: any) => (
               <div
                 onClick={() => handleClick(e.name, e.race, e.class, e.id)}
-                className="col-start-4 col-end-5 row-span-1 flex cursor-pointer items-center justify-around rounded-xl bg-white p-4 drop-shadow"
+                className="gold oneHero col-start-4 col-end-5 row-span-1 flex cursor-pointer items-center justify-between pl-10 pr-20 rounded-xl bg-white p-4 drop-shadow"
                 key={e.id}
               >
                 <div>
@@ -99,8 +104,7 @@ const Characters = ({ characters }: { characters: any }) => {
             ))}
           <Link className={styles.createButton} href="/character-creation">
             <button
-              className="w-full rounded-md bg-blue-600 px-10 py-4 text-white
-                duration-300 ease-in hover:bg-blue-500 hover:drop-shadow-md"
+              className="gold"
             >
               Create new character
             </button>
@@ -111,4 +115,4 @@ const Characters = ({ characters }: { characters: any }) => {
   );
 };
 
-export default Characters;
+export default CharactersDetail;

@@ -5,7 +5,9 @@ import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
 import Head from 'next/head';
-import Header from 'components/general/Header';
+import { useState } from 'react';
+import NavigationBar from 'components/NavigationBar';
+import VideoBackground from 'components/VideoBackground';
 
 export async function getStaticProps() {
   const ssg = await createProxySSGHelpers({
@@ -26,6 +28,11 @@ export async function getStaticProps() {
 
 export default function GetAllRaces() {
   const data = trpc.dbRouter.getAllRaces.useQuery()
+    
+  const [selectedRace, setSelectedRace] = useState("")
+  const setRace = (e: string) => {
+    setSelectedRace(e)
+  }
 
   if (data.status === 'error') {
     return (
@@ -37,10 +44,14 @@ export default function GetAllRaces() {
 
   return (
     <>
-      <Header title='Races'/>
+      <Head>
+        <title>Races</title>
+      </Head>
+      <VideoBackground />
+      <NavigationBar />
       {/* <p>Data status: {data.status}</p> */}
       {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
-      <div>{data.data && <RaceList races={data.data} />}</div>
+      <div>{data.data && <RaceList races={data.data} setRace={setRace}  />}</div>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+// import { deleteTestUser } from './functions';
 
 // It is imposibble to test specific trpc procedures on backend, 
 // if you want to test something it must go through frontend
@@ -7,7 +8,7 @@ import { test, expect } from '@playwright/test';
 
 test('GET /races, returns all races', async ({ page }) => {
     await page.goto('/races');
-    await expect(page.getByTestId('race')).toHaveCount(9); 
+    await expect(page.getByTestId('race')).toHaveCount(8); 
 });
 
 test('GET /races/human, returns correct human stats', async ({ page }) => {

@@ -1,5 +1,7 @@
 .container{
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(16,100px);
-    grid-template-rows: repeat(9,100px);
+    width: 100%;
+    grid-template-columns: repeat(16,1fr);
+    grid-template-rows: repeat(9,1fr);
 }
