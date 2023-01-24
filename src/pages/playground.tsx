@@ -40,6 +40,7 @@ const Playground: NextPage = () => {
     damage: 15,
     cooldown: 3,
   };
+  
   // const heroInfo: Characters = {
   //   id: 0,
   //   name: 'test hero name',
@@ -78,6 +79,7 @@ const Playground: NextPage = () => {
   const setNpc = ( y: NPC) => {
     setEnemy(y)
   }
+
   const t = trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
     onData(data) {
       console.log(data);
@@ -96,7 +98,7 @@ const Playground: NextPage = () => {
     }
   });
   console.log(players);
-  console.log(players[session.data?.user?.name as string], 'session name');
+  console.log(session.data?.user?.name as string, 'session name');
 
   const controller = trpc.playground.remoteControl.useMutation();
   const main = useRef<HTMLDivElement>(null);
