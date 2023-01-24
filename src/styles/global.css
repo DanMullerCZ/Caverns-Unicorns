@@ -258,6 +258,7 @@ a {
   opacity: 0.7;
   padding-left: 10px;
   padding-right: 10px;
+  cursor: url('/wallpers/sword.svg'),auto;
 }
 .town-button:hover {
   border: solid goldenrod;
@@ -285,4 +286,5 @@ a {
   color: darkred;
   opacity: 1;
   background-color: black;
+  cursor: url('/wallpers/sword.svg'),auto;
 }
