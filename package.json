@@ -64,6 +64,7 @@
     "react-icons": "^4.7.1",
     "rxjs": "^7.8.0",
     "sass": "^1.57.1",
+    "sharp": "^0.31.3",
     "stripe": "^11.6.0",
     "superjson": "^1.7.4",
     "swr": "^2.0.0",
@@ -72,7 +73,7 @@
     "zod": "^3.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.26.1",
+    "@playwright/test": "^1.29.2",
     "@tanstack/react-query-devtools": "^4.3.8",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.7.20",

@@ -183,6 +183,9 @@ const Map = () => {
               >
                 <div
                   style={{
+                    position:"relative",
+                    left:`-${12* map.current!.clientWidth/1600}px`,
+                    top:`-${25* map.current!.clientWidth/1600}px`,
                     transform: `scaleX(${orientation ? -1 : 1})`,
                     backgroundImage: `url('/npc/rogue.gif')`,
                     backgroundSize: 'cover',
@@ -192,10 +195,8 @@ const Map = () => {
                   }}
                 ></div>
                 <div>{k}</div>
-                <div>PosX: {x}</div>
-                <div>PosY: {y}</div>
-                <div>CW: {map.current?.clientWidth}</div>
-                <div>CH: {map.current?.clientHeight}</div>
+                <div>PosX: {x.toFixed(1)}</div>
+                <div>PosY: {y.toFixed(1)}</div>
                 <button 
                   disabled={false}
                   onClick={startBattle}

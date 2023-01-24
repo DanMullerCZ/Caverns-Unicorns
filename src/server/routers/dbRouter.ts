@@ -87,4 +87,17 @@ export const dbRouter = router({
                 return 'error has occured'
             }
         }),
+        deleteTestingUnit: publicProcedure
+        .mutation(async () => {
+            try {
+                const deletedUser = await prisma.user.delete({
+                    where: {
+                        email: 'test@test.cz'
+                    }
+                })
+                return deletedUser 
+            } catch (error: any) {
+                return `Unable to delete tester: ${error.message}`
+            }
+        }),
 });

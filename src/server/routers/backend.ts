@@ -149,6 +149,7 @@ export const exampleRouter = router({
             email: input.input.email,
             password: hashToken(input.input.password),
             name: input.input.name,
+            image: "/defaultUserImages/default.png"
           },
         })) as User;
         const timeOfExpiration = new Date();
