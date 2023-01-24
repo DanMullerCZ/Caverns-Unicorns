@@ -15,27 +15,27 @@ const Playground: NextPage = () => {
   const [players, setPlayers] = useState<{ [k: string]: { [k: string]: any } }>(
     {},
   );
-const spellOne: Spell = {
-  name: 'Soul chain',
-  id: 1,
-  description: 'fucing badass chain with souls',
-  damage: 50,
-  cooldown: 5,
-}
-const spellTwo: Spell = {
-  name: 'fireball',
-  id: 2,
-  description: 'fucking little candle',
-  damage: 20,
-  cooldown: 0,
-}
-const spellthree: Spell = {
-  name: 'immolation',
-  id: 3,
-  description: 'flames wreathe one creature you can see within your range',
-  damage: 15,
-  cooldown: 3,
-}
+  const spellOne: Spell = {
+    name: 'Soul chain',
+    id: 1,
+    description: 'fucing badass chain with souls',
+    damage: 50,
+    cooldown: 5,
+  };
+  const spellTwo: Spell = {
+    name: 'fireball',
+    id: 2,
+    description: 'fucking little candle',
+    damage: 20,
+    cooldown: 0,
+  };
+  const spellthree: Spell = {
+    name: 'immolation',
+    id: 3,
+    description: 'flames wreathe one creature you can see within your range',
+    damage: 15,
+    cooldown: 3,
+  };
   const heroInfo: Characters = {
     id: 0,
     name: 'test hero name',
@@ -61,7 +61,7 @@ const spellthree: Spell = {
     posY: 0,
     img: '/npc/dragon.gif',
     dmg: 20,
-    power: 10,
+    power: 10000,
     exp: 50,
     hp: 1000,
     cur_hp: 1000,
@@ -150,6 +150,9 @@ const spellthree: Spell = {
   const handleKeyUp = (e: React.KeyboardEvent<HTMLElement>) => {
     handleKey(e, false);
   };
+  const exitBattle = (hero: Characters) => {
+    setInCombat(false);
+  };
   // const arr:string[] = Array(144).fill('grass')
   // arr[72]='city'
   return (
@@ -177,7 +180,7 @@ const spellthree: Spell = {
         <Chat />
         {inCombat && players[session.data?.user?.name as string] && (
           <Battle
-            exitBattle={() => setInCombat(false)}
+            exitBattle={exitBattle}
             enemyInput={enemy}
             heroInput={heroInfo}
             skillOne={spellOne}

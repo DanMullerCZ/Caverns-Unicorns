@@ -6,6 +6,7 @@ import styles from '../../styles/Battle.module.css';
 import { NPC, Characters, Spell } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import session from 'pages/api/stripe/checkout/session';
+import ResultScreen from './ResultScreen';
 
 const Battle = ({
   exitBattle,
@@ -15,18 +16,11 @@ const Battle = ({
   skillTwo,
   skillthree,
 }: {
-  exitBattle: () => void;
+  exitBattle: (hero: Characters) => void;
   heroInput: Characters;
   skillOne: Spell;
   skillTwo: Spell;
   skillthree: Spell;
-  // {
-  //   name: string;
-  //   hp: number;
-  //   skillONe: { damage: number; name: string; CD: number };
-  //   skillTwo: { damage: number; name: string; CD: number };
-  //   skillthree: { damage: number; name: string; CD: number };
-  // };
   enemyInput: NPC;
 }) => {
   const [luck, setLuck] = useState<number>(0);
@@ -64,22 +58,16 @@ const Battle = ({
     cooldown: skillthree.cooldown || 0,
     remainingCD: skillthree.cooldown || 0,
   });
+  const gifUrl = '/boromir_1.gif';
+  const herodeadRef = useRef<HTMLDivElement>(null);
   const handleClick = () => {
-    exitBattle();
-  };
+    exitBattle(hero);
+    }
+  
 
   const [enemy, setEnemy] = useState<NPC>(enemyInput);
 
   const [hero, setHero] = useState<Characters>(heroInput);
-
-  // useState({
-  //   name: heroInput.name,
-  //   hp: heroInput.hp,
-  //   skillONe: { ...heroInput.skillONe, remainingCD: heroInput.skillONe.CD },
-  //   skillTwo: { ...heroInput.skillTwo, remainingCD: 0 },
-  //   skillthree: { ...heroInput.skillthree, remainingCD: 0 },
-
-  // });
 
   const combatProcderure = (inputdamage: {
     damage: number;
@@ -197,13 +185,12 @@ const Battle = ({
   const [heroDead, setHeroDead] = useState(false);
   useEffect(() => {
     if (enemy.cur_hp === 0) {
-      setHealthBar(0);
       setEnemyDead(true);
     }
     if (hero.currentHP === 0) {
       setHeroDead(true);
     }
-  }, [enemy.hp, hero.currentHP]);
+  }, [enemy.cur_hp, hero.currentHP]);
 
   useEffect(() => {
     if (luck! > 0) {
@@ -232,7 +219,11 @@ const Battle = ({
           <h1>fighting</h1>
           <h2>Name:{enemy.name}</h2>
           <h2>HP:{enemy.cur_hp}</h2>
-          <progress  value={enemy.cur_hp} className={styles.healthbar} max={enemy.hp}></progress>
+          <progress
+            value={enemy.cur_hp}
+            className={styles.healthbar}
+            max={enemy.hp}
+          ></progress>
         </div>
         <Image
           src="/npc/dragon.gif"
@@ -244,31 +235,37 @@ const Battle = ({
       <div className={styles.abilitties}>
         <h2>Skills</h2>
         <button
-          title={`remaining cooldown: ${spellOne.remainingCD}`}
+          title={`remaining cooldown: ${spellOne.remainingCD}, ${spellOne.description}`}
           onClick={() => setDamage({ ...spellOne, skill: 1 })}
-          disabled={spellOne.remainingCD > 0 || heroDead ? true : false}
+          disabled={
+            spellOne.remainingCD > 0 || heroDead || enemyDead ? true : false
+          }
         >
           {spellOne.name}
         </button>
         <br />
         <button
-          title={`remaining cooldown: ${spellTwo.remainingCD}`}
+          title={`remaining cooldown: ${spellTwo.remainingCD} ,${spellTwo.description}`}
           onClick={() => setDamage({ ...spellTwo, skill: 2 })}
-          disabled={spellTwo.remainingCD > 0 || heroDead ? true : false}
+          disabled={
+            spellTwo.remainingCD > 0 || heroDead || enemyDead ? true : false
+          }
         >
           {spellTwo.name}
         </button>
         <br />
         <button
-          title={`remaining cooldown: ${spellthree.remainingCD}`}
+          title={`remaining cooldown: ${spellthree.remainingCD}, ${spellthree.description}`}
           onClick={() => setDamage({ ...spellthree, skill: 3 })}
-          disabled={spellthree.remainingCD > 0 || heroDead ? true : false}
+          disabled={
+            spellthree.remainingCD > 0 || heroDead || enemyDead ? true : false
+          }
         >
           {spellthree.name}
         </button>
       </div>
       <button
-        disabled={heroDead ? true : false}
+        disabled={heroDead || enemyDead ? true : false}
         className={styles.run}
         onClick={handleClick}
       >
@@ -276,7 +273,13 @@ const Battle = ({
       </button>
       <div className={styles.stats}>
         <h2>HP:{hero.currentHP}</h2>
-        <progress  value={hero.currentHP} className={styles.healthbar} max={hero.maxHP}>{hero.currentHP}/{hero.maxHP}</progress>
+        <progress
+          value={hero.currentHP}
+          className={styles.healthbar}
+          max={hero.maxHP}
+        >
+          {hero.currentHP}/{hero.maxHP}
+        </progress>
       </div>
       <div className={styles.hero}>
         <Image
@@ -299,15 +302,8 @@ const Battle = ({
         <h2>combat log</h2>
         <div className={styles.combattext} ref={combatlog}></div>
       </div>
-      {heroDead && (
-        <div className={styles.herodead} onClick={() => exitBattle()}>
-          <video autoPlay muted id="myVideo">
-            <source src="/boromir_1.gif" />
-            <source src="boromir.gif" />
-          </video>
-          You died u weakling
-        </div>
-      )}
+      {heroDead && <ResultScreen handleClick={handleClick} />}
+      {enemyDead && <ResultScreen handleClick={handleClick} />}
     </div>
   );
 };
