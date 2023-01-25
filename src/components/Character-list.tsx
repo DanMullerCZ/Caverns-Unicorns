@@ -97,9 +97,11 @@ const CharactersDetail = ({
                 </div>
               </div>
             ))}
-          <Link className={styles.createButton} href="/character-creation">
-            <button className="gold">Create new character</button>
-          </Link>
+          {characters.length <= 8 &&
+            <Link className={styles.createButton} href="/character-creation">
+              <button className="gold">Create new character</button>
+            </Link>
+          }
         </div>
       </section>
     </>
