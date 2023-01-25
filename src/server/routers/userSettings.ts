@@ -34,7 +34,7 @@ export const userSettRouter = router({
                     }) as User
                     return `Succesfully changed password`
                 } else {
-                    return `HASH> ${hashedInput} and ${userPass.password} `
+                    return `Wrong password`
                 }
             } catch (e) {
                 return `Cannot acces data from database, error:${e}`

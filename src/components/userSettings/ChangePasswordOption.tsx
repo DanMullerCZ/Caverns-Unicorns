@@ -2,10 +2,16 @@ import NavigationBar from 'components/NavigationBar';
 import VideoBackground from 'components/VideoBackground';
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
+import { type } from 'os';
 import { useEffect, useRef, useState } from 'react';
+
+
 import { trpc } from 'utils/trpc';
 
-const ChangePasswordOption: NextPage = () => {
+
+
+
+const ChangePasswordOption = (props: any):JSX.Element => {
   const passwordInput = useRef<HTMLFormElement>(null);
   const userPassword = trpc.userSettings.passwordCheck.useMutation();
   const [passwordStatus, setPasswordStatus] = useState('');
@@ -25,12 +31,20 @@ const ChangePasswordOption: NextPage = () => {
         newPassword: newPass.value,
         userId: session.data?.user?.id,
       };
+      props.setChangePasswordSucces(passwordStatus)
       ev.preventDefault();
       userPassword.mutate(currentPassword);
     } else {
+      props.setChangePasswordSucces(passwordStatus)
+      ev.preventDefault()
       setPasswordStatus('invalid inputs');
     }
   };
+  if(userPassword.isSuccess){
+    console.log('succes');
+    
+    props.setChangePasswordSucces(userPassword.data)
+  }
 
   useEffect(() => {
     setPasswordStatus(userPassword.data as any);
@@ -46,11 +60,12 @@ const ChangePasswordOption: NextPage = () => {
         <div className="flex gap-1">
           <input
             className="rounded-md border bg-transparent px-3 py-2"
-            type="text"
+            type="password"
             placeholder="current password"
+            required
           />
-          <input className="rounded-md border bg-transparent px-3 py-2" type="text" placeholder="new password" />
-          <input className="rounded-md border bg-transparent px-3 py-2" type="text" placeholder=" confirm new password" />
+          <input className="rounded-md border bg-transparent px-3 py-2" type="password" placeholder="new password" required/>
+          <input className="rounded-md border bg-transparent px-3 py-2" type="password" placeholder=" confirm new password" required/>
         </div>
         <p test-id="success">{passwordStatus}</p>
         <div className="self-center">
