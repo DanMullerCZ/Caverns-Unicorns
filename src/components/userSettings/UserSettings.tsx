@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import Result from "pages/payment_result";
 import { useEffect, useState } from "react";
 
 import ChangePassword from "./ChangePasswordOption";
@@ -10,6 +9,7 @@ const UserSettings: NextPage = () => {
     const [changePasswordSucces, setChangePasswordSucces] = useState<string>()
     const resultOf = (message: string) => {
         setChangePasswordSucces(message)
+        // console.log(message)
     }
     useEffect(() => {
         setChangePasswordForm(false)
@@ -23,11 +23,10 @@ const UserSettings: NextPage = () => {
             {changePasswordForm &&             
             <>
             <ChangePassword setChangePasswordSucces={resultOf} />
+            <button onClick={() => setChangePasswordForm(false)}>close</button>
             </>
             }
-            {changePasswordSucces && 
-            (<p>{changePasswordSucces}</p>)
-            }
+            <p>{changePasswordSucces}</p>
             <UserImage/>
         </>
     )

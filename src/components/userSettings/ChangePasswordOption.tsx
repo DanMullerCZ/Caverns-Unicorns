@@ -4,51 +4,68 @@ import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import { type } from 'os';
 import { useEffect, useRef, useState } from 'react';
-
-
+import { hashToken } from 'pages/api/auth/jwt';
 import { trpc } from 'utils/trpc';
+import * as crypto from 'crypto';
 
 
 
 
 const ChangePasswordOption = (props: any):JSX.Element => {
+
   const passwordInput = useRef<HTMLFormElement>(null);
+  const [passwordStatus, setPasswordStatus] = useState("");
   const userPassword = trpc.userSettings.passwordCheck.useMutation();
-  const [passwordStatus, setPasswordStatus] = useState('');
+  const changeUserPassword = trpc.userSettings.passwordChange.useMutation()
   const session = useSession();
   const currentPass = passwordInput.current?.elements[0] as HTMLInputElement;
   const newPass = passwordInput.current?.elements[1] as HTMLInputElement;
   const confirmNewPass = passwordInput.current?.elements[2] as HTMLInputElement;
 
-  const handleClick = (ev: React.FormEvent<EventTarget>) => {
-    if (
-      newPass.value === confirmNewPass.value &&
-      currentPass.value.length &&
-      confirmNewPass.value.length
-    ) {
-      const currentPassword: any = {
-        currentPassword: currentPass.value,
-        newPassword: newPass.value,
-        userId: session.data?.user?.id,
-      };
-      props.setChangePasswordSucces(passwordStatus)
-      ev.preventDefault();
-      userPassword.mutate(currentPassword);
-    } else {
-      props.setChangePasswordSucces(passwordStatus)
-      ev.preventDefault()
-      setPasswordStatus('invalid inputs');
-    }
-  };
-  if(userPassword.isSuccess){
-    console.log('succes');
-    
-    props.setChangePasswordSucces(userPassword.data)
+  const hashFn = (password: string) => {
+    return crypto.createHash('sha512').update(password).digest('hex');
   }
-
+  
   useEffect(() => {
-    setPasswordStatus(userPassword.data as any);
-  }, [userPassword.data]);
+    userPassword.mutate({userId: session.data?.user?.id as string})
+    console.log(userPassword.data, 'useeffect ')
+  },[])
+
+//   useEffect(() => {
+
+//       setPasswordStatus(userPassword.data as any);
+//     console.log(userPassword.data);
+    
+//     console.log("stanu se?");
+    
+//   }, [userPassword.data]);
+
+  const handleClick = (ev: React.FormEvent<EventTarget>) => {
+    ev.preventDefault()
+    console.log('cur password hash',hashFn(currentPass.value), 'new pass hash:', hashFn(newPass.value))
+    if (
+      newPass.value === confirmNewPass.value
+    ) {
+      if(hashFn(currentPass.value) === userPassword.data){
+        props.setChangePasswordSucces("Succesfully changed password")
+        const hashedNewPass = hashFn(newPass.value)
+        changeUserPassword.mutate({ 
+          userId: session.data?.user?.id as string,
+          newPassword: hashedNewPass
+        })
+        
+        
+      
+    } else { 
+      props.setChangePasswordSucces("incoreect password")
+    }
+  }else { props.setChangePasswordSucces("password dont match")}
+};
+  // if(userPassword.isSuccess){
+  //   props.setChangePasswordSucces(passwordStatus)
+  // }
+
+  
 
   return (
     <>
@@ -75,5 +92,6 @@ const ChangePasswordOption = (props: any):JSX.Element => {
     </>
   );
 };
+
 
 export default ChangePasswordOption;
