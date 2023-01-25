@@ -71,6 +71,20 @@ export const dbRouter = router({
                 return `Unable to delete user with id ${input}`
             }
         }),
+    deleteCharacter: publicProcedure
+        .input(z.number())
+        .mutation(async ({ input }) => {
+            try {
+                const deletedCharacter = await prisma.characters.delete({
+                    where: {
+                        id: input
+                    }
+                })
+                return deletedCharacter 
+            } catch (error: any) {
+                return `Unable to delete character with id ${input}`
+            }
+        }),
     createPremium: publicProcedure
         .input(z.string())
         .mutation(async ({ input }) => {
