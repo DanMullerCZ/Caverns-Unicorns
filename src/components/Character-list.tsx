@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '../styles/Character-list.module.css';
@@ -10,54 +9,25 @@ type HeroList = {
   race: string;
   class: string;
   id: number;
-}
+};
 
-const CharactersDetail = ({ characters, handleDeletion }: { characters: any, handleDeletion: Function }) => {
-  console.log(characters);
-  const [hero, setHero] = useState<HeroList>({
-      name: '',
-      race: '',
-      class: '',
-      id: 0,
-    }
-  );
-
-  useEffect(() => {
-    if (localStorage.getItem('char_id')) {
-      for (let i = 0; i < characters.length; i++) {
-        if (characters[i].id.toString() == localStorage.getItem('char_id')) {
-          setHero({
-            name: characters[i].name,
-            race: characters[i].race,
-            class: characters[i].class,
-            id: characters[i].id,
-          });
-        } else {
-          setHero({
-            name: characters[0].name,
-            race: characters[0].race,
-            class: characters[0].class,
-            id: characters[0].id,
-          });
-        }
-      }
-    }
-  }, [characters]);
-
-  const handleClick = (
+const CharactersDetail = ({
+  characters,
+  handleDeletion,
+  hero,
+  handleClick,
+}: {
+  characters: any;
+  handleDeletion: (id: number, index: number) => void;
+  hero: HeroList;
+  handleClick: (
     name: string,
     race: string,
     nameOfClass: string,
     id: number,
-  ) => {
-    setHero({
-      name: name,
-      race: race,
-      class: nameOfClass,
-      id: id,
-    });
-    localStorage.setItem('char_id', id.toString());
-  };
+  ) => void;
+}) => {
+  console.log(characters);
 
   return (
     <>
@@ -65,25 +35,27 @@ const CharactersDetail = ({ characters, handleDeletion }: { characters: any, han
       <VideoBackground />
       <section className="font-LOTR">
         <div className={styles.container}>
-          <div className={styles.heroDisplay}>
-            {hero.race && (
-              <Image
-                className="rounded-lg"
-                src={`/${hero.race}.png`}
-                alt={`${hero.race}`}
-                width={200}
-                height={200}
-              />
-            )}
-            <div className="gold">
-              <p className="text-2xl">{hero.name}</p>
-              <p>
-                <span className="text-gray-400">
-                  {hero.race} {hero.class}
-                </span>
-              </p>
+          {characters.length > 0 && (
+            <div className={styles.heroDisplay}>
+              {hero.race && (
+                <Image
+                  className="rounded-lg"
+                  src={`/${hero.race}.png`}
+                  alt={`${hero.race}`}
+                  width={200}
+                  height={200}
+                />
+              )}
+              <div className="gold">
+                <p className="text-2xl">{hero.name}</p>
+                <p>
+                  <span className="text-gray-400">
+                    {hero.race} {hero.class}
+                  </span>
+                </p>
+              </div>
             </div>
-          </div>
+          )}
           <Link className={styles.startGameButton} href="/lobby">
             <button className="gold">Start the Game</button>
           </Link>
@@ -96,7 +68,8 @@ const CharactersDetail = ({ characters, handleDeletion }: { characters: any, han
               >
                 <div>
                   <p className="text-2xl">{e.name}</p>
-                  <p>r
+                  <p>
+                    r
                     <span className="text-gray-400">
                       {e.race} {e.class}
                     </span>
@@ -110,14 +83,17 @@ const CharactersDetail = ({ characters, handleDeletion }: { characters: any, han
                     width={15}
                     height={15}
                   />
-                  <Image 
+                  <Image
                     className="h-8 w-8 rounded-lg"
                     src={`/deleteCross.png`}
                     alt={`${e.class}`}
                     width={15}
                     height={15}
-                    onClick={(event) => {event.stopPropagation(); handleDeletion(e.id, index)}}
-                  />  
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleDeletion(e.id, index);
+                    }}
+                  />
                 </div>
               </div>
             ))}
