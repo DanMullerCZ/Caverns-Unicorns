@@ -1,10 +1,9 @@
 import { Characters } from '@prisma/client';
-import DragonDialog from 'components/DragonDialog';
 import ElvenTown from 'components/ElvenTown';
 import HumanTown from 'components/Town';
 import { useState } from 'react';
 
-const Town = () => {
+const Elven = () => {
   const [test_hero, setTest_hero] = useState<Characters>({
     id: 1,
     name: 'test hero',
@@ -25,8 +24,9 @@ const Town = () => {
   };
   return (
     <div>
+      <ElvenTown hero={test_hero} setHero={setHero}/>
     </div>
   );
 };
 
-export default Town;
+export default Elven;
