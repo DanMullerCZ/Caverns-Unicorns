@@ -51,19 +51,21 @@ model Class {
   name        String
   id          Int                @id @default(autoincrement())
   description String             @db.VarChar(255)
+  longer_desc String?            @db.VarChar(500)
   spells      SpellsForClasses[]
 }
 
 model Race {
   name        String
-  id          Int    @id @default(autoincrement())
-  description String @db.VarChar(255)
+  id          Int     @id @default(autoincrement())
+  description String  @db.VarChar(255)
   dex         Int
   str         Int
   con         Int
   int         Int
   wis         Int
   char        Int
+  longer_desc String? @db.VarChar(500)
 }
 
 model Spell {

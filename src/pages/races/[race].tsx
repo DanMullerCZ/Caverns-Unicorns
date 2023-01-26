@@ -11,7 +11,8 @@ import { trpc } from 'utils/trpc';
 import Image from 'next/image';
 import Header from 'components/general/Header';
 import ComponentFourOhFour from 'components/general/ComponentFourOhFour';
-
+import NavigationBar from 'components/NavigationBar';
+import VideoBackground from 'components/VideoBackground';
 
 export async function getStaticProps(
   context: GetStaticPropsContext<{ race: string }>,
@@ -54,15 +55,18 @@ export default function GetRace(
   props: InferGetStaticPropsType<typeof getStaticProps>,
 ) {
   const { race } = props;
-  const data = trpc.dbRouter.getRace.useQuery(race)
+  const data = trpc.dbRouter.getRace.useQuery(race);
 
-  console.log(race)
-  console.log(data.data)
+  console.log(race);
+  console.log(data.data);
 
   return (
     <>
       <Header title={data?.data?.name as string} />
-      {/* <h1>{data.name}</h1>
+      <NavigationBar />
+      <VideoBackground />
+      <div className="gold flex h-screen w-screen items-center justify-around pl-40 pr-20 font-LOTR">
+        {/* <h1>{data.name}</h1>
       <p>Here is your race:::</p>
       <ul>
       <li>Charisma: {data?.char}</li>
@@ -72,18 +76,32 @@ export default function GetRace(
       <li>Dexterity: {data?.dex}</li>
       <li>Intelligence: {data?.int}</li>
     </ul> */}
-      {data.data ? (
-        <>
-          <h1>{data.data.name}</h1>
-          <Image test-id={`image${data.data.name}`} src={`/${data.data.name.toLowerCase()}.png`} alt={data.data.name} width={150} height={150} />
-          <p test-id='race_details'>{data.data.description}</p>
-        </>
-      ) : 
-      <ComponentFourOhFour />
-      }
-
+        {data.data ? (
+          <>
+            <div className="flex flex-col items-center gap-10">
+              <h1 className="text-6xl">{data.data.name}</h1>
+              <div className="oneHero flex flex-col items-center justify-center">
+                <Image
+                  test-id={`image${data.data.name}`}
+                  src={`/${data.data.name.toLowerCase()}.png`}
+                  alt={data.data.name}
+                  width={350}
+                  height={150}
+                  className=""
+                />
+              </div>
+            </div>
+            <p
+              className="gold oneHero w-[50%] rounded-xl bg-white p-4 pl-10 pr-10 text-xl leading-9 tracking-widest drop-shadow"
+              test-id="race_details"
+            >
+              {data.data.longer_desc}
+            </p>
+          </>
+        ) : (
+          <ComponentFourOhFour />
+        )}
+      </div>
     </>
   );
-
-
 }
