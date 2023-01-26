@@ -58,7 +58,7 @@ const Lobby = () => {
   const handleStart = () => {
     console.log(players);
     console.log(checkReadyForEveryone());
-    sendStart.mutate()
+    sendStart.mutate(players)
 
   };
 
@@ -111,7 +111,7 @@ const Lobby = () => {
           Start
         </button>
         {/*   </Link> } */}
-        <Link className={styles.backLink} href="/character-list">
+<Link className={styles.backLink} href="/character-list">
           <button className={styles.backButton}>{'<-'}</button>
         </Link>
       </div>

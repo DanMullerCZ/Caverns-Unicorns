@@ -3,13 +3,16 @@ import { prisma } from '../db/client';
 import { z } from 'zod';
 import { protectedProcedure, router } from '../trpc';
 import { Subject } from 'rxjs';
+import { fork } from 'node:child_process';
+import { Characters } from '@prisma/client';
+import { pg } from './playground';
 
 const subject = new Subject<string>();
 const chatMsg = new Subject<string>();
 const online = new Subject<string>();
 const onlineChars = new Subject<any>();
 const playerToRemove = new Subject<string>();
-const startGame = new Subject<any>()
+const startGame = new Subject<any>();
 
 export const wsRouter = router({
   sub: protectedProcedure.subscription(() => {
@@ -93,28 +96,38 @@ export const wsRouter = router({
   removePlayer: protectedProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      
-      playerToRemove.next(input.name)
+      playerToRemove.next(input.name);
+    }),
 
-    }),
-    
-    sendRemovedPlayer: protectedProcedure.subscription(() => {
-      return observable<string>((emit) => {
-        playerToRemove.subscribe((x: string) => {
-          emit.next(x);
-        });
+  sendRemovedPlayer: protectedProcedure.subscription(() => {
+    return observable<string>((emit) => {
+      playerToRemove.subscribe((x: string) => {
+        emit.next(x);
       });
-    }),
-  
-    sendStart: protectedProcedure
-      .mutation(() => {
-        startGame.next(true)
-      }),
-      startGame: protectedProcedure.subscription(() => {
-        return observable<boolean>((emit) => {
-          startGame.subscribe((x: boolean) => {
-            emit.next(x);
-          });
-        });
-      }),
+    });
+  }),
+
+  sendStart: protectedProcedure.input(
+   z.any()
+).mutation(async ({input}) => {
+    console.log(input);
+    const chars: Characters[] = []
+    for (const player in input) {
+      input[player].char_id
+      const playableChar = await prisma.characters.findUniqueOrThrow({ where: { id: input[player].char_id } })
+      chars.push(playableChar)
+    }
+    
+    pg.setPlayers(chars)
+
+    startGame.next(true);
+
+  }),
+  startGame: protectedProcedure.subscription(() => {
+    return observable<boolean>((emit) => {
+      startGame.subscribe((x: boolean) => {
+        emit.next(x);
+      });
+    });
+  }),
 });

@@ -1,4 +1,5 @@
 export abstract class Entity {
+
   protected _status: { battle: boolean; alive: boolean; }  = {battle:false, alive:true}
   constructor(
     protected _name: string,
@@ -19,10 +20,10 @@ export abstract class Entity {
     return { battle: this._status.battle, alive: this._status.alive };
   }
   set setStatus({ alive, battle }: { alive?: boolean; battle?: boolean }) {
-    if (alive) {
+    if (alive!==undefined) {
       this._status = { ...this._status, alive: alive };
     }
-    if (battle) {
+    if (battle!==undefined) {
       this._status = { ...this._status, battle: battle };
     }
   }
