@@ -1,9 +1,11 @@
+import { randomUUID } from 'crypto';
 import { Entity } from './entity';
 import { Player } from './player';
 
 export class NPC extends Entity {
-  opponent: Player | undefined;
-
+  //opponent: Player | undefined;
+  public id: string = randomUUID();
+  public inBattle = false;
   constructor(
     _name: string,
     _x: number,
@@ -16,11 +18,17 @@ export class NPC extends Entity {
     protected exp: number,
   ) {
     super(_name, _x, _y, _hp, _cur_hp);
-    this.opponent = undefined;
+    // this.opponent = undefined;
   }
 
   get getStats() {
-    return { hp: this._hp, cur_hp: this._cur_hp, dmg: this.dmg, pwr: this.pwr };
+    return {
+      hp: this._hp,
+      cur_hp: this._cur_hp,
+      dmg: this.dmg,
+      pwr: this.pwr,
+      exp: this.exp,
+    };
   }
 
   get image() {
@@ -31,21 +39,13 @@ export class NPC extends Entity {
     const playerArr = Array.from(players.values());
     const nearbyPlayers = playerArr.filter((player) => {
       return (
-        this.calcDist(this._x, this._y, player.coords.x, player.coords.y) < 10
+        this.calcDist(this._x, this._y, player.coords.x, player.coords.y) < 20
       );
     });
-    if (this.opponent && nearbyPlayers.length === 0) {
-      this.opponent = undefined;
-    } else {
-        if(nearbyPlayers.length === 1){
-            this.opponent = nearbyPlayers[0];
-        }
+    if (!this.inBattle && nearbyPlayers.length > 0) {
+      this.inBattle = true;
+      nearbyPlayers[0].findOpponent(this);
     }
-    if(this.opponent){
-       this.opponent.findOpponent(this)
-    }
-    
-    
   }
 
   calcDist(x1: number, y1: number, x2: number, y2: number) {

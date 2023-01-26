@@ -2,7 +2,7 @@ import { Entity } from './entity';
 import { NPC } from './npc';
 
 export class Player extends Entity {
-  opponent: NPC | undefined
+  opponent: NPC | undefined;
   private _speed = 5;
   public orientation: boolean;
   private _move: { up: boolean; left: boolean; right: boolean; down: boolean } =
@@ -14,10 +14,33 @@ export class Player extends Entity {
     _y: number,
     _hp: number,
     _cur_hp: number,
+    public str: number,
+    public dex: number,
+    public con: number,
+    public int: number,
+    public wis: number,
+    public char: number,
+    public clas: string,
+    public race: string,
   ) {
     super(_name, _x, _y, _hp, _cur_hp);
     this.orientation = true;
     this.opponent = undefined;
+  }
+
+  get getStats() {
+    return {
+      str: this.str,
+      dex: this.dex,
+      con: this.con,
+      int: this.int,
+      wis: this.wis,
+      char: this.char,
+    };
+  }
+
+  get details() {
+    return { clas: this.clas, race: this.race };
   }
 
   play(
@@ -136,17 +159,25 @@ export class Player extends Entity {
 
   geOutBattle() {
     this.move = this._moving;
+    this.opponent = undefined;
+    this.setStatus = { battle: false };
+    console.error('Out of battle', this.status);
   }
 
   findOpponent(opponent: NPC): any {
     // const opponent = arrNPC.filter(
     //   (npc) => npc.opponent?.name === this.name,
     // )[0];
-    if (opponent.status.alive && !opponent.status.battle && this._status.alive && !this._status.battle) {
-      this.setStatus = {battle:true};
-      opponent.setStatus = {battle: true};
-      this.getInBattle()
-      this.opponent = opponent      
+    if (
+      opponent.status.alive &&
+      !opponent.status.battle &&
+      this._status.alive &&
+      !this._status.battle
+    ) {
+      this.setStatus = { battle: true };
+      opponent.setStatus = { battle: true };
+      this.getInBattle();
+      this.opponent = opponent;
     }
   }
 }

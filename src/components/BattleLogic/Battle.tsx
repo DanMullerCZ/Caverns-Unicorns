@@ -16,7 +16,7 @@ const Battle = ({
   skillTwo,
   skillthree,
 }: {
-  exitBattle: (hero: Characters) => void;
+  exitBattle: (hero: Characters, npc: NPC) => void;
   heroInput: Characters;
   skillOne: Spell;
   skillTwo: Spell;
@@ -61,7 +61,7 @@ const Battle = ({
   const gifUrl = '/boromir_1.gif';
   const herodeadRef = useRef<HTMLDivElement>(null);
   const handleClick = () => {
-    exitBattle(hero);
+    exitBattle(hero, enemy);
     }
   
 
@@ -76,10 +76,10 @@ const Battle = ({
     skill: number;
   }) => {
     setRolled(false);
-    let heroDamage: number = 0;
+    let heroDamage = 0;
 
     if (spellOne.remainingCD > 0) {
-      let devCooldown = spellOne.remainingCD - 1;
+      const devCooldown = spellOne.remainingCD - 1;
       setSpellOne((prev) => ({
         ...prev,
         remainingCD: devCooldown,
@@ -87,7 +87,7 @@ const Battle = ({
     }
 
     if (spellTwo.remainingCD > 0) {
-      let devCooldown = spellTwo.remainingCD - 1;
+      const devCooldown = spellTwo.remainingCD - 1;
       setSpellTwo((prev) => ({
         ...prev,
         remainingCD: devCooldown,
