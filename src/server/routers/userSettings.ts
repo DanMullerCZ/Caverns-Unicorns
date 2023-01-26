@@ -13,7 +13,7 @@ export const userSettRouter = router({
         .input(z.object({ 
             userId: z.string(),
         }))
-        .mutation(async({input }) => {      
+        .query(async({input }) => {      
             try {
                 const userPass = await prisma.user.findUnique({
                     where: { id: input.userId } ,

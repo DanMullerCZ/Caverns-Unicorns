@@ -6,14 +6,19 @@ import UserImage from "./UserImage";
 
 const UserSettings: NextPage = () => {
     const [changePasswordForm, setChangePasswordForm] = useState(false)
-    const [changePasswordSucces, setChangePasswordSucces] = useState<string>()
+    const [changePasswordMessage , setChangePasswordMessage ] = useState<string>()
     const resultOf = (message: string) => {
-        setChangePasswordSucces(message)
+        setChangePasswordMessage (message)
         // console.log(message)
     }
+    const onClose = () => {
+        setChangePasswordForm(false)
+        
+    }
+
     useEffect(() => {
         setChangePasswordForm(false)
-    },[changePasswordSucces])
+    },[changePasswordMessage ])
     return (
 
         <>  
@@ -22,11 +27,11 @@ const UserSettings: NextPage = () => {
             }
             {changePasswordForm &&             
             <>
-            <ChangePassword setChangePasswordSucces={resultOf} />
-            <button onClick={() => setChangePasswordForm(false)}>close</button>
+            <ChangePassword setChangePasswordMessage ={resultOf} />
+            <button onClick={() => onClose()}>close</button>
             </>
             }
-            <p>{changePasswordSucces}</p>
+            <p>{ changePasswordMessage }</p>
             <UserImage/>
         </>
     )

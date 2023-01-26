@@ -8,6 +8,8 @@ import VideoBackground from 'components/VideoBackground';
 import NavigationBar from 'components/NavigationBar';
 import Header from 'components/general/Header';
 
+
+
 const Home: NextPage = () => {
   return (
     <>

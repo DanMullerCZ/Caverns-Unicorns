@@ -15,7 +15,7 @@ const ChangePasswordOption = (props: any):JSX.Element => {
 
   const passwordInput = useRef<HTMLFormElement>(null);
   const [passwordStatus, setPasswordStatus] = useState("");
-  const userPassword = trpc.userSettings.passwordCheck.useMutation();
+  
   const changeUserPassword = trpc.userSettings.passwordChange.useMutation()
   const session = useSession();
   const currentPass = passwordInput.current?.elements[0] as HTMLInputElement;
@@ -26,28 +26,15 @@ const ChangePasswordOption = (props: any):JSX.Element => {
     return crypto.createHash('sha512').update(password).digest('hex');
   }
   
-  useEffect(() => {
-    userPassword.mutate({userId: session.data?.user?.id as string})
-    console.log(userPassword.data, 'useeffect ')
-  },[])
-
-//   useEffect(() => {
-
-//       setPasswordStatus(userPassword.data as any);
-//     console.log(userPassword.data);
-    
-//     console.log("stanu se?");
-    
-//   }, [userPassword.data]);
+  const userPassword = trpc.userSettings.passwordCheck.useQuery({userId: session.data?.user?.id as string});
 
   const handleClick = (ev: React.FormEvent<EventTarget>) => {
     ev.preventDefault()
-    console.log('cur password hash',hashFn(currentPass.value), 'new pass hash:', hashFn(newPass.value))
     if (
       newPass.value === confirmNewPass.value
     ) {
       if(hashFn(currentPass.value) === userPassword.data){
-        props.setChangePasswordSucces("Succesfully changed password")
+        props.setChangePasswordMessage("Succesfully changed password")
         const hashedNewPass = hashFn(newPass.value)
         changeUserPassword.mutate({ 
           userId: session.data?.user?.id as string,
@@ -57,9 +44,9 @@ const ChangePasswordOption = (props: any):JSX.Element => {
         
       
     } else { 
-      props.setChangePasswordSucces("incoreect password")
+      props.setChangePasswordMessage("incoreect password")
     }
-  }else { props.setChangePasswordSucces("password dont match")}
+  }else { props.setChangePasswordMessage("password dont match")}
 };
   // if(userPassword.isSuccess){
   //   props.setChangePasswordSucces(passwordStatus)
