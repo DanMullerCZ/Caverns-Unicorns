@@ -45,5 +45,4 @@ yarn-error.log*
 # lockfiles
 package-lock.json
 yarn.lock
-.env
 /dist
