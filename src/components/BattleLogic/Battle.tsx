@@ -5,6 +5,7 @@ import styles from '../../styles/Battle.module.css';
 import { NPC, Characters, Spell } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import ResultScreen from './ResultScreen';
+import { trpc } from 'utils/trpc';
 
 const Battle = ({
   exitBattleHeroWin,
@@ -26,8 +27,6 @@ const Battle = ({
   enemyInput: NPC;
 }) => {
   const [luck, setLuck] = useState<number>(0);
-  type SKillName = 'skillONe' | 'skillTwo' | 'skillthree';
-  type Skill = { damage: number; name: string; CD: number; skill: string };
   const [damage, setDamage] = useState({
     damage: 0,
     name: '',
@@ -60,24 +59,31 @@ const Battle = ({
     cooldown: skillthree.cooldown || 0,
     remainingCD: skillthree.cooldown || 0,
   });
-  const gifUrl = '/boromir_1.gif';
-  const herodeadRef = useRef<HTMLDivElement>(null);
+  const skillArray = trpc.dbRouter.getSkills.useMutation();
 
   const handleClickHeroWin = () => {
     exitBattleHeroWin(hero, enemy);
-  }
+  };
   const handleClickNpcWin = () => {
     exitBattleNpcWin(hero, enemy);
-  }
+  };
   const handleClickRetreat = () => {
     runFromBattle(hero, enemy);
-  }
-  
+  };
 
   const [enemy, setEnemy] = useState<NPC>(enemyInput);
 
   const [hero, setHero] = useState<Characters>(heroInput);
+  useEffect(() => {
+    skillArray.mutate(hero.class);
+  }, []);
 
+  useEffect(()=>{
+        if(skillArray.data && skillArray.data[0].spell){setSpellOne({...skillArray.data[0].spell,remainingCD:0})}
+        if(skillArray.data && skillArray.data[1].spell){setSpellTwo({...skillArray.data[1].spell,remainingCD:0})}
+        if(skillArray.data && skillArray.data[2].spell){setSpellthree({...skillArray.data[2].spell,remainingCD:0})}
+    
+  },[skillArray.data])
   const combatProcderure = (inputdamage: {
     damage: number;
     name: string;
@@ -235,7 +241,7 @@ const Battle = ({
           ></progress>
         </div>
         <Image
-          src={enemy.img || "/npc/dragon.gif"}
+          src={enemy.img || '/npc/dragon.gif'}
           width="500"
           height="500"
           alt="/npc/dragon.gif"
@@ -243,7 +249,7 @@ const Battle = ({
       </div>
       <div className={styles.abilitties}>
         <h2>Skills</h2>
-        <button
+        {skillArray.data &&(<button
           title={`remaining cooldown: ${spellOne.remainingCD}, ${spellOne.description}`}
           onClick={() => setDamage({ ...spellOne, skill: 1 })}
           disabled={
@@ -251,9 +257,9 @@ const Battle = ({
           }
         >
           {spellOne.name}
-        </button>
+        </button>)}
         <br />
-        <button
+        {skillArray.data &&(<button
           title={`remaining cooldown: ${spellTwo.remainingCD} ,${spellTwo.description}`}
           onClick={() => setDamage({ ...spellTwo, skill: 2 })}
           disabled={
@@ -261,9 +267,9 @@ const Battle = ({
           }
         >
           {spellTwo.name}
-        </button>
+        </button>)}
         <br />
-        <button
+    {skillArray.data && (    <button
           title={`remaining cooldown: ${spellthree.remainingCD}, ${spellthree.description}`}
           onClick={() => setDamage({ ...spellthree, skill: 3 })}
           disabled={
@@ -271,7 +277,7 @@ const Battle = ({
           }
         >
           {spellthree.name}
-        </button>
+        </button>)}
       </div>
       <button
         disabled={heroDead || enemyDead ? true : false}
@@ -311,8 +317,12 @@ const Battle = ({
         <h2>combat log</h2>
         <div className={styles.combattext} ref={combatlog}></div>
       </div>
-      {heroDead && <ResultScreen handleClick={handleClickNpcWin} whosIsDead={'hero'}/>}
-      {enemyDead && <ResultScreen handleClick={handleClickHeroWin} whosIsDead={'enemy'}/>}
+      {heroDead && (
+        <ResultScreen handleClick={handleClickNpcWin} whosIsDead={'hero'} />
+      )}
+      {enemyDead && (
+        <ResultScreen handleClick={handleClickHeroWin} whosIsDead={'enemy'} />
+      )}
     </div>
   );
 };
