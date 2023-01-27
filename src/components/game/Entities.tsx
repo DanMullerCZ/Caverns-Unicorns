@@ -17,12 +17,7 @@ const Entities = ({
   const map = useRef<HTMLDivElement>(null);
 
   // STATES
-  const [bp, setBp] = useState<{
-    player: any;
-    npc: any;
-  }>();
-
-  const [s, setS] = useState<{
+  const [players, setPlayers] = useState<{
     [k: string]: {
       x: number;
       y: number;
@@ -36,12 +31,12 @@ const Entities = ({
   const enemies = trpc.playground.loadEnemies.useMutation();
   trpc.playground.sub.useSubscription(undefined, {
     onData(data) {
-      setS(data);
+      setPlayers(data);
     },
   });
   trpc.playground.killNpc.useSubscription(undefined, {
     onData() {
-      enemies.mutate()
+      enemies.mutate();
     },
   });
 
@@ -50,15 +45,13 @@ const Entities = ({
     enemies.mutate();
   }, []);
 
-  useEffect(() => {
-    setHero(bp?.player);
-    setEnemy(bp?.npc);
-  }, [bp]);
-
   const startBattle = async () => {
-    setInCombat(true);
     await battlePair.mutateAsync().then((res) => {
-      setBp(() => { return {player: res.player, npc: res.npc} });
+      console.warn('res: ', res);
+      setHero(res.player as Characters);
+      setEnemy(res.npc as NPC);
+      console.warn("as*",res.player,res.npc);
+      setInCombat(true);
     });
   };
 
@@ -75,8 +68,8 @@ const Entities = ({
       }}
     >
       {/* Renders Players */}
-      {s &&
-        Object.entries(s).map(
+      {players &&
+        Object.entries(players).map(
           (
             [
               k,

@@ -45,12 +45,25 @@ const Player_Container = (
                 <div>PosX: {props.another_props.x.toFixed(1)}</div>
                 <div>PosY: {props.another_props.y.toFixed(1)}</div>
                 <div>{props.another_props.status.battle ? 'true' : 'false'}</div>
-                <button 
-                  disabled={false}
-                  onClick={props.startBattle}
-                >
-                  Start Battle
-                </button>
+                {props.another_props.status.battle && 
+                  <button
+                    disabled={false}
+                    onClick={props.startBattle}
+                    style={{
+                      zIndex: "100",
+                      fontFamily: 'LOTR',
+                      color: 'goldenrod',
+                      border: 'solid red 1px',
+                      borderRadius: '5px',
+                      backgroundColor: 'black',
+                      height: '40px',
+                      width: '120px',
+                      boxShadow: '2px 2px  2px 2px black',
+                    }}
+                  >
+                    Start Battle
+                  </button>
+                }
               </div>
     )
 }
