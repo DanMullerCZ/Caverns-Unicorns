@@ -1,4 +1,5 @@
 .container{
+    position: absolute;
     width: 150vh;
     height: 100vh;
     background-size: cover;

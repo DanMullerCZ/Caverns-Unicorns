@@ -11,6 +11,8 @@ import { NPC, Characters } from '@prisma/client';
 import { InGameChat } from 'components/InGameChat';
 import Entities from 'components/game/Entities';
 import { spellOne, spellthree, spellTwo } from 'server/playground/spells';
+import LocationButtons from 'components/LocationButtons';
+import Locations from 'components/Locations';
 
 const Playground: NextPage = () => {
   // ALL HOOKS AND REFS
@@ -19,6 +21,8 @@ const Playground: NextPage = () => {
 
     // STATES
   const [heroInfo, setHeroInfo] = useState<Characters>();
+  const [location,setLocation] = useState<string>('')
+  const [locationVisibility,setLocationVisibility]= useState<string>('')
   const [enemy, setEnemy] = useState<NPC>();
   const [inCombat, setInCombat] = useState(false);
   const [moveMatrix, setMoveMatrix] = useState({
@@ -39,7 +43,7 @@ const Playground: NextPage = () => {
   useEffect(() => {
     if (session.status === 'unauthenticated') {
       window.location.href = '/login';
-    } else if (localStorage.getItem('char_id') === null) {
+    } else if (localStorage.getItem('char_id') === null ) {
       window.location.href = '/character-list';
     }
   });
@@ -130,6 +134,14 @@ const Playground: NextPage = () => {
     retreat.mutate({hero: hero})
   };
 
+  const setLocationName = (name:string)=>{
+    setLocation(name)
+  }
+
+  const setVisibility = (x:string)=>{
+    setLocationVisibility(x)
+  }
+
   return (
     <>
       <Header title="Playground" />
@@ -171,7 +183,8 @@ const Playground: NextPage = () => {
               )),
             )}
           </div>
-          <Entities setHero={setHero} setEnemy={setNpc} setInCombat={setInCombat} />
+          <Entities setHero={setHero} setEnemy={setNpc} setInCombat={setInCombat} setLocation={setLocationName} />
+            <LocationButtons locationName={location} setVisible={setVisibility} />
           {inCombat && enemy && heroInfo && (
             <Battle
               exitBattleHeroWin={exitBattleHeroWin}
@@ -183,7 +196,8 @@ const Playground: NextPage = () => {
               skillTwo={spellTwo}
               skillthree={spellthree}
             />
-          )}
+            )}
+            {heroInfo && (<Locations setVisible={setVisibility} setInCombat={setInCombat} setEnemy={setEnemy} visible={locationVisibility} hero={heroInfo} setHero={setHero}/>)}
         </div>
         <InGameChat />
       </div>

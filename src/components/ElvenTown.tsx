@@ -5,9 +5,11 @@ import styles from '../styles/ElvenTown.module.css';
 const ElvenTown = ({
   hero,
   setHero,
+  setVisible
 }: {
   hero: Characters;
   setHero: (x: Characters) => void;
+  setVisible:(x:string)=>void
 }) => {
   const sleep = () => {
     setHeroInTown((prev) => {
@@ -22,7 +24,7 @@ const ElvenTown = ({
   };
   const leaveTown = () => {
     setHero(heroInTown);
-    window.location.href = '/playground';
+    setVisible('nada')
   };
   return (
     <>
