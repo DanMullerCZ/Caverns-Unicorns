@@ -1,97 +1,111 @@
-import { getSession, useSession } from 'next-auth/react';
-import { NextApiRequest } from 'next';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { createProxySSGHelpers } from '@trpc/react-query/ssg';
-import { appRouter } from 'server/routers/_app';
-import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
-import { Characters } from '@prisma/client';
 import CharactersDetail from 'components/Character-list';
+import { Characters } from '@prisma/client';
 
+type HeroList = {
+  name: string;
+  race: string;
+  class: string;
+  id: number;
+};
 
 const CharacterList = () => {
   const sessionData = useSession();
-  const res = trpc.dbRouter.getCharacters.useMutation()
-  //const [characters,setCharacters]=useState<Characters[]>([])
-  useEffect(()=>{ 
-    if (sessionData.data?.user?.id) res.mutate(sessionData.data.user.id);
-  },[sessionData])
-  //if(res.isSuccess){setCharacters(res.data)}
-  
-  
-  useEffect(()=>{
-    if (sessionData.status == 'unauthenticated'){
-        window.location.href='/login'
+  const res = trpc.dbRouter.getCharacters.useMutation();
+  const deletion = trpc.dbRouter.deleteCharacter.useMutation();
+
+  const [characters, setCharacters] = useState<Characters[]>([]);
+  const [hero, setHero] = useState<HeroList>({
+    name: '',
+    race: '',
+    class: '',
+    id: 0,
+  });
+
+  const handleClick = (
+    name: string,
+    race: string,
+    nameOfClass: string,
+    id: number,
+  ) => {
+    setHero({
+      name: name,
+      race: race,
+      class: nameOfClass,
+      id: id,
+    });
+    localStorage.setItem('char_id', id.toString());
+  };
+
+  const handleDeletion = (id: number, index: number) => {
+    deletion.mutate(id);
+    setCharacters((prevChar) => {
+      prevChar.splice(index, 1);
+      return prevChar;
+    });
+    if (localStorage.getItem('char_id') === id.toString()) {
+      setHero({
+        name: characters[0].name,
+        race: characters[0].race,
+        class: characters[0].class,
+        id: characters[0].id,
+      });
     }
-  },[])
+  };
+
+  useEffect(() => {
+    if (sessionData.data?.user?.id) {
+      res.mutate(sessionData.data.user.id);
+    }
+  }, [sessionData]);
+
+  useEffect(() => {
+    if (res.data) setCharacters(res.data);
+  }, [res.data]);
+
+  useEffect(() => {
+    if (sessionData.status == 'unauthenticated') {
+      window.location.href = '/login';
+    }
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem('char_id')) {
+      for (let i = 0; i < characters.length; i++) {
+        if (characters[i].id.toString() == localStorage.getItem('char_id')) {
+          setHero({
+            name: characters[i].name,
+            race: characters[i].race,
+            class: characters[i].class,
+            id: characters[i].id,
+          });
+        } else {
+          setHero({
+            name: characters[0].name,
+            race: characters[0].race,
+            class: characters[0].class,
+            id: characters[0].id,
+          });
+        }
+      }
+    }
+  }, [characters]);
 
   return (
     <>
-      <div className="w-screen h-screen">
-        {res.data && <CharactersDetail characters={res.data} />}
-        {/* {sessionData.data && (
-              <p>
-            {sessionData.data?.user?.name}: {sessionData.data?.user?.id}
-          </p>
-
-        )} */}
+      <div className="h-screen w-screen">
+        {characters && (
+          <CharactersDetail
+            characters={characters}
+            handleDeletion={handleDeletion}
+            hero={hero}
+            handleClick={handleClick}
+          />
+        )}
       </div>
     </>
   );
 };
 export default CharacterList;
-
-// export async function getServerSideProps() {
-//   const ssg = await createProxySSGHelpers({
-//     router: appRouter,
-//     ctx: { session: null },
-//     transformer: superjson, // optional - adds superjson serialization
-//   });
-
-  
-//   const sessionData = await getSession();
-//   await ssg.dbRouter.getCharacters.prefetch(sessionData?.user?.id);
-//   return {
-//     props: {
-//       trpcState: ssg.dehydrate(),
-//     },
-//     revalidate: 1,
-//   };
-// }
-
-// export const getServerSideProps = async (context: { req: NextApiRequest }) => {
-//   const sessionData = await getSession(context);
-//   let characters
-//   if(sessionData?.user?.id){
-
-//      characters = await prisma?.characters.findMany({
-//       where: {
-//         owner_id: sessionData?.user?.id,
-//       },
-//       select: {
-//         name: true,
-//         race:true,
-//         class: true,
-//         id:true
-//       },
-//   });
-//   }else {characters=[]}
-
-//   return {
-//     props: { response: characters },
-//   };
-// };
-// const ssg = await createProxySSGHelpers({
-//   router: appRouter,
-//   ctx: { session: null },
-//   transformer: superjson, // optional - adds superjson serialization
-// });
-// const sessionData = await getSession(context);
-// if (sessionData?.user?.id) {await ssg.dbRouter.getCharacters.prefetch(sessionData?.user?.id);}
-// return {
-//   props: {
-//     trpcState: ssg.dehydrate(),
-//   },
-//   revalidate: 1,
-// };
-// }

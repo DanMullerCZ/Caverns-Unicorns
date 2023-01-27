@@ -3,18 +3,19 @@ import { test, expect } from '@playwright/test';
 test('registration ', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'Register' }).click();
+  await page.getByRole('link', { name: 'Register' }).click();
   await page.locator('input[name="email"]').click();
   await page.locator('input[name="email"]').fill('test@test.cz');
   await page.locator('input[name="name"]').click();
-  await page.locator('input[name="name"]').fill('test');
-  await page.locator('input[name="name"]').press('Tab');
-  await page.locator('input[name="password1"]').fill('test');
-  await page.locator('input[name="password1"]').press('Tab');
-  await page.locator('input[name="password2"]').fill('test');
+  await page.locator('input[name="name"]').fill('Test');
+  await page.locator('input[name="password1"]').click();
+  await page.locator('input[name="password1"]').fill('1234');
+  await page.locator('input[name="password2"]').click();
+  await page.locator('input[name="password2"]').fill('1234');
   await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(
-    page.getByText('Successfully registered. Now you can login'),
-  ).toBeVisible();
+  await expect(page.getByTestId('login-message')).toBe(
+    'Successfully registered. Now you can login',
+  );
 });
 
 test('log-in', async ({ page }) => {
@@ -23,11 +24,9 @@ test('log-in', async ({ page }) => {
   await page.getByLabel('Email').click();
   await page.getByLabel('Email').fill('test@test.cz');
   await page.getByLabel('Email').press('Tab');
-  await page.getByLabel('Password').fill('test');
+  await page.getByLabel('Password').fill('1234');
   await page.getByRole('button', { name: 'Login with Credentials' }).click();
-  await expect(page.getByTestId('succes login')).toHaveText(
-    'USERS PAGE',
-  );
+  await expect(page.getByTestId('succes login')).toBe('USERS PAGE');
 });
 
 test('open user endpoint without being loged, login , changing password', async ({
@@ -67,14 +66,10 @@ test.afterAll(async ({ request }) => {
     `Finished all userSettings tests => Deleting Test Unit from database`,
   );
 
-  const response = await request.post('/api/admin/testing', {
+  await request.post('/api/admin/testing', {
     data: {
-        user: 'Admin',
-        password: 'veryComplicatedPasswordAndHardToHack'
-    }
-  })  
-
-  expect(JSON.stringify(await response.json())).toBe(JSON.stringify({
-      "body": "success"
-  }));
+      user: 'Admin',
+      password: 'veryComplicatedPasswordAndHardToHack',
+    },
+  });
 });

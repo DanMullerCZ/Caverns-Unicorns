@@ -1,6 +1,6 @@
 .container {
   position: absolute;
-  width: 90vh;
+  width: 140vh;
   height: 90vh;
   left: 20%;
   top: 5%;
@@ -8,7 +8,9 @@
   grid-template-columns: 1fr 1fr;
   grid-template-columns: 1fr 1fr;
   background-size: contain;
-  cursor: url('/wallpers/sword.svg'),auto;
+  background-repeat: no-repeat;
+  cursor: url('/wallpers/sword.svg'), auto;
+  z-index: 0;
 }
 
 .marketplace {
@@ -18,17 +20,19 @@
   flex-flow: column;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 25%;
+  padding-bottom: 35%;
   padding-top: 25%;
+  padding-left: 35%;
 }
 .townhall {
   height: 100%;
   width: 100%;
   display: flex;
   flex-flow: column;
-  justify-content: top;
-  padding-left: 20%;
-  padding-top: 10%;
+  justify-content: space-between;
+  padding-left: 45%;
+  padding-top: 0%;
+  padding-bottom: 30%;
 }
 .cathedral {
   height: 100%;
@@ -48,22 +52,22 @@
   justify-content: space-between;
   padding-left: 30%;
   padding: 25%;
-  padding-bottom: 20%;
+  padding-top: 0%;
 }
 .shop {
   width: 80vh;
   height: 80vh;
   position: absolute;
-  left: 3%;
+  left: 15%;
   top: 3%;
   /* background-color: burlywood;
-    border: groove black; */
+      border: groove black; */
   background-image: url('/maps/town/parchment.svg');
   background-size: contain;
   background-repeat: no-repeat;
   padding: 12%;
-  padding-top: 20%;
-  padding-bottom: 20%;
+  padding-top: 15%;
+  padding-bottom: 15%;
 }
 .closeButton {
   height: 30px;
@@ -74,19 +78,19 @@
   position: absolute;
   right: 3.5%;
   top: 7.5%;
-  cursor: url('/wallpers/sword.svg'),auto;
+  cursor: url('/wallpers/sword.svg'), auto;
 }
 
 .questList {
   width: 80vh;
   height: 80vh;
   position: absolute;
-  left: 4%;
+  left: 15%;
   top: 3%;
   background-image: url('/maps/town/parchment.svg');
   background-size: contain;
   background-repeat: no-repeat;
   padding: 12%;
-  padding-top: 20%;
-  padding-bottom: 20%;
+  padding-top: 15%;
+  padding-bottom: 15%;
 }

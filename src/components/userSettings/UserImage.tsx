@@ -27,17 +27,16 @@ const UserImage = () => {
         console.log(userImage.data, 'trpc return');       
     },[session?.data?.user?.id])
     return (
-        <>  
-            <h3>Change you avatar</h3>
-                {session?.data?.user?.id && userImage.data &&
-                 <Image src={ userImage.data as string } 
+        <> 
+            <h3>{session.data?.user?.name}</h3>           
+            <Image src={userImage.data as string || "/defaultUserImages/default.png"} 
                  width='100' 
                  height='100' 
                  alt={ userImage.data as string || '/defaultUserImages/default.png' } 
                  onClick={handleClick}
                  />
                 }
-               
+      
             {/* 1.2 { showPics ? defaultImages.map((image, index) => <Image src={image} width='100' height='100' alt={image} key={index} onClick={handleClick}/>) : null} */}
         </>
     )

@@ -33,7 +33,7 @@ const Dice = ({setLuck, rolled, setRolled}: {setLuck: (n: number) => void, rolle
 
     return (
         <div className={styles.content}>
-            <div ref={die} onClick={rolled ? () => {} : handleClick} className={styles.die}>
+            <div ref={die} onClick={rolled ? () => {return true} : handleClick} className={styles.die}>
                 <figure className={`${styles.face} ${styles['face-1']}`} ></figure>
                 <figure className={`${styles.face} ${styles['face-2']}`}></figure>
                 <figure className={`${styles.face} ${styles['face-3']}`}></figure>

@@ -1,8 +1,8 @@
 import { Characters } from '@prisma/client';
 import { useState } from 'react';
-import styles from '../styles/Town.module.css';
+import styles from '../styles/ElvenTown.module.css';
 
-const HumanTown = ({
+const ElvenTown = ({
   hero,
   setHero,
   setVisible
@@ -30,45 +30,43 @@ const HumanTown = ({
     <>
       <div
         className={styles.container}
-        style={{ backgroundImage: `url(/maps/town/city.jpg)` }}
+        style={{ backgroundImage: `url(/maps/town/elvenCity.jpg)` }}
       >
-        <div className={styles.inn}>
-          <h2 className="parttitle font-LOTR">Inn</h2>
-          <button
-            onClick={sleep}
-            title="Rest and heal yourself."
-            className="town-button font-LOTR"
-          >
-            Sleep
-          </button>
-        </div>
-
-        <div className={styles.cathedral}>
-          <h2 className="parttitle font-LOTR">Cathedral</h2>
-          <h2 className="parttitle font-LOTR">Town Hall</h2>
-        </div>
         <div className={styles.marketplace}>
-          <h2 className="parttitle font-LOTR">Marketplace</h2>
+          <h2 className="elven-parttitle font-LOTR">Marketplace</h2>
           <button
             onClick={showMarket}
-            className="town-button font-LOTR"
+            className="elven-town-button font-LOTR"
             title="Visit marketplace to buy awesome gear and potions."
           >
             Shop
           </button>
         </div>
+
+        <div className={styles.cathedral}></div>
         <div className={styles.townhall}>
+          <h2 className="elven-parttitle font-LOTR">Town Hall</h2>
           <button
             onClick={() => setQuestVisibility(true)}
-            className="town-button font-LOTR"
+            className="elven-town-button font-LOTR"
             title="If you are looking for job, enter town hall."
           >
             Quests
           </button>
         </div>
+        <div className={styles.inn}>
+          <h2 className="elven-parttitle font-LOTR">Inn</h2>
+          <button
+            onClick={sleep}
+            title="Rest and heal yourself."
+            className="elven-town-button font-LOTR"
+          >
+            Sleep
+          </button>
+        </div>
         <button
           onClick={leaveTown}
-          className="leavebutton font-LOTR"
+          className="elven-leavebutton font-LOTR"
           title="Just get out, we never wanted you here!"
         >
           Leave Town
@@ -100,9 +98,8 @@ const HumanTown = ({
           </div>
         )}
       </div>
-      <div>{heroInTown.currentHP}</div>
     </>
   );
 };
 
-export default HumanTown;
+export default ElvenTown;

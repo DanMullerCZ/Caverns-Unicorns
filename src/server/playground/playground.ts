@@ -3,6 +3,7 @@ import { Player } from './player';
 import { prisma } from '../db/client';
 import { listNPC } from './listNPC';
 import { specificNPC } from './listNPC';
+import { Characters } from '@prisma/client';
 
 export class Playground {
   private players = new Map<string, Player>();
@@ -12,7 +13,7 @@ export class Playground {
 
   constructor() {
     this.createNPCs(
-      [1, 1, 0, 0],
+      [1, 1, 3, 5],
       [listNPC.demon, listNPC.bandit, listNPC.zombie, listNPC.sheep],
     );
   }
@@ -52,24 +53,48 @@ export class Playground {
   }
 
   setState({
-    name,
+    id,
     up,
     left,
     right,
     down,
     orientation,
   }: {
-    name: string;
+    id: string;
     up: boolean;
     left: boolean;
     right: boolean;
     down: boolean;
     orientation: boolean;
   }) {
-    if (this.players.has(name)) {
-      this.players.get(name)?.play(up, left, right, down, orientation);
-    } else {
+    if (this.players.has(id)) {
+      this.players.get(id)?.play(up, left, right, down, orientation);
+    } /* else {
       this.players.set(name, new Player(name, 0, 0, 10, 10));
+      // create a new player from db
+    } */
+  }
+
+  setPlayers(characters: Characters[]) {
+    for (const character of characters) {
+      this.players.set(
+        character.owner_id,
+        new Player(
+          character.name,
+          0,
+          0,
+          character.maxHP,
+          character.currentHP,
+          character.str,
+          character.dex,
+          character.con,
+          character.int,
+          character.wis,
+          character.char,
+          character.class,
+          character.race,
+        ),
+      );
     }
   }
   getState() {
@@ -114,10 +139,11 @@ export class Playground {
     });
   }
 
-  getOpponent(name: string) {
-    const player = this.players.get(name) as Player;
-    const npc = this.players.get(name)?.opponent as NPC;
-    return { player: player.name, enemy: npc.name };
+  getOpponent(id: string) {
+    const player = this.players.get(id);
+    // const npc = this.players.get(id)?.opponent as NPC;
+    // console.log(player, npc);
+    return { player: player };
   }
 
   interval = setInterval(() => {
@@ -128,7 +154,7 @@ export class Playground {
       const array = enemy.getNearbies(this.players);
     });
   }, 25);
-  
+
   surface(x: number, y: number) {
     if (y > 0.96 * x + 189.37 && y < -1.09 * x + 654.83) {
       return 'deadland';
@@ -162,5 +188,25 @@ export class Playground {
       return 'hills&mountains';
     }
     return 'grass';
+  }
+  removeNpc(npc_id: string, hero_id: string, callback:()=>void): void {
+    console.log("----before",this._enemies);    
+    const temp = this._enemies.filter((enemy) => enemy.id !== npc_id );
+    this._enemies = [...temp]
+    console.log("-----after",this._enemies);
+    this.players.get(hero_id)?.geOutBattle()
+    callback()
+  }
+
+  removePlayer(hero_ownerId: string): void {
+    this.players.delete(hero_ownerId);
+    console.log("++++++++++",this.players);
+    
+  }
+
+  retreat(hero: Characters): void {
+    const retPlayer = this.players.get(hero.owner_id) as Player
+    retPlayer.changeHp(hero.currentHP)
+    retPlayer.geOutBattle()
   }
 }
