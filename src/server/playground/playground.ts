@@ -102,14 +102,16 @@ export class Playground {
       [k: string]: {
         x: number;
         y: number;
+        ownerId: string;
         orientation: boolean;
         status: { battle: boolean; alive: boolean };
       };
     } = {};
-    this.players.forEach((player) => {
+    this.players.forEach((player, owner) => {
       state[player.name] = {
         x: player.coords.x,
         y: player.coords.y,
+        ownerId: owner,
         orientation: player.orientation,
         status: player.status,
       };

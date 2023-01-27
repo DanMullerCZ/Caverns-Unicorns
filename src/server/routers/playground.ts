@@ -17,6 +17,7 @@ export const playground = router({
       [k: string]: {
         x: number;
         y: number;
+        ownerId: string;
         orientation: boolean;
         status: { battle: boolean; alive: boolean };
       };
