@@ -226,7 +226,7 @@ const Battle = ({
           ></progress>
         </div>
         <Image
-          src="/npc/dragon.gif"
+          src={enemy.img || "/npc/dragon.gif"}
           width="500"
           height="500"
           alt="/npc/dragon.gif"

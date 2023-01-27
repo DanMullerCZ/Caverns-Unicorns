@@ -1,0 +1,102 @@
+.elven{
+    position: absolute;
+    top: 100%;
+    left: 24%;
+    width: fit-content;
+    height: fit-content;
+    background-color: darkgoldenrod;
+    padding: 2px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid black;
+}
+.elven:disabled{
+    opacity:0.5;
+    background-color: gray;
+}
+.human{
+    position: absolute;
+    top: 47%;
+    left: 38%;
+    width: fit-content;
+    height: fit-content;
+    background-color: darkgoldenrod;
+    padding: 2px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid black;
+}
+.human:disabled{
+    opacity:0.5;
+    background-color: gray;
+}
+.necro{
+    position: absolute;
+    top: 47%;
+    left: 0%;
+    width: fit-content;
+    height: fit-content;
+    background-color: darkgoldenrod;
+    padding: 2px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid black;
+}
+.necro:disabled{
+    opacity:0.5;
+    background-color: gray;
+}
+.dung{
+    position: absolute;
+    left: 7%;
+    top: 4%;
+    width: fit-content;
+    height: fit-content;
+    background-color: darkgoldenrod;
+    padding: 2px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid black;
+}
+.dung:disabled{
+    opacity:0.5;
+    background-color: gray;
+}
+.dragon{
+    position: absolute;
+    top: 60%;
+    right: 6%;
+    width: fit-content;
+    height: fit-content;
+    background-color: darkgoldenrod;
+    padding: 2px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid black;
+}
+.dragon:disabled{
+    opacity:0.5;
+    background-color: gray;
+}
+.ironforge{
+    position: absolute;
+    top: 7%;
+    right: 50%;
+    width: fit-content;
+    height: fit-content;
+    background-color: darkgoldenrod;
+    padding: 2px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid black;
+}
+.ironforge:disabled{
+    opacity:0.5;
+    background-color: gray;
+}

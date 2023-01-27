@@ -1,5 +1,7 @@
 import { Characters, NPC } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 import { useState, useRef, useEffect } from 'react';
+import { checkPosition } from 'utils/playground-functions';
 import { trpc } from 'utils/trpc';
 import NPC_Container from './NPC_Container';
 import Player_Container from './Player_Container';
@@ -8,19 +10,18 @@ const Entities = ({
   setInCombat,
   setHero,
   setEnemy,
+  setLocation,
 }: {
   setInCombat: (x: boolean) => void;
   setHero: (x: Characters) => void;
   setEnemy: (x: NPC) => void;
+  setLocation:(x:string)=>void;
 }) => {
   // REFS
   const map = useRef<HTMLDivElement>(null);
+  const [name,setName]=useState<string>('')
 
   // STATES
-  const [bp, setBp] = useState<{
-    player: any;
-    npc: any;
-  }>();
 
   const [s, setS] = useState<{
     [k: string]: {
@@ -41,26 +42,36 @@ const Entities = ({
   });
   trpc.playground.killNpc.useSubscription(undefined, {
     onData() {
-      enemies.mutate()
+      enemies.mutate();
     },
   });
 
   // USE EFFECTS
   useEffect(() => {
     enemies.mutate();
+    setBp()
   }, []);
 
   useEffect(() => {
-    setHero(bp?.player);
-    setEnemy(bp?.npc);
-  }, [bp]);
+      if (s && name && s[name] && s[name].x && s[name].y) {
+      const response = checkPosition(s[name].x,s[name].y)
+      setLocation(response)
+    }
+  }, [s]);
 
   const startBattle = async () => {
     setInCombat(true);
-    await battlePair.mutateAsync().then((res) => {
-      setBp(() => { return {player: res.player, npc: res.npc} });
-    });
+    setBp()
   };
+
+  const setBp = async() => {
+    await battlePair.mutateAsync().then((res) => {
+        setHero(res.player as Characters) 
+        setEnemy(res.npc as NPC)
+        setName(res.player.name as string)
+      });
+  };
+  
 
   return (
     <div

@@ -3,7 +3,7 @@ import styles from '../styles/DragonDialog.module.css';
 import Image from 'next/image';
 import { Characters } from '@prisma/client';
 
-const DragonDialog = ({hero}:{hero:Characters}) => {
+const DragonDialog = ({hero,setVisible}:{hero:Characters,setVisible:(x:string)=>void}) => {
   const [dialogOption, setDialogOption] = useState<number>(1);
   const nextDialog = () => {
     const page = dialogOption + 1;
@@ -11,10 +11,10 @@ const DragonDialog = ({hero}:{hero:Characters}) => {
   };
   const heroName = hero.name || 'Player'
   const fight = () => {
-    return null;
+    setVisible('nada')
   };
   const leave = () => {
-    return null;
+    setVisible('nada')
   };
   return (
     <div className={styles.main}>
