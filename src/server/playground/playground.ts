@@ -13,7 +13,7 @@ export class Playground {
 
   constructor() {
     this.createNPCs(
-      [2, 2, 2, 2],
+      [1, 1, 3, 5],
       [listNPC.demon, listNPC.bandit, listNPC.zombie, listNPC.sheep],
     );
   }
@@ -189,9 +189,24 @@ export class Playground {
     }
     return 'grass';
   }
-  removeNpc(npc_id: string, hero_id: string): void {
+  removeNpc(npc_id: string, hero_id: string, callback:()=>void): void {
+    console.log("----before",this._enemies);    
     const temp = this._enemies.filter((enemy) => enemy.id !== npc_id );
     this._enemies = [...temp]
+    console.log("-----after",this._enemies);
     this.players.get(hero_id)?.geOutBattle()
+    callback()
+  }
+
+  removePlayer(hero_ownerId: string): void {
+    this.players.delete(hero_ownerId);
+    console.log("++++++++++",this.players);
+    
+  }
+
+  retreat(hero: Characters): void {
+    const retPlayer = this.players.get(hero.owner_id) as Player
+    retPlayer.changeHp(hero.currentHP)
+    retPlayer.geOutBattle()
   }
 }

@@ -7,9 +7,8 @@ import { NPC } from '../playground/npc';
 import { Player } from '../playground/player';
 import { Subject } from 'rxjs';
 
-
 export const pg = new Playground();
-const killedNpc = new Subject()
+const killedNpc = new Subject();
 
 export const playground = router({
   sub: protectedProcedure.subscription(() => {
@@ -64,7 +63,6 @@ export const playground = router({
 
   somethingLikeBattle: protectedProcedure.mutation(async ({ ctx }) => {
     const { player } = pg.getOpponent(ctx.session.user.id as string);
-    console.log(Object.create(player as Player));
     const hero = {
       // id: number,
       name: player?.name,
@@ -92,21 +90,40 @@ export const playground = router({
       exp: player?.opponent?.getStats.exp,
       hp: player?.opponent?.hp,
     };
+    console.warn('smthlbtprcdr', 'hero:', hero, 'enemy:', enemy);
+
     return { player: hero, npc: enemy };
   }),
 
   removeDeadNpc: protectedProcedure
-    .input(z.object({npcId: z.string()}))
-    .mutation(({ input,ctx }) => {
-      pg.removeNpc(input.npcId,ctx.session.user.id );
-      killedNpc.next("kill")
-      return 'all goof'
+    .input(z.object({ npcId: z.string() }))
+    .mutation(({ input, ctx }) => {
+      const killNpc = () => {
+        killedNpc.next('kill');
+      };
+      pg.removeNpc(input.npcId, ctx.session.user.id, killNpc);
+
+      return 'all goof';
     }),
 
-    killNpc: protectedProcedure.subscription(() => {
-            return observable<any>((emit) => {
-             killedNpc.subscribe((x:any)=>emit.next(x));
-        
-      });
+  killNpc: protectedProcedure.subscription(() => {
+    return observable<any>((emit) => {
+      killedNpc.subscribe((x: any) => emit.next(x));
+    });
+  }),
+
+  removeDeadPlayer: protectedProcedure
+    .mutation(({ ctx }) => {
+      console.log("///////////////");
+      
+      pg.removePlayer(ctx.session.user.id);
+      return 'you died :(';
+    }),
+
+  retreat: protectedProcedure
+    .input(z.object({ hero: z.any() }))
+    .mutation(({ input }) => {
+      pg.retreat(input.hero);
+      return 'you retreated';
     }),
 });

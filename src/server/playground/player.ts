@@ -152,6 +152,7 @@ export class Player extends Entity {
   move = this._moving;
 
   getInBattle(): void {
+    console.error('Going into battle, opponent is: ', this.opponent);
     this.move = () => {
       return;
     };
@@ -161,7 +162,7 @@ export class Player extends Entity {
     this.move = this._moving;
     this.opponent = undefined;
     this.setStatus = { battle: false };
-    console.error('Out of battle', this.status);
+    console.error('Out of battle, opponent is: ', this.opponent);
   }
 
   findOpponent(opponent: NPC): any {
@@ -176,8 +177,12 @@ export class Player extends Entity {
     ) {
       this.setStatus = { battle: true };
       opponent.setStatus = { battle: true };
-      this.getInBattle();
       this.opponent = opponent;
+      this.getInBattle();
     }
+  }
+
+  changeHp(new_cur_hp: number) {
+    this._cur_hp = new_cur_hp;
   }
 }

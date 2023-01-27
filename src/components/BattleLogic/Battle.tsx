@@ -1,22 +1,24 @@
 import Dice from 'components/Dice';
 import Image from 'next/image';
-import { ProgressHTMLAttributes, useEffect, useRef, useState } from 'react';
-import { any, string } from 'zod';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../../styles/Battle.module.css';
 import { NPC, Characters, Spell } from '@prisma/client';
 import { useSession } from 'next-auth/react';
-import session from 'pages/api/stripe/checkout/session';
 import ResultScreen from './ResultScreen';
 
 const Battle = ({
-  exitBattle,
+  exitBattleHeroWin,
+  exitBattleNpcWin,
+  runFromBattle,
   heroInput,
   enemyInput,
   skillOne,
   skillTwo,
   skillthree,
 }: {
-  exitBattle: (hero: Characters, npc: NPC) => void;
+  exitBattleHeroWin: (hero: Characters, npc: NPC) => void;
+  exitBattleNpcWin: (hero: Characters, npc: NPC) => void;
+  runFromBattle: (hero: Characters, npc: NPC) => void;
   heroInput: Characters;
   skillOne: Spell;
   skillTwo: Spell;
@@ -60,9 +62,16 @@ const Battle = ({
   });
   const gifUrl = '/boromir_1.gif';
   const herodeadRef = useRef<HTMLDivElement>(null);
-  const handleClick = () => {
-    exitBattle(hero, enemy);
-    }
+
+  const handleClickHeroWin = () => {
+    exitBattleHeroWin(hero, enemy);
+  }
+  const handleClickNpcWin = () => {
+    exitBattleNpcWin(hero, enemy);
+  }
+  const handleClickRetreat = () => {
+    runFromBattle(hero, enemy);
+  }
   
 
   const [enemy, setEnemy] = useState<NPC>(enemyInput);
@@ -267,7 +276,7 @@ const Battle = ({
       <button
         disabled={heroDead || enemyDead ? true : false}
         className={styles.run}
-        onClick={handleClick}
+        onClick={handleClickRetreat}
       >
         RUN!
       </button>
@@ -302,8 +311,8 @@ const Battle = ({
         <h2>combat log</h2>
         <div className={styles.combattext} ref={combatlog}></div>
       </div>
-      {heroDead && <ResultScreen handleClick={handleClick} whosIsDead={'hero'}/>}
-      {enemyDead && <ResultScreen handleClick={handleClick} whosIsDead={'enemy'}/>}
+      {heroDead && <ResultScreen handleClick={handleClickNpcWin} whosIsDead={'hero'}/>}
+      {enemyDead && <ResultScreen handleClick={handleClickHeroWin} whosIsDead={'enemy'}/>}
     </div>
   );
 };

@@ -20,7 +20,6 @@ const Playground: NextPage = () => {
   const main = useRef<HTMLDivElement>(null);
 
     // STATES
-  const [players, setPlayers] = useState<{ [k: string]: { [k: string]: any } }>({});
   const [heroInfo, setHeroInfo] = useState<Characters>();
   const [location,setLocation] = useState<string>('')
   const [locationVisibility,setLocationVisibility]= useState<string>('')
@@ -36,16 +35,10 @@ const Playground: NextPage = () => {
 
     // PROCEDURES HOOKS
   const controller = trpc.playground.remoteControl.useMutation();
-  const deadNPC = trpc.playground.removeDeadNpc.useMutation()
-  trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
-    onData(data) {
-      console.log(data);
-      setPlayers((prev) => {
-        return { ...prev, [data.name]: data };
-      });
-    },
-  });
- 
+  const deadNPC = trpc.playground.removeDeadNpc.useMutation();
+  const deadPlayer = trpc.playground.removeDeadPlayer.useMutation();
+  const retreat = trpc.playground.retreat.useMutation();
+   
     //  USE EFFECTS
   useEffect(() => {
     if (session.status === 'unauthenticated') {
@@ -61,7 +54,6 @@ const Playground: NextPage = () => {
   }, [])
 
   useEffect(() => {
-    console.log(players);
     if (document.activeElement === main.current) {
       controller.mutate(moveMatrix);
     }
@@ -121,13 +113,25 @@ const Playground: NextPage = () => {
     handleKey(e, false);
   };
 
-  const exitBattle = (hero: Characters, npc: NPC) => {
-    // here we have to call backend procedure to update character in db and instance as well
-    console.error('****', hero, npc);
+  const exitBattleHeroWin = (hero: Characters, npc: NPC) => {
+    console.error('**** hero wins', hero, npc);
     setInCombat(false);
-    
     deadNPC.mutate({npcId:npc.id})
-    
+  };
+
+  const exitBattleNpcWin = (hero: Characters, npc: NPC) => {
+    console.error('**** hero looses', hero, npc);
+    setInCombat(false);
+    deadPlayer.mutate()
+    alert('You died! Now you are spectating other heroes!');
+  };
+
+  const runFromBattle = (hero: Characters, npc: NPC) => {
+    console.error('**** runnnig away', hero, npc);
+    setInCombat(false);
+    // both are alive
+    // player looses some hp
+    retreat.mutate({hero: hero})
   };
 
   const setLocationName = (name:string)=>{
@@ -183,12 +187,14 @@ const Playground: NextPage = () => {
             <LocationButtons locationName={location} setVisible={setVisibility} />
           {inCombat && enemy && heroInfo && (
             <Battle
-            exitBattle={exitBattle}
-            enemyInput={enemy}
-            heroInput={heroInfo}
-            skillOne={spellOne}
-            skillTwo={spellTwo}
-            skillthree={spellthree}
+              exitBattleHeroWin={exitBattleHeroWin}
+              exitBattleNpcWin={exitBattleNpcWin}
+              runFromBattle={runFromBattle}
+              enemyInput={enemy}
+              heroInput={heroInfo}
+              skillOne={spellOne}
+              skillTwo={spellTwo}
+              skillthree={spellthree}
             />
             )}
             {heroInfo && (<Locations setVisible={setVisibility} setInCombat={setInCombat} setEnemy={setEnemy} visible={locationVisibility} hero={heroInfo} setHero={setHero}/>)}

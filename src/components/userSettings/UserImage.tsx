@@ -21,14 +21,16 @@ const UserImage: NextPage = () => {
     }
 
     useEffect(() => {
-        (userImage.mutate({userId: session.data?.user?.id as string}))
+        if(session.data?.user?.id){
+            (userImage.mutate({userId: session.data?.user?.id as string}))
+        }
         console.log(userImage.data, 'trpc return');       
     },[session.data?.user?.id])
     return (
         <>  
             <h3>{session.data?.user?.name}</h3>
             
-            <Image src={userImage.data as string} 
+            <Image src={userImage.data as string || "/defaultUserImages/default.png"} 
                  width='100' 
                  height='100' 
                  alt="/defaultUserImages/first.jpg" 

@@ -22,8 +22,7 @@ const Entities = ({
   const [name,setName]=useState<string>('')
 
   // STATES
-
-  const [s, setS] = useState<{
+  const [players, setPlayers] = useState<{
     [k: string]: {
       x: number;
       y: number;
@@ -37,7 +36,7 @@ const Entities = ({
   const enemies = trpc.playground.loadEnemies.useMutation();
   trpc.playground.sub.useSubscription(undefined, {
     onData(data) {
-      setS(data);
+      setPlayers(data);
     },
   });
   trpc.playground.killNpc.useSubscription(undefined, {
@@ -52,12 +51,13 @@ const Entities = ({
     setBp()
   }, []);
 
+
   useEffect(() => {
-      if (s && name && s[name] && s[name].x && s[name].y) {
-      const response = checkPosition(s[name].x,s[name].y)
+      if (players && name && players[name] &&players[name].x && players[name].y) {
+      const response = checkPosition(players[name].x,players[name].y)
       setLocation(response)
     }
-  }, [s]);
+  }, [players]);
 
   const startBattle = async () => {
     setInCombat(true);
@@ -70,6 +70,7 @@ const Entities = ({
         setEnemy(res.npc as NPC)
         setName(res.player.name as string)
       });
+
   };
   
 
@@ -86,8 +87,8 @@ const Entities = ({
       }}
     >
       {/* Renders Players */}
-      {s &&
-        Object.entries(s).map(
+      {players &&
+        Object.entries(players).map(
           (
             [
               k,
