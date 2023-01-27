@@ -26,6 +26,7 @@ const Entities = ({
     [k: string]: {
       x: number;
       y: number;
+      ownerId: string;
       orientation: boolean;
       status: { battle: boolean; alive: boolean };
     };
@@ -60,8 +61,8 @@ const Entities = ({
   }, [players]);
 
   const startBattle = async () => {
+    await setBp()
     setInCombat(true);
-    setBp()
   };
 
   const setBp = async() => {
@@ -96,6 +97,7 @@ const Entities = ({
                 x,
                 y,
                 orientation,
+                ownerId,
                 status: { battle, alive },
               },
             ],
@@ -111,6 +113,7 @@ const Entities = ({
                   x,
                   y,
                   orientation,
+                  ownerId,
                   status: { battle, alive },
                 }}
               />

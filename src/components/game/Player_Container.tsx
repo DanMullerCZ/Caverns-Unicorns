@@ -1,9 +1,12 @@
+import { useSession } from "next-auth/react";
+
 const Player_Container = (
     props: {
         hero_name: string
         another_props: {
             x: number;
             y: number;
+            ownerId: string;
             orientation: boolean;
             status: {
                 battle: boolean;
@@ -14,6 +17,7 @@ const Player_Container = (
         startBattle: () => Promise<void>,
     }
 ) => {
+    const session = useSession()
     return (
         <div
                 id='player-container'
@@ -45,7 +49,7 @@ const Player_Container = (
                 <div>PosX: {props.another_props.x.toFixed(1)}</div>
                 <div>PosY: {props.another_props.y.toFixed(1)}</div>
                 <div>{props.another_props.status.battle ? 'true' : 'false'}</div>
-                {props.another_props.status.battle && 
+                {(session.data?.user?.id === props.another_props.ownerId && props.another_props.status.battle) && 
                   <button
                     disabled={false}
                     onClick={props.startBattle}
