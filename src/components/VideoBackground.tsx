@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 
 const VideoBackground: NextPage = () => {
+
   const randomVideo: number = Math.floor(Math.random() * 2);
   const videosSrc: string[] = [
     '/wallpers/tree02.mov',
@@ -33,5 +34,6 @@ const VideoBackground: NextPage = () => {
     </div>
   );
 };
+
 
 export default VideoBackground;
