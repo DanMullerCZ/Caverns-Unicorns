@@ -11,9 +11,10 @@ export class Playground {
   private _width = 1570;
   private _height = 860;
 
-  constructor() {
+
+  constructor(private NPCs:number[]=[5,2,1,2]) {
     this.createNPCs(
-      [1, 1, 3, 5],
+      NPCs,
       [listNPC.demon, listNPC.bandit, listNPC.zombie, listNPC.sheep],
     );
   }
