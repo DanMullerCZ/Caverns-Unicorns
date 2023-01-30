@@ -71,7 +71,7 @@ model Race {
 model Spell {
   name        String             @unique
   id          Int                @id @default(autoincrement())
-  description String            @db.VarChar(500)
+  description String             @db.VarChar(500)
   damage      Int
   cooldown    Int
   classes     SpellsForClasses[]
@@ -129,4 +129,10 @@ model NPC {
   cur_hp Int
   exp    Int
   hp     Int
+}
+
+model ForgotenPassword {
+  id         String   @id
+  token      String
+  expiration DateTime
 }
