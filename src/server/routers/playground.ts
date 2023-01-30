@@ -4,7 +4,7 @@ import { protectedProcedure, publicProcedure, router } from '../trpc';
 import { Playground } from '../playground/playground';
 import { Subject } from 'rxjs';
 
-export const pg = new Playground();
+export let pg:Playground = new Playground();
 const killedNpc = new Subject();
 
 export const playground = router({
@@ -117,4 +117,12 @@ export const playground = router({
       pg.retreat(input.hero);
       return 'you retreated';
     }),
+    newGame: protectedProcedure
+    .input(z.array(z.number()))
+    .mutation(({ input }) => {
+      pg = new Playground(input)
+      return 'you retreated';
+    }),
+
+  
 });
