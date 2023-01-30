@@ -30,12 +30,16 @@ export default function Checkout() {
       body: JSON.stringify({ quantity: 1 }),
     }).then((res) => res.json());
 
+    alert(sessionId);
+    
     const stripe = await stripePromise;
     const { error } = (await stripe?.redirectToCheckout({
       sessionId,
     })) as { error: StripeError };
 
     if (error) {
+      alert(error.message);
+
       router.reload();
     }
   };
@@ -56,7 +60,7 @@ export default function Checkout() {
             List of benefits for premium members:
           </h2>
           <p className="text-center font-LOTR">*work in progress*</p>
-          <button role="link" onClick={handleClick}>
+          <button onClick={handleClick}>
             Click HERE to buy your PREMIUM MEMBERSHIP
           </button>
         </div>
