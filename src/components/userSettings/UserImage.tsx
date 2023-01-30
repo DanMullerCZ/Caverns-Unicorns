@@ -35,7 +35,7 @@ const UserImage = () => {
                  alt={ userImage.data as string || '/defaultUserImages/default.png' } 
                  onClick={handleClick}
                  />
-                }
+                
       
             {/* 1.2 { showPics ? defaultImages.map((image, index) => <Image src={image} width='100' height='100' alt={image} key={index} onClick={handleClick}/>) : null} */}
         </>
