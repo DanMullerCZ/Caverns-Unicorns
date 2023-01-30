@@ -43,12 +43,12 @@ const Battle = ({
     cooldown: number;
     remainingCD: number;
   }>({
-    name: skillOne.name || ('' as string),
-    id: skillOne.id || (0 as number),
-    description: skillOne.description || ('' as string),
-    damage: skillOne.damage || (0 as number),
-    cooldown: skillOne.cooldown || (0 as number),
-    remainingCD: skillOne.cooldown || (0 as number),
+    name: skillOne.name || '',
+    id: skillOne.id || 0 ,
+    description: skillOne.description || '',
+    damage: skillOne.damage || 0,
+    cooldown: skillOne.cooldown || 0,
+    remainingCD: skillOne.cooldown || 0,
   });
   const [spellTwo, setSpellTwo] = useState<{
     name: string;
@@ -73,12 +73,12 @@ const Battle = ({
     cooldown: number;
     remainingCD: number;
   }>({
-    name: skillthree.name || ('' as string),
-    id: skillthree.id || (0 as number),
-    description: skillthree.description || ('' as string),
-    damage: skillthree.damage || (0 as number),
-    cooldown: skillthree.cooldown || (0 as number),
-    remainingCD: skillthree.cooldown || (0 as number),
+    name: skillthree.name || '',
+    id: skillthree.id || 0,
+    description: skillthree.description || '',
+    damage: skillthree.damage || 0,
+    cooldown: skillthree.cooldown || 0,
+    remainingCD: skillthree.cooldown || 0 ,
   });
   const skillArray = trpc.dbRouter.getSkills.useMutation();
 
