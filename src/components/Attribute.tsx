@@ -1,3 +1,4 @@
+import { CharacterProperties } from 'pages/character-creation';
 import React, { useState, useRef } from 'react';
 
 const Attribute = ({
@@ -9,8 +10,8 @@ const Attribute = ({
 }: {
   setPoints: (x: number) => void;
   remaining: number;
-  name: string;
-  change: any;
+  name: CharacterProperties;
+  change: (atrValue: number, atrName: CharacterProperties) => void;
   defaultAtr: number;
 }) => {
   const [atr, setAtr] = useState(defaultAtr);

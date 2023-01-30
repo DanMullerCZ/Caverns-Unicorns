@@ -59,6 +59,7 @@ const CharacterList = () => {
     if (sessionData.data?.user?.id) {
       res.mutate(sessionData.data.user.id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionData]);
 
   useEffect(() => {

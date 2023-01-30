@@ -1,6 +1,4 @@
-import { Characters, NPC } from '@prisma/client';
-import { useEffect, useState } from 'react';
-import { trpc } from 'utils/trpc';
+import { NPC } from '@prisma/client';
 import styles from '../styles/Necropolis.module.css';
 
 const Necropolis = ({

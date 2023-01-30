@@ -57,25 +57,12 @@ export default function GetRace(
   const { race } = props;
   const data = trpc.dbRouter.getRace.useQuery(race);
 
-  console.log(race);
-  console.log(data.data);
-
   return (
     <>
       <Header title={data?.data?.name as string} />
       <NavigationBar />
       <VideoBackground />
       <div className="gold flex h-screen w-screen items-center justify-around pl-40 pr-20 font-LOTR">
-        {/* <h1>{data.name}</h1>
-      <p>Here is your race:::</p>
-      <ul>
-      <li>Charisma: {data?.char}</li>
-      <li>Strength: {data?.str}</li>
-      <li>Wisdom: {data?.wis}</li>
-      <li>Constitution: {data?.con}</li>
-      <li>Dexterity: {data?.dex}</li>
-      <li>Intelligence: {data?.int}</li>
-    </ul> */}
         {data.data ? (
           <>
             <div className="flex flex-col items-center gap-10">

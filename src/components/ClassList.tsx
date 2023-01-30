@@ -16,11 +16,9 @@ const ClassList = ({
   classes,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setClass = () => {},
-  creation = false,
 }: {
   classes: Class[];
   setClass: (arg:string)=>void;
-  creation: boolean;
 }) => {
   const classesWithBoolean:ClassList[]=classes.map((e:Class)=>{return {...e,on:false}})
   const [selectedClass, setSelectedClass] = useState(classesWithBoolean);
@@ -40,9 +38,8 @@ const ClassList = ({
   const allClasses = selectedClass.map((oneClass: ClassList) => ( 
     <ClassDetail
       key={oneClass.id}
-      creation={creation}
       click={handleClick}
-      desc={oneClass.description!}
+      desc={oneClass.description}
       name={oneClass.name}
       on={oneClass.on}
     ></ClassDetail>

@@ -4,8 +4,7 @@ import Link from 'next/link';
 import React, { useState, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { trpc } from 'utils/trpc';
-import session from 'pages/api/stripe/checkout/session';
-import { getSession, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 export function NavigationBar() {
   return (
@@ -26,7 +25,6 @@ function Navbar(props: any) {
 }
 
 function NavItem(props: any) {
-  //   const [open, setOpen] = useState(false);
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
@@ -50,7 +48,6 @@ function DropdownMenu() {
   const [activeMenu, setActiveMenu] = useState('main');
   const [menuHeight, setMenuHeight] = useState<any>(null);
   const dropdownRef = useRef<any>(null);
-  //   const { ref, isComponentVisible } = useComponentVisible(true);
 
   const dataRaces = trpc.dbRouter.getAllRaces.useQuery();
   const races = dataRaces.data;
@@ -73,7 +70,6 @@ function DropdownMenu() {
         className="menu-item"
         onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}
       >
-        {/* <span className="icon-button">{props.leftIcon}</span> */}
         {props.children}
         <span className="icon-right">{props.rightIcon}</span>
       </a>
@@ -82,8 +78,6 @@ function DropdownMenu() {
 
   const sessionData = useSession();
   return (
-    // <div ref={ref}>
-    //   {isComponentVisible && (
     <div className="dropdown" style={{ height: menuHeight }} ref={dropdownRef}>
       <CSSTransition
         in={activeMenu === 'main'}
@@ -100,14 +94,14 @@ function DropdownMenu() {
           <DropdownItem goToMenu="races">Races</DropdownItem>
           <DropdownItem goToMenu="classes">Classes</DropdownItem>
           
-          {/* <DropdownItem goToMenu="quests">Quests</DropdownItem>
-          <DropdownItem goToMenu="races">Spells</DropdownItem> */}
           <Link href="/shop">
             <DropdownItem>Shop</DropdownItem>
           </Link>
+
           {sessionData.data?.user?.id &&(<Link href="/character-list">
             <DropdownItem>Character List</DropdownItem>
           </Link>)}
+
           {sessionData.data?.user?.id &&(<Link href={`/user/${sessionData.data.user.id}`}>
             <DropdownItem>User Settings</DropdownItem>
           </Link>)}
@@ -158,8 +152,6 @@ function DropdownMenu() {
         </div>
       </CSSTransition>
     </div>
-    //   )}
-    // </div>
   );
 }
 

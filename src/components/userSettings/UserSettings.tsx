@@ -9,7 +9,6 @@ const UserSettings: NextPage = () => {
     const [changePasswordMessage , setChangePasswordMessage ] = useState<string>()
     const resultOf = (message: string) => {
         setChangePasswordMessage (message)
-        // console.log(message)
     }
     const onClose = () => {
         setChangePasswordForm(false)

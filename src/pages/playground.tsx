@@ -57,6 +57,7 @@ const Playground: NextPage = () => {
     if (document.activeElement === main.current) {
       controller.mutate(moveMatrix);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moveMatrix]);
 
   const setHero = (x: Characters) => {
@@ -103,7 +104,6 @@ const Playground: NextPage = () => {
           break;
       }
     }
-    console.log(moveMatrix);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
@@ -114,23 +114,18 @@ const Playground: NextPage = () => {
   };
 
   const exitBattleHeroWin = (hero: Characters, npc: NPC) => {
-    console.error('**** hero wins', hero, npc);
     setInCombat(false);
     deadNPC.mutate({npcId:npc.id})
   };
 
   const exitBattleNpcWin = (hero: Characters, npc: NPC) => {
-    console.error('**** hero looses', hero, npc);
     setInCombat(false);
     deadPlayer.mutate()
     alert('You died! Now you are spectating other heroes!');
   };
 
   const runFromBattle = (hero: Characters, npc: NPC) => {
-    console.error('**** runnnig away', hero, npc);
     setInCombat(false);
-    // both are alive
-    // player looses some hp
     retreat.mutate({hero: hero})
   };
 

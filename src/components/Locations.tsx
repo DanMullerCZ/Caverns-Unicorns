@@ -25,7 +25,6 @@ const Locations = ({
       {visible == 'elven' && (
         <ElvenTown setVisible={setVisible} hero={hero} setHero={setHero} />
       )}
-      {/* {visible=='dungeon' && ()} */}
       {visible == 'necropolis' && (
         <Necropolis setVisible={setVisible}   setInCombat={setInCombat} setEnemy={setEnemy} />
       )}

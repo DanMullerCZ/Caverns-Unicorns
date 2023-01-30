@@ -1,8 +1,6 @@
 import { router, publicProcedure } from '../trpc';
 import { prisma } from '../db/client'
-import { boolean, string, z } from 'zod';
-
-import { hashToken } from '../../pages/api/auth/jwt';
+import { z } from 'zod';
 import { User } from 'next-auth';
 
 
@@ -20,7 +18,6 @@ export const userSettRouter = router({
                     select: { password: true }
                 }) as UserPassword    
                     return userPass.password
-            //     }
             } catch (e) {
                 return `Cannot acces data from database, error:${e}`
             }
@@ -53,7 +50,7 @@ export const userSettRouter = router({
         }))    
         .mutation(async({input}) => {
             try {
-                const changeUserImage = await prisma.user.update({
+                await prisma.user.update({
                     where: {
                         id: input.userId
                     },
@@ -73,7 +70,7 @@ export const userSettRouter = router({
         }))
         .mutation(async({ input }) => {      
             try {          
-                    const newPassword = await prisma.user.update({
+                    await prisma.user.update({
                         where: { 
                             id: input.userId
                         },

@@ -3,7 +3,6 @@ import { prisma } from '../db/client';
 import { z } from 'zod';
 import { protectedProcedure, router } from '../trpc';
 import { Subject } from 'rxjs';
-import { fork } from 'node:child_process';
 import { Characters } from '@prisma/client';
 import { pg } from './playground';
 
@@ -27,8 +26,6 @@ export const wsRouter = router({
   input: protectedProcedure
     .input(z.object({ typing: z.string() }))
     .mutation(async ({ input }) => {
-      //console.log('ctx:', ctx);
-      console.log(input.typing);
       subject.next(input.typing);
     }),
 
@@ -95,7 +92,7 @@ export const wsRouter = router({
 
   removePlayer: protectedProcedure
     .input(z.object({ name: z.string() }))
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       playerToRemove.next(input.name);
     }),
 
@@ -107,21 +104,19 @@ export const wsRouter = router({
     });
   }),
 
-  sendStart: protectedProcedure.input(
-   z.any()
-).mutation(async ({input}) => {
-    console.log(input);
-    const chars: Characters[] = []
+  sendStart: protectedProcedure.input(z.any()).mutation(async ({ input }) => {
+    const chars: Characters[] = [];
     for (const player in input) {
-      input[player].char_id
-      const playableChar = await prisma.characters.findUniqueOrThrow({ where: { id: input[player].char_id } })
-      chars.push(playableChar)
+      input[player].char_id;
+      const playableChar = await prisma.characters.findUniqueOrThrow({
+        where: { id: input[player].char_id },
+      });
+      chars.push(playableChar);
     }
-    
-    pg.setPlayers(chars)
+
+    pg.setPlayers(chars);
 
     startGame.next(true);
-
   }),
   startGame: protectedProcedure.subscription(() => {
     return observable<boolean>((emit) => {

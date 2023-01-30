@@ -5,8 +5,7 @@ const Dice = ({setLuck, rolled, setRolled}: {setLuck: (n: number) => void, rolle
     const die = useRef<HTMLDivElement>(null)
 
     let lastFace:number
-    let timeoutId:any
-   //let transitionDuration:number = 500
+    let timeoutId:NodeJS.Timeout
     const animationDuration  = 300
     const handleClick = () => {
         setRolled()
