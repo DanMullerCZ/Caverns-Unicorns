@@ -21,7 +21,9 @@ const ChangeUserPicture: NextPage = () => {
       userId: session.data?.user?.id as string,
       newImage: img.alt as string,
     });
-    router.push('/user/');
+    if(session.data?.user?.id){ 
+      router.push(`/user/${session.data.user.id}`);
+    }
   };
 
   return (

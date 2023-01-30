@@ -56,7 +56,7 @@ export default function Checkout() {
             List of benefits for premium members:
           </h2>
           <p className="text-center font-LOTR">*work in progress*</p>
-          <button role="link" onClick={handleClick}>
+          <button onClick={handleClick}>
             Click HERE to buy your PREMIUM MEMBERSHIP
           </button>
         </div>
