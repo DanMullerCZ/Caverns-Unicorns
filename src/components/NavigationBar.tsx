@@ -93,6 +93,10 @@ function DropdownMenu() {
         onEnter={calcHeight}
       >
         <div className="menu">
+          <Link href="/">
+            <DropdownItem>Home Page</DropdownItem>
+          </Link>
+
           <DropdownItem goToMenu="races">Races</DropdownItem>
           <DropdownItem goToMenu="classes">Classes</DropdownItem>
           
