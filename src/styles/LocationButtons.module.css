@@ -1,7 +1,4 @@
 .elven{
-    position: absolute;
-    top: 100%;
-    left: 24%;
     width: fit-content;
     height: fit-content;
     background-color: darkgoldenrod;
@@ -16,9 +13,6 @@
     background-color: gray;
 }
 .human{
-    position: absolute;
-    top: 47%;
-    left: 38%;
     width: fit-content;
     height: fit-content;
     background-color: darkgoldenrod;
@@ -33,9 +27,6 @@
     background-color: gray;
 }
 .necro{
-    position: absolute;
-    top: 47%;
-    left: 0%;
     width: fit-content;
     height: fit-content;
     background-color: darkgoldenrod;
@@ -50,9 +41,6 @@
     background-color: gray;
 }
 .dung{
-    position: absolute;
-    left: 7%;
-    top: 4%;
     width: fit-content;
     height: fit-content;
     background-color: darkgoldenrod;
@@ -67,9 +55,6 @@
     background-color: gray;
 }
 .dragon{
-    position: absolute;
-    top: 60%;
-    right: 6%;
     width: fit-content;
     height: fit-content;
     background-color: darkgoldenrod;
@@ -84,9 +69,6 @@
     background-color: gray;
 }
 .ironforge{
-    position: absolute;
-    top: 7%;
-    right: 50%;
     width: fit-content;
     height: fit-content;
     background-color: darkgoldenrod;

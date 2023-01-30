@@ -178,8 +178,8 @@ const Playground: NextPage = () => {
               )),
             )}
           </div>
-          <Entities setHero={setHero} setEnemy={setNpc} setInCombat={setInCombat} setLocation={setLocationName} />
-            <LocationButtons locationName={location} setVisible={setVisibility} />
+          <Entities setHero={setHero} setEnemy={setNpc} setInCombat={setInCombat} setLocation={setLocationName} locationName={location} setVisible={setVisibility} />
+
           {inCombat && enemy && heroInfo && (
             <Battle
               exitBattleHeroWin={exitBattleHeroWin}
