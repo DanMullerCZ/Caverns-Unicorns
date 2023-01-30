@@ -39,8 +39,13 @@ const Register: NextPage = () => {
       } else {
         alert('All inputs are required and must have between 4-30 characters and email must be valid')
       }
-
   }};
+
+  const handleEnter = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if(e.key === 'Enter') {
+      submitForm();
+    }
+  }
 
   useEffect(() => {
     if(creation.data === 'Successfully registered'){
@@ -59,7 +64,8 @@ const Register: NextPage = () => {
       <div className=" flex h-screen w-screen items-center justify-center z-30 absolute">
         <form
           ref={regForm}
-          className=" gold goldnohover space-y-5 rounded-xl bg-transparent bg-white p-10 font-LOTR text-xl drop-shadow-lg "
+          className=" gold goldnohover space-y-5 rounded-xl bg-transparent bg-white p-10 font-LOTR text-xl drop-shadow-lg"
+          onKeyDown={(e) => handleEnter(e)}
         >
           <h1 className="text-center text-3xl">Registration</h1>
           <div className="flex flex-col space-y-2">
@@ -74,6 +80,7 @@ const Register: NextPage = () => {
               type="email"
               name="email"
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              autoComplete='email'
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -87,6 +94,7 @@ const Register: NextPage = () => {
               className="w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="text"
               name="name"
+              autoComplete='username'
               minLength={4}
               maxLength={30}
             />
@@ -102,6 +110,7 @@ const Register: NextPage = () => {
               className=" w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="password"
               name="password1"
+              autoComplete='new-password'
               minLength={4}
               maxLength={30}
             />

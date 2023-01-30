@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { KeyboardEvent, useRef } from 'react';
 import DontHaveAccount from './DontHaveAccount';
 import ExternalLogin from './ExternalLogin';
 import ForgotPassword from './ForgotPassword';
@@ -28,6 +28,12 @@ export default function LoginForm(props: { message: string }) {
     }
   };
 
+  const handleEnter = (e: KeyboardEvent<HTMLFormElement>) => {
+    if(e.key === 'Enter') {
+      submitForm();
+    }
+  }
+
   return (
     <>
       <div className=" flex flex-col items-center justify-center  font-LOTR md:h-screen ">
@@ -42,7 +48,7 @@ export default function LoginForm(props: { message: string }) {
           >
             {props.message && props.message}
           </div>
-          <form ref={input} className="flex flex-col space-y-2">
+          <form ref={input} className="flex flex-col space-y-2" onKeyDown={(e) => {handleEnter(e)}}>
             <label className="text-sm" htmlFor="email">
               Email
             </label>
@@ -50,6 +56,7 @@ export default function LoginForm(props: { message: string }) {
               className="w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="email"
               name="email"
+              autoComplete='email'
               id="email"
             />
             <label className="text-sm" htmlFor="password">
@@ -59,6 +66,7 @@ export default function LoginForm(props: { message: string }) {
               className="w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="password"
               name="password"
+              autoComplete='current-password'
               id="password"
             />
           </form>
