@@ -1,4 +1,4 @@
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { KeyboardEvent, useRef } from 'react';
 import DontHaveAccount from './DontHaveAccount';
@@ -7,6 +7,7 @@ import ForgotPassword from './ForgotPassword';
 
 export default function LoginForm(props: { message: string }) {
   const router = useRouter();
+  const sessionData = useSession();
   const input = useRef<HTMLFormElement>(null);
 
   const submitForm = () => {
@@ -21,7 +22,12 @@ export default function LoginForm(props: { message: string }) {
         if (response?.error === 'CredentialsSignin' || response?.error === "Cannot read properties of null (reading 'password')" || response?.error === "Cannot read properties of null (reading 'email')") {
           router.push('/login', { query: { error: 'true' } }); //
         } else {
-          router.push(process.env.HOST || '/user');
+          if(sessionData.data?.user?.id){
+            router.push(`/user/${sessionData.data.user.id}`);
+          } else {
+            router.push('/user');
+
+          }
         }
       });
     }

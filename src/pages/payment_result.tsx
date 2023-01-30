@@ -32,7 +32,7 @@ export default function Result() {
         <Header title="Payment Result" />
         <h1>Payment Result</h1>
         <pre>{data ? data.session.status : 'Loading...'}</pre>
-        <Link href='/user'>
+        <Link href={`/user/${session.data?.user?.id}`}>
             Go to your user page
         </Link>
     </>)
