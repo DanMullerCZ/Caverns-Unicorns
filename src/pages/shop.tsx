@@ -52,7 +52,9 @@ export default function Checkout() {
         </div>
         <div className="rounded-x gold goldnohover z-30 space-y-5  p-10 drop-shadow-lg">
           <h1 className="text-center font-LOTR text-3xl">Checkout</h1>
-          <h2 className="text-center font-LOTR text-xl">List of benefits for premium members:</h2>
+          <h2 className="text-center font-LOTR text-xl">
+            List of benefits for premium members:
+          </h2>
           <p className="text-center font-LOTR">*work in progress*</p>
           <button role="link" onClick={handleClick}>
             Click HERE to buy your PREMIUM MEMBERSHIP

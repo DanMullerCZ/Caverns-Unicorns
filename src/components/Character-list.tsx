@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styles from '../styles/Character-list.module.css';
 import NavigationBar from './NavigationBar';
 import VideoBackground from './VideoBackground';
+import { Characters } from '@prisma/client';
 
 type HeroList = {
   name: string;
@@ -17,7 +18,7 @@ const CharactersDetail = ({
   hero,
   handleClick,
 }: {
-  characters: any;
+  characters: Characters[];
   handleDeletion: (id: number, index: number) => void;
   hero: HeroList;
   handleClick: (
@@ -27,7 +28,6 @@ const CharactersDetail = ({
     id: number,
   ) => void;
 }) => {
-  console.log(characters);
 
   return (
     <>
@@ -60,7 +60,7 @@ const CharactersDetail = ({
             <button className="gold">Start the Game</button>
           </Link>
           {characters &&
-            characters.map((e: any, index: number) => (
+            characters.map((e: Characters, index: number) => (
               <div
                 onClick={() => handleClick(e.name, e.race, e.class, e.id)}
                 className="gold oneHero col-start-4 col-end-5 row-span-1 flex cursor-pointer items-center justify-between rounded-xl bg-white p-4 pl-10 pr-10 drop-shadow"

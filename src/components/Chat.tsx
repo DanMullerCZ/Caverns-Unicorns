@@ -44,8 +44,6 @@ export const Chat: NextPage = () => {
    
 
     const usersCheck = setInterval(() => {
-      console.log(players);
-
       setPlayers((prev) => {
         for (const p in prev) {
           if (prev[p] > 1.5) {

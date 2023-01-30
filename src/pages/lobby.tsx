@@ -1,7 +1,6 @@
 import { Chat } from 'components/Chat';
 import NavigationBar from 'components/NavigationBar';
 import VideoBackground from 'components/VideoBackground';
-import { Session } from 'inspector';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,15 +10,14 @@ import styles from '../styles/lobby.module.css';
 
 const Lobby = () => {
   const session = useSession();
-  const router = useRouter()
-  
-  const [players, setPlayers] = useState<{ [k: string]: { [k: string]: any } }>(
+  const router = useRouter();
+
+  const [players, setPlayers] = useState<{ [k: string]: { [k: string]: string | number | boolean } }>(
     {},
   );
   const [prepared, setPrepared] = useState(false);
-  const t = trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
+  trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
     onData(data) {
-     
       setPlayers((prev) => {
         return { ...prev, [data.name]: data };
       });
@@ -35,12 +33,14 @@ const Lobby = () => {
   });
   useEffect(() => {
     setPrepared(checkReadyForEveryone());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [players]);
   useEffect(() => {
     localStorage.setItem('ready', 'false');
   }, []);
 
   const checkReadyForEveryone = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [key, value] of Object.entries(players)) {
       if (value.ready === false) {
         return false;
@@ -50,33 +50,30 @@ const Lobby = () => {
   };
 
   const setReady = () => {
-        localStorage.getItem('ready') === 'false'
+    localStorage.getItem('ready') === 'false'
       ? localStorage.setItem('ready', 'true')
       : localStorage.setItem('ready', 'false');
   };
-  const sendStart = trpc.wsRouter.sendStart.useMutation()
+  const sendStart = trpc.wsRouter.sendStart.useMutation();
   const handleStart = () => {
-    console.log(players);
-    console.log(checkReadyForEveryone());
-    sendStart.mutate(players)
-
+    sendStart.mutate(players);
   };
 
   trpc.wsRouter.startGame.useSubscription(undefined, {
     onData(data) {
-     if(data){
-      router.push("/playground")
-     }
+      if (data) {
+        router.push('/playground');
+      }
     },
-  })
-  
+  });
+
   return (
     <div>
       <VideoBackground />
       <NavigationBar />
       <Chat />
       <div className={styles.container}>
-        {Object.keys(players).map((e: any, index: number) => {
+        {Object.keys(players).map((e: string, index: number) => {
           return (
             <div
               key={index}
@@ -101,8 +98,6 @@ const Lobby = () => {
             </div>
           );
         })}
-
-        {/*      { <Link className={styles.startLink} href="/playground"> */}
         <button
           disabled={!prepared}
           className={styles.startButton}
@@ -110,8 +105,7 @@ const Lobby = () => {
         >
           Start
         </button>
-        {/*   </Link> } */}
-<Link className={styles.backLink} href="/character-list">
+        <Link className={styles.backLink} href="/character-list">
           <button className={styles.backButton}>{'<-'}</button>
         </Link>
       </div>

@@ -13,6 +13,7 @@ export default function Result() {
     const premium = trpc.dbRouter.createPremium.useMutation()
 
     // using swr because I cannot have default function asynchronous
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, error } = useSWR(
         router.query.session_id
             ? `api/stripe/checkout/${router.query.session_id}`

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import RaceDetail from './RaceDetail';
 import styles from '../styles/Races.module.css';
-import { race } from 'rxjs';
 import PropTypes from  'prop-types';
 import { Race } from '@prisma/client';
 
@@ -22,11 +21,9 @@ const RaceList = ({
   races,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setRace = () => {},
-  creation = false,
 }: {
   races: Race[];
   setRace: (arg: string, id: number) => void;
-  creation: boolean;
 }) => {
   const racesWithBoolean:RaceDetail[]=races.map((e:Race)=>{return {...e,on:false}})
   const [selectedRace, setSelectedRace] = useState(racesWithBoolean);
@@ -46,9 +43,8 @@ const RaceList = ({
     <RaceDetail
       key={raceBoolean.id}
       id={raceBoolean.id}
-      creation={creation}
       click={handleClick}
-      desc={raceBoolean.description!}
+      desc={raceBoolean.description}
       name={raceBoolean.name}
       on={raceBoolean.on}
     ></RaceDetail>

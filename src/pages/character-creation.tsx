@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ClassList from 'components/ClassList';
 import RaceList from 'components/RaceList';
-import styles from '../styles/character-creation.module.css';
 import { trpc } from 'utils/trpc';
 import { useSession } from 'next-auth/react';
 import { appRouter } from 'server/routers/_app';
@@ -9,23 +8,20 @@ import superjson from 'superjson';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Head from 'next/head';
 
-import { prisma } from 'server/db/client';
 import NavigationBar from 'components/NavigationBar';
 import Attribute from 'components/Attribute';
 import VideoBackground from 'components/VideoBackground';
-import Header from 'components/general/Header';
 
-const createNewChar = () => {
+export type CharacterProperties = 'str' | 'con' | 'dex' | 'int' | 'wis' | 'char';
+
+const CreateNewChar = () => {
   const dataRaces = trpc.dbRouter.getAllRaces.useQuery();
   const races = dataRaces.data;
   const dataClasses = trpc.dbRouter.getAllClasses.useQuery();
   const classes = dataClasses.data;
   const sessionData = useSession();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [confirmAtr, setConfirmAtr] = useState(false);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const nameOfChar = useRef<HTMLInputElement>(null);
-  type CharacterProperties = 'str' | 'con' | 'dex' | 'int' | 'wis' | 'char';
   const arr: CharacterProperties[] = [
     'str',
     'dex',
@@ -34,9 +30,7 @@ const createNewChar = () => {
     'char',
     'int',
   ];
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [selectedRace, setSelectedRace] = useState(1);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [character, setCharacter] = useState({
     race: '',
     class: '',
@@ -47,7 +41,7 @@ const createNewChar = () => {
     wis: 10,
     char: 10,
   });
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+
   const [atrPoints, setAtrPoints] = useState(5);
 
   const setRace = (x: string, i: number) => {
@@ -81,7 +75,7 @@ const createNewChar = () => {
       ...updatedClass,
     }));
   };
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+
   useEffect(() => {
     if (races) {
       arr.forEach((e) => {
@@ -91,6 +85,7 @@ const createNewChar = () => {
         }));
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [character.race]);
 
   const addChar = trpc.backend.addChar.useMutation();
@@ -140,7 +135,6 @@ const createNewChar = () => {
           )}
           {!character.class && character.race && classes && (
             <div test-id="class-selection">
-              {/* <h1>SELECT CLASS</h1> */}
               <ClassList
                 creation={true}
                 setClass={setClass}
@@ -229,15 +223,15 @@ const createNewChar = () => {
                 />
               </label>
             </div>
-            <div className="flex mt-2">
+            <div className="mt-2 flex">
               <button
                 onClick={resetChar}
-                className="gold w-full font-black rounded-md border border-yellow-400 px-10 py-2"
+                className="gold w-full rounded-md border border-yellow-400 px-10 py-2 font-black"
               >
                 Reset
               </button>
               <button
-                className="gold w-full font-black rounded-md border border-yellow-400 px-10 py-2"
+                className="gold w-full rounded-md border border-yellow-400 px-10 py-2 font-black"
                 onClick={createChar}
               >
                 Create
@@ -268,4 +262,4 @@ export const getStaticProps = async () => {
   };
 };
 
-export default createNewChar;
+export default CreateNewChar;

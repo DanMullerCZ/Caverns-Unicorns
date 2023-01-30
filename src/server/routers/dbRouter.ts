@@ -1,7 +1,6 @@
 import { router, publicProcedure } from '../trpc';
 import { prisma } from '../db/client';
 import { z } from 'zod';
-import { inputAdornmentClasses } from '@mui/material';
 
 export const dbRouter = router({
   getCharacters: publicProcedure
@@ -149,22 +148,6 @@ export const dbRouter = router({
         }
         
     });
-
-
-
-
-    const response = await prisma.class.findMany({
-        where: {
-          name:input.input,
-        }   ,
-        select: {
-          spells: {
-            select:{
-                spell:true
-            }
-          },
-        },
-      })
     return respo;
   }),
 });

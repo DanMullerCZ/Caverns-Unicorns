@@ -64,7 +64,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token }) {
       if (session.user) {
-        console.log(token);
         const st = (): string => {
           return randomUUID?.() ?? randomBytes(32).toString('hex');
         };
