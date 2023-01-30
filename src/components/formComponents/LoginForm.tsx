@@ -18,7 +18,6 @@ export default function LoginForm(props: { message: string }) {
         password: password.value,
         redirect: false,
       }).then((response) => {
-        console.log(response);
         if (response?.error === 'CredentialsSignin' || response?.error === "Cannot read properties of null (reading 'password')" || response?.error === "Cannot read properties of null (reading 'email')") {
           router.push('/login', { query: { error: 'true' } }); //
         } else {

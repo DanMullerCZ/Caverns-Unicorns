@@ -1,17 +1,12 @@
-import NavigationBar from 'components/NavigationBar';
-import VideoBackground from 'components/VideoBackground';
-import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
-import { type } from 'os';
-import { useEffect, useRef, useState } from 'react';
-import { hashToken } from 'pages/api/auth/jwt';
+import { useRef, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import * as crypto from 'crypto';
 
 
 
 
-const ChangePasswordOption = (props: any):JSX.Element => {
+const ChangePasswordOption = (props: {setChangePasswordMessage: (message: string) => void}):JSX.Element => {
 
   const passwordInput = useRef<HTMLFormElement>(null);
   const [passwordStatus, setPasswordStatus] = useState("");

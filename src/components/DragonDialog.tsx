@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../styles/DragonDialog.module.css';
 import Image from 'next/image';
 import { Characters } from '@prisma/client';

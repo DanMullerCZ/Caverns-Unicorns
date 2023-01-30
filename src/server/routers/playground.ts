@@ -1,10 +1,7 @@
 import { observable } from '@trpc/server/observable';
-//import { prisma } from '../prisma';
 import { z } from 'zod';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
 import { Playground } from '../playground/playground';
-import { NPC } from '../playground/npc';
-import { Player } from '../playground/player';
 import { Subject } from 'rxjs';
 
 export const pg = new Playground();
@@ -50,7 +47,6 @@ export const playground = router({
     }),
 
   loadEnemies: publicProcedure.mutation(async () => {
-    // await pg.fillWithNPCs()
     return pg.enemies.map((enemy) => {
       return {
         name: enemy.name,
@@ -65,9 +61,7 @@ export const playground = router({
   somethingLikeBattle: protectedProcedure.mutation(async ({ ctx }) => {
     const { player } = pg.getOpponent(ctx.session.user.id as string);
     const hero = {
-      // id: number,
       name: player?.name,
-      // owner_id: string,
       maxHP: player?.hp,
       currentHP: player?.currentHP,
       str: player?.getStats.str,
@@ -91,8 +85,6 @@ export const playground = router({
       exp: player?.opponent?.getStats.exp,
       hp: player?.opponent?.hp,
     };
-    console.warn('smthlbtprcdr', 'hero:', hero, 'enemy:', enemy);
-
     return { player: hero, npc: enemy };
   }),
 
@@ -114,9 +106,7 @@ export const playground = router({
   }),
 
   removeDeadPlayer: protectedProcedure
-    .mutation(({ ctx }) => {
-      console.log("///////////////");
-      
+    .mutation(({ ctx }) => { 
       pg.removePlayer(ctx.session.user.id);
       return 'you died :(';
     }),

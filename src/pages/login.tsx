@@ -7,7 +7,6 @@ import Header from 'components/general/Header';
 
 const Signin = () => {
   const router = useRouter();
-  // const input = useRef<HTMLFormElement>(null);
   const [message, setMessage] = useState<string>()
 
   useEffect(() => {

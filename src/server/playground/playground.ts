@@ -1,6 +1,5 @@
 import { NPC } from './npc';
 import { Player } from './player';
-import { prisma } from '../db/client';
 import { listNPC } from './listNPC';
 import { specificNPC } from './listNPC';
 import { Characters } from '@prisma/client';
@@ -127,24 +126,8 @@ export class Playground {
     return { x: this._width, y: this._height };
   }
 
-  async fillWithNPCs() {
-    const npcFromDbArr = await prisma.characters.findMany({
-      where: {
-        name: 'ales',
-      },
-    });
-    npcFromDbArr.forEach((npc) => {
-      if (!this._enemies.some((x) => x.name === npc.name)) {
-        console.log('Adding ' + npc.name);
-        // this._enemies.push(new NPC(npc.name, 300, 350)); // we need to create new db model with all npcs
-      }
-    });
-  }
-
   getOpponent(id: string) {
     const player = this.players.get(id);
-    // const npc = this.players.get(id)?.opponent as NPC;
-    // console.log(player, npc);
     return { player: player };
   }
 
@@ -153,7 +136,7 @@ export class Playground {
       value.move(this.size);
     });
     this._enemies.forEach((enemy) => {
-      const array = enemy.getNearbies(this.players);
+      enemy.getNearbies(this.players);
     });
   }, 25);
 
@@ -191,19 +174,15 @@ export class Playground {
     }
     return 'grass';
   }
-  removeNpc(npc_id: string, hero_id: string, callback:()=>void): void {
-    console.log("----before",this._enemies);    
+  removeNpc(npc_id: string, hero_id: string, callback:()=>void): void {   
     const temp = this._enemies.filter((enemy) => enemy.id !== npc_id );
     this._enemies = [...temp]
-    console.log("-----after",this._enemies);
     this.players.get(hero_id)?.geOutBattle()
     callback()
   }
 
   removePlayer(hero_ownerId: string): void {
-    this.players.delete(hero_ownerId);
-    console.log("++++++++++",this.players);
-    
+    this.players.delete(hero_ownerId); 
   }
 
   retreat(hero: Characters): void {

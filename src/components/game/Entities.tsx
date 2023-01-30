@@ -1,5 +1,4 @@
 import { Characters, NPC } from '@prisma/client';
-import { useSession } from 'next-auth/react';
 import { useState, useRef, useEffect } from 'react';
 import { checkPosition } from 'utils/playground-functions';
 import { trpc } from 'utils/trpc';
@@ -50,6 +49,7 @@ const Entities = ({
   useEffect(() => {
     enemies.mutate();
     setBp()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
@@ -58,6 +58,7 @@ const Entities = ({
       const response = checkPosition(players[name].x,players[name].y)
       setLocation(response)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [players]);
 
   const startBattle = async () => {

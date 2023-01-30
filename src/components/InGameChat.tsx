@@ -1,5 +1,5 @@
 import { trpc } from 'utils/trpc';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styles from '../styles/Chat.module.css';
 
 export const InGameChat= () => {
@@ -31,7 +31,7 @@ export const InGameChat= () => {
           const target: HTMLInputElement = ev.target as HTMLInputElement;
           setMessage(target.value);
         }}
-        onKeyDown={(ev: any) => {
+        onKeyDown={(ev: React.KeyboardEvent<HTMLElement>) => {
           if (ev.key == 'Enter') {
             messenger.mutate({ typing: message });
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

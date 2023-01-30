@@ -97,6 +97,7 @@ const Battle = ({
   const [hero, setHero] = useState<Characters>(heroInput);
   useEffect(() => {
     skillArray.mutate(hero.class);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -163,21 +164,21 @@ const Battle = ({
       case 1: {
         setSpellOne((prev) => ({
           ...prev,
-          remainingCD: skillOne.cooldown!,
+          remainingCD: skillOne.cooldown as number,
         }));
         break;
       }
       case 2: {
         setSpellTwo((prev) => ({
           ...prev,
-          remainingCD: skillTwo.cooldown!,
+          remainingCD: skillTwo.cooldown as number,
         }));
         break;
       }
       case 3: {
         setSpellthree((prev) => ({
           ...prev,
-          remainingCD: skillthree.cooldown!,
+          remainingCD: skillthree.cooldown as number,
         }));
         break;
       }
@@ -209,10 +210,6 @@ const Battle = ({
     );
     let heroHpAfterAttack = hero.currentHP - enemyDamage;
     let enemyHpAfterAttack: number = enemy.cur_hp - heroDamage;
-    // if( hero[skill] instanceof Object && hero[skill].hasOwnProperty('CD')){
-    //   console.log((hero[skill] as {CD: number}).CD)
-    //   console.log(hero[skill].CD)
-    // }
     if (combatlog.current)
       combatlog.current.innerText +=
         ` ${hero.name} did: ` +
@@ -251,7 +248,7 @@ const Battle = ({
   }, [enemy.cur_hp, hero.currentHP]);
 
   useEffect(() => {
-    if (luck! > 0) {
+    if (luck > 0) {
       combatProcderure(damage);
       setDamage({
         damage: 0,
@@ -259,8 +256,8 @@ const Battle = ({
         cooldown: 0,
         skill: 0,
       });
-      console.log('fight');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [luck]);
 
   const roll = async (n: number) => {
