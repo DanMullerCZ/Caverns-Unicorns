@@ -1,4 +1,5 @@
 import { Characters, NPC } from '@prisma/client';
+import LocationButtons from 'components/LocationButtons';
 import { useSession } from 'next-auth/react';
 import { useState, useRef, useEffect } from 'react';
 import { checkPosition } from 'utils/playground-functions';
@@ -11,15 +12,19 @@ const Entities = ({
   setHero,
   setEnemy,
   setLocation,
+  locationName,
+  setVisible,
 }: {
   setInCombat: (x: boolean) => void;
   setHero: (x: Characters) => void;
   setEnemy: (x: NPC) => void;
-  setLocation:(x:string)=>void;
+  setLocation: (x: string) => void;
+  locationName: string;
+  setVisible: (x: string) => void;
 }) => {
   // REFS
   const map = useRef<HTMLDivElement>(null);
-  const [name,setName]=useState<string>('')
+  const [name, setName] = useState<string>('');
 
   // STATES
   const [players, setPlayers] = useState<{
@@ -49,31 +54,34 @@ const Entities = ({
   // USE EFFECTS
   useEffect(() => {
     enemies.mutate();
-    setBp()
+    setBp();
   }, []);
 
-
   useEffect(() => {
-      if (players && name && players[name] &&players[name].x && players[name].y) {
-      const response = checkPosition(players[name].x,players[name].y)
-      setLocation(response)
+    if (
+      players &&
+      name &&
+      players[name] &&
+      players[name].x &&
+      players[name].y
+    ) {
+      const response = checkPosition(players[name].x, players[name].y);
+      setLocation(response);
     }
   }, [players]);
 
   const startBattle = async () => {
-    await setBp()
+    await setBp();
     setInCombat(true);
   };
 
-  const setBp = async() => {
+  const setBp = async () => {
     await battlePair.mutateAsync().then((res) => {
-        setHero(res.player as Characters) 
-        setEnemy(res.npc as NPC)
-        setName(res.player.name as string)
-      });
-
+      setHero(res.player as Characters);
+      setEnemy(res.npc as NPC);
+      setName(res.player.name as string);
+    });
   };
-  
 
   return (
     <div
@@ -129,6 +137,7 @@ const Entities = ({
           map={map.current as HTMLDivElement}
         />
       ))}
+      {map.current?.clientWidth && (<LocationButtons locationName={locationName} setVisible={setVisible} map={map.current as HTMLDivElement}/>)}
     </div>
   );
 };
