@@ -52,4 +52,8 @@ export class NPC extends Entity {
     const result = Math.sqrt(distX ** 2 + distY ** 2);
     return result;
   }
+
+  surviveBattle(){
+    this.inBattle = false;
+  }
 }

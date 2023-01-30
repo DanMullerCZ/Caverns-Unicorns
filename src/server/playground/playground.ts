@@ -174,20 +174,23 @@ export class Playground {
     }
     return 'grass';
   }
+
   removeNpc(npc_id: string, hero_id: string, callback:()=>void): void {   
     const temp = this._enemies.filter((enemy) => enemy.id !== npc_id );
     this._enemies = [...temp]
-    this.players.get(hero_id)?.geOutBattle()
+    this.players.get(hero_id)?.getOutBattle()
     callback()
   }
 
   removePlayer(hero_ownerId: string): void {
+    this.players.get(hero_ownerId)?.opponent?.surviveBattle()
     this.players.delete(hero_ownerId); 
   }
 
   retreat(hero: Characters): void {
-    const retPlayer = this.players.get(hero.owner_id) as Player
-    retPlayer.changeHp(hero.currentHP)
-    retPlayer.geOutBattle()
+    this.players.get(hero.owner_id)?.changeHp(hero.currentHP)
+    this.players.get(hero.owner_id)!.opponent!.setStatus = {battle: false}
+    this.players.get(hero.owner_id)?.getOutBattle()
+    // opponent is probably locking the hero
   }
 }
