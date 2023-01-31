@@ -15,7 +15,7 @@ export const playground = router({
         x: number;
         y: number;
         ownerId: string;
-        orientation: boolean;
+        orientation: number;
         status: { battle: boolean; alive: boolean };
       };
     }>((emit) => {
@@ -32,7 +32,7 @@ export const playground = router({
         left: z.boolean(),
         down: z.boolean(),
         right: z.boolean(),
-        orientation: z.boolean(),
+        orientation: z.number(),
       }),
     )
     .mutation(async ({ input, ctx }) => {

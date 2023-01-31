@@ -65,7 +65,7 @@ export class Playground {
     left: boolean;
     right: boolean;
     down: boolean;
-    orientation: boolean;
+    orientation: number;
   }) {
     if (this.players.has(id)) {
       this.players.get(id)?.play(up, left, right, down, orientation);
@@ -101,7 +101,7 @@ export class Playground {
         x: number;
         y: number;
         ownerId: string;
-        orientation: boolean;
+        orientation: number;
         status: { battle: boolean; alive: boolean };
       };
     } = {};

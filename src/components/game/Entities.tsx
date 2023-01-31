@@ -31,7 +31,7 @@ const Entities = ({
       x: number;
       y: number;
       ownerId: string;
-      orientation: boolean;
+      orientation: number;
       status: { battle: boolean; alive: boolean };
     };
   }>();
