@@ -157,7 +157,7 @@ export class Player extends Entity {
     };
   }
 
-  geOutBattle() {
+  getOutBattle() {
     this.move = this._moving;
     this.opponent = undefined;
     this.setStatus = { battle: false };
