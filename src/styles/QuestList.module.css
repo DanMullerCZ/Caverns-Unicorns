@@ -1,0 +1,8 @@
+.container{
+    position: absolute;
+    right: 20%;
+    bottom: 20%;
+    width: 200px;
+    height: 200px;
+    background-color: aqua;
+}
