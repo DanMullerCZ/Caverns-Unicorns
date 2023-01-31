@@ -140,6 +140,7 @@ const Register: NextPage = () => {
             className="border-yellow-400px-10 goldeffect w-full rounded-md py-2 "
             type="button"
             onClick={submitForm}
+            test-id="registration-submit"
           >
             Submit
           </button>

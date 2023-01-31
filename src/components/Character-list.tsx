@@ -69,7 +69,6 @@ const CharactersDetail = ({
                 <div>
                   <p className="text-2xl">{e.name}</p>
                   <p>
-                    r
                     <span className="text-gray-400">
                       {e.race} {e.class}
                     </span>
