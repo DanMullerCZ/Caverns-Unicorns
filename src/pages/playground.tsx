@@ -201,7 +201,7 @@ const Playground: NextPage = () => {
             />
             )}
             {heroInfo && (<Locations setVisible={setVisibility} setInCombat={setInCombat} setEnemy={setEnemy} visible={locationVisibility} hero={heroInfo} setHero={setHero}/>)}
-            {(locationVisibility=='quest-list') && (<QuestList setVisibility={setVisibility} />)}
+            {(locationVisibility=='quest-list') && heroInfo  && (<QuestList hero={heroInfo} setVisibility={setVisibility} />)}
             {(locationVisibility=='character-detail')&& heroInfo && (<CharacterDetail hero={heroInfo} setVisibility={setVisibility} />)}            
         </div>
         <InGameChat />
