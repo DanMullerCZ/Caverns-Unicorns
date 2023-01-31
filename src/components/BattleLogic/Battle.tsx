@@ -33,6 +33,8 @@ const Battle = ({
     cooldown: 0,
     skill: 0,
   });
+  const acceptedQuests = trpc.dbRouter.getAcceptedQuests.useMutation();
+  const [questId,setQuestId] = useState<number>()
   const [rolled, setRolled] = useState(false);
   const combatlog = useRef<HTMLDivElement>(null);
   const [spellOne, setSpellOne] = useState<{
@@ -81,8 +83,9 @@ const Battle = ({
     remainingCD: skillthree.cooldown || 0 ,
   });
   const skillArray = trpc.dbRouter.getSkills.useMutation();
-
+  const completeQ = trpc.dbRouter.completeQuest.useMutation()
   const handleClickHeroWin = () => {
+    if(questId)completeQ.mutate({questId:questId,heroName:heroInput.name})
     exitBattleHeroWin(hero, enemy);
   };
   const handleClickNpcWin = () => {
@@ -98,6 +101,9 @@ const Battle = ({
   useEffect(() => {
     skillArray.mutate(hero.class);
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    acceptedQuests.mutate(heroInput.name);
   }, []);
 
   useEffect(() => {
@@ -257,6 +263,13 @@ const Battle = ({
         skill: 0,
       });
     }
+    useEffect(()=>{
+      if (acceptedQuests.isSuccess && acceptedQuests.data){
+        const id = acceptedQuests.data.filter(e=> e.quest.objective==enemyInput.name).map(e=>e.quest.id)
+        setQuestId(id[0])
+      }
+    },[acceptedQuests.data])
+  
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [luck]);
 
