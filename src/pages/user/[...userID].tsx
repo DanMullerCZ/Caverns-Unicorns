@@ -31,7 +31,10 @@ export default function UserPage() {
   });
 
   const handleSendingMail = async () => {
-    verification.mutate(session);
+    if(session.data && session.data.user && session.data.user.email){
+      verification.mutate({id: session.data.user.id, email:session.data.user.email});
+
+    }
   };
 
   return (

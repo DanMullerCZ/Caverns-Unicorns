@@ -241,7 +241,7 @@ export const exampleRouter = router({
     }),
 
     verifyEmailAgain: publicProcedure
-      .input(z.object({data: z.object({user: z.object({id: z.string(), email: z.string()})})}))
+      .input(z.object({id:z.string(),email:z.string()}))
       .mutation(async ({ input }) => {
         const date = new Date();
 
@@ -254,11 +254,11 @@ export const exampleRouter = router({
 
         
         const account: Account = await prisma.account.upsert({
-          where: {userId: input.data.user.id 
+          where: {userId: input.id 
           },
           update : {
             verification_token: jwt.sign(
-              { email: input.data.user.email },
+              { email: input.email },
               process.env.JWT_ACCESS_SECRET as Secret,
               {
                 expiresIn: tokenExpiration,
@@ -266,12 +266,12 @@ export const exampleRouter = router({
               ),
           },
           create : {
-                userId: input.data.user.id,
+                userId: input.id,
                 type: 'normal',
                 provider: 'Credentials',
                 providerAccountId: 'not important',
                 verification_token: jwt.sign(
-                    { email: input.data.user.email },
+                    { email: input.email },
                     process.env.JWT_ACCESS_SECRET as Secret,
                     {
                         expiresIn: tokenExpiration,
@@ -290,7 +290,7 @@ export const exampleRouter = router({
         }
         `;
         sendEmailVerificationToken(
-            input.data?.user?.email as string,
+            input.email as string,
           'Verify your account',
           message,
         );
