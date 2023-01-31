@@ -129,7 +129,11 @@ const Playground: NextPage = () => {
 
   const runFromBattle = (hero: Characters, npc: NPC) => {
     setInCombat(false);
-    retreat.mutate({hero: hero})
+    const newHero = {...hero, owner_id: session.data?.user?.id as string}
+    retreat.mutate({hero: newHero, npc: npc})
+    if (main.current) {
+      main.current.focus();
+    }
   };
 
   const setLocationName = (name:string)=>{
