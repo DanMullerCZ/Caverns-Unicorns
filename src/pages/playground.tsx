@@ -33,7 +33,7 @@ const Playground: NextPage = () => {
     left: false,
     down: false,
     right: false,
-    orientation: 0,
+    orientation: 1,
   });
 
   // PROCEDURES HOOKS
