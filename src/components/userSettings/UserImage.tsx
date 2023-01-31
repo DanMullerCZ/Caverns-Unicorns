@@ -7,6 +7,7 @@ const UserImage = () => {
   const session = useSession();
   const userImage = trpc.userSettings.userImage.useMutation();
 
+
   const handleClick = () => {
     // 1.1 zobrazeni obrazku na vyber pod aktualnim obrazkem
     // setShowPics(!showPics)
@@ -32,5 +33,6 @@ const UserImage = () => {
     </>
   );
 };
+
 
 export default UserImage;

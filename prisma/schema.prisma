@@ -139,6 +139,7 @@ model ForgotenPassword {
   email      String   @db.VarChar(50)
 }
 
+
 model Quest {
   id          Int                   @id @default(autoincrement())
   description String
@@ -154,3 +155,4 @@ model QuestsForCharacters {
 
   @@id([questId, charId])
 }
+

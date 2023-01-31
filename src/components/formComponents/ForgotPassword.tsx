@@ -4,7 +4,7 @@ export default function ForgotPassword() {
       <p className="goldeffect text-center ">
         <a
           className="text-sm font-light "
-          href="https://www.wikihow.com/Improve-Your-Memory"
+          href="/forgotPassword"
         >
           Forgot Password?
         </a>
