@@ -135,19 +135,59 @@ export const dbRouter = router({
       return response;
     }),
 
-     
   getSkills: publicProcedure.input(z.string()).mutation(async (input) => {
     const respo = await prisma.spellsForClasses.findMany({
-        where :  {
-            class :{
-                name : input.input
-            } 
+      where: {
+        class: {
+          name: input.input,
         },
-        select : {
-            spell : true
-        }
-        
+      },
+      select: {
+        spell: true,
+      },
     });
     return respo;
   }),
+  getQuests: publicProcedure.mutation(async () => {
+    const response = await prisma.quest.findMany({where:{NOT:{id:2}}});
+    return response;
+  }),
+  acceptQuest: publicProcedure
+    .input(z.object({ questId: z.number(), heroName: z.string() }))
+    .mutation(async (input) => {
+      const id = await prisma.characters.findFirst({
+        where: { name: input.input.heroName },
+        select: { id: true },
+      });
+      if (id) {
+        const response = await prisma.questsForCharacters.create({
+          data: {
+            quest: {
+              connect: { id: input.input.questId },
+            },
+            character: {
+              connect: { id: id.id },
+            },
+          },
+        });
+        return response;
+      }
+    }),
+    getAcceptedQuests:publicProcedure
+      .input(z.string())
+      .mutation(async(input)=>{
+
+          const response = await prisma.questsForCharacters.findMany({
+            where: {
+              character: {
+                name: input.input,
+              },
+            },
+            select: {
+              quest: true,
+            },
+          });
+          return response
+        }
+      )
 });

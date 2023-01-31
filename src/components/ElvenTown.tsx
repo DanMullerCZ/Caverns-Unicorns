@@ -1,15 +1,16 @@
-import { Characters } from '@prisma/client';
-import { useState } from 'react';
+import { Characters, Quest } from '@prisma/client';
+import { useEffect, useState } from 'react';
+import { trpc } from 'utils/trpc';
 import styles from '../styles/ElvenTown.module.css';
 
 const ElvenTown = ({
   hero,
   setHero,
-  setVisible
+  setVisible,
 }: {
   hero: Characters;
   setHero: (x: Characters) => void;
-  setVisible:(x:string)=>void
+  setVisible: (x: string) => void;
 }) => {
   const sleep = () => {
     setHeroInTown((prev) => {
@@ -19,13 +20,21 @@ const ElvenTown = ({
   const [heroInTown, setHeroInTown] = useState<Characters>(hero);
   const [questVisibility, setQuestVisibility] = useState(false);
   const [marketVisibility, setMarketVisibility] = useState(false);
+  const quests = trpc.dbRouter.getQuests.useMutation();
+  const acceptingQ = trpc.dbRouter.acceptQuest.useMutation();
   const showMarket = () => {
     setMarketVisibility(true);
   };
   const leaveTown = () => {
     setHero(heroInTown);
-    setVisible('nada')
+    setVisible('nada');
   };
+  const acceptQuest = (questId: number) => {
+    acceptingQ.mutate({ questId: questId, heroName: heroInTown.name });
+  };
+  useEffect(() => {
+    quests.mutate();
+  }, []);
   return (
     <>
       <div
@@ -74,13 +83,25 @@ const ElvenTown = ({
 
         {questVisibility && (
           <div className={styles.questList}>
-            <p className="font-LOTR">Missing list of quests.</p>
-            <button
-              className={styles.closeButton}
-              onClick={() => setQuestVisibility(false)}
-            >
-              ×
-            </button>
+            <>
+              {quests.data &&
+                quests.data.map((e: Quest) => {
+                  return (
+                    <>
+                      <div className='font-LOTR'>{e.description}</div>
+                      <button className='font-LOTR' onClick={() => acceptQuest(e.id)}>
+                        Accept quest.
+                      </button>
+                    </>
+                  );
+                })}
+
+              <button
+                className={styles.closeButton}
+                onClick={() => setQuestVisibility(false)}
+                style={{ backgroundImage: `url(/deleteCross.png)` }}
+              ></button>
+            </>
           </div>
         )}
         {marketVisibility && (

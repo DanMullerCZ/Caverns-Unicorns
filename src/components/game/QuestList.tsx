@@ -1,9 +1,35 @@
-import styles from '../../styles/QuestList.module.css'
+import { Characters, Quest } from '@prisma/client';
+import { useEffect } from 'react';
+import { trpc } from 'utils/trpc';
+import styles from '../../styles/QuestList.module.css';
 
-const QuestList = ({setVisibility}:{setVisibility:(arg:string)=>void}) => {
+const QuestList = ({
+  setVisibility,
+  hero,
+}: {
+  setVisibility: (arg: string) => void;
+  hero: Characters;
+}) => {
+  const acceptedQuests = trpc.dbRouter.getAcceptedQuests.useMutation();
+  useEffect(() => {
+    acceptedQuests.mutate(hero.name);
+  }, []);
   return (
-    <div className={styles.container} onClick={()=>setVisibility('nada')}>QuestList:W.I.P.</div>
-  )
-}
+    <div
+      className={styles.container}
+      style={{ backgroundImage: `url(/maps/town/parchment.svg)` }}
+    >
+      <button
+        className={styles.closeButton}
+        onClick={() => setVisibility('nada')}
+        style={{ backgroundImage: `url(/deleteCross.png)` }}
+      ></button>
+      {acceptedQuests.data &&
+        acceptedQuests.data.map((e) => {
+          return <div className="font-LOTR">{e.quest.description}</div>;
+        })}
+    </div>
+  );
+};
 
-export default QuestList
+export default QuestList;
