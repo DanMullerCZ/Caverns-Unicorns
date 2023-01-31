@@ -1,7 +1,7 @@
 import { Characters } from '@prisma/client';
 import styles from '../../styles/CharacterDetail.module.css';
 
-const QuestList = ({
+const CharacterDetail = ({
   setVisibility,
   hero,
 }: {
@@ -15,7 +15,7 @@ const QuestList = ({
     >
       <button
         className="right-1 h-4 w-4 bg-contain bg-no-repeat"
-        style={{ backgroundImage: `url(/deleteCross.png)` }}
+        style={{ backgroundImage: `url(/deleteCross.png)`  }}
         onClick={() => setVisibility('nada')}
       ></button>
       <div className="gold flex flex-col justify-center font-LOTR">
@@ -36,4 +36,4 @@ const QuestList = ({
   );
 };
 
-export default QuestList;
+export default CharacterDetail;

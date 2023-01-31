@@ -69,10 +69,7 @@ export class Playground {
   }) {
     if (this.players.has(id)) {
       this.players.get(id)?.play(up, left, right, down, orientation);
-    } /* else {
-      this.players.set(name, new Player(name, 0, 0, 10, 10));
-      // create a new player from db
-    } */
+    }
   }
 
   setPlayers(characters: Characters[]) {

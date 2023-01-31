@@ -70,10 +70,10 @@
   width: 30px;
   border-radius: 9999px;
   background-color: transparent;
-  border: solid black;
   position: absolute;
   right: 3.5%;
   top: 7.5%;
+  background-size: contain;
   cursor: url('/wallpers/sword.svg'),auto;
 }
 

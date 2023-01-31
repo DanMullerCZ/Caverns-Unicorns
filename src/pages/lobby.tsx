@@ -1,4 +1,5 @@
 import { Chat } from 'components/Chat';
+import Header from 'components/general/Header';
 import NavigationBar from 'components/NavigationBar';
 import VideoBackground from 'components/VideoBackground';
 import { useSession } from 'next-auth/react';
@@ -69,6 +70,7 @@ const Lobby = () => {
 
   return (
     <div>
+      <Header title="Lobby" />
       <VideoBackground />
       <NavigationBar />
       <Chat />

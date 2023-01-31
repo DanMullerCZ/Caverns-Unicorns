@@ -1,6 +1,5 @@
 import { Characters, NPC } from '@prisma/client';
 import LocationButtons from 'components/LocationButtons';
-
 import { useState, useRef, useEffect } from 'react';
 import { checkPosition } from 'utils/playground-functions';
 import { trpc } from 'utils/trpc';
@@ -24,9 +23,9 @@ const Entities = ({
 }) => {
   // REFS
   const map = useRef<HTMLDivElement>(null);
-  const [name, setName] = useState<string>('');
 
   // STATES
+  const [name, setName] = useState<string>('');
   const [players, setPlayers] = useState<{
     [k: string]: {
       x: number;
@@ -36,6 +35,7 @@ const Entities = ({
       status: { battle: boolean; alive: boolean };
     };
   }>();
+  const [allDead, setAllDead] = useState<boolean>(false);
 
   // BACKEND PROCEDURES
   const battlePair = trpc.playground.somethingLikeBattle.useMutation();
@@ -55,8 +55,8 @@ const Entities = ({
   useEffect(() => {
     enemies.mutate();
 
-    setBp()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setBp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -69,9 +69,19 @@ const Entities = ({
     ) {
       const response = checkPosition(players[name].x, players[name].y);
       setLocation(response);
+    } else {
+      if (players && Object.keys(players).length === 0 && !allDead) {
+        setAllDead(true);
+      }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [players]);
+
+  useEffect(() => {
+    if (allDead) {
+      window.location.href = '/game-result';
+    }
+  }, [allDead]);
 
   const startBattle = async () => {
     await setBp();
@@ -140,7 +150,13 @@ const Entities = ({
           map={map.current as HTMLDivElement}
         />
       ))}
-      {map.current?.clientWidth && (<LocationButtons locationName={locationName} setVisible={setVisible} map={map.current as HTMLDivElement}/>)}
+      {map.current?.clientWidth && (
+        <LocationButtons
+          locationName={locationName}
+          setVisible={setVisible}
+          map={map.current as HTMLDivElement}
+        />
+      )}
     </div>
   );
 };

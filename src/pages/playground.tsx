@@ -11,7 +11,6 @@ import { NPC, Characters } from '@prisma/client';
 import { InGameChat } from 'components/InGameChat';
 import Entities from 'components/game/Entities';
 import { spellOne, spellthree, spellTwo } from 'server/playground/spells';
-import LocationButtons from 'components/LocationButtons';
 import Locations from 'components/Locations';
 import InGameMenu from 'components/game/InGameMenu';
 import QuestList from 'components/game/QuestList';
@@ -174,6 +173,7 @@ const Playground: NextPage = () => {
     deadNPC.mutate({ npcId: npc.id });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const exitBattleNpcWin = (hero: Characters, npc: NPC) => {
     setInCombat(false);
     deadPlayer.mutate();
@@ -210,13 +210,13 @@ const Playground: NextPage = () => {
         style={{
           display: 'flex',
           background: '#92884A',
-          aspectRatio: 16 / 9,
         }}
         draggable={false}
-      >
+        >
         <div
           id="map"
           style={{
+            aspectRatio: 16 / 9,
             position: 'relative',
             height: '80vh',
             width: '80vw',
@@ -259,23 +259,10 @@ const Playground: NextPage = () => {
               skillTwo={spellTwo}
               skillthree={spellthree}
             />
-          )}
-          {heroInfo && (
-            <Locations
-              setVisible={setVisibility}
-              setInCombat={setInCombat}
-              setEnemy={setEnemy}
-              visible={locationVisibility}
-              hero={heroInfo}
-              setHero={setHero}
-            />
-          )}
-          {locationVisibility == 'quest-list' && (
-            <QuestList setVisibility={setVisibility} />
-          )}
-          {locationVisibility == 'character-detail' && heroInfo && (
-            <CharacterDetail hero={heroInfo} setVisibility={setVisibility} />
-          )}
+            )}
+            {heroInfo && (<Locations setVisible={setVisibility} setInCombat={setInCombat} setEnemy={setEnemy} visible={locationVisibility} hero={heroInfo} setHero={setHero}/>)}
+            {(locationVisibility=='quest-list') && heroInfo  && (<QuestList hero={heroInfo} setVisibility={setVisibility} />)}
+            {(locationVisibility=='character-detail')&& heroInfo && (<CharacterDetail hero={heroInfo} setVisibility={setVisibility} />)}            
         </div>
         <InGameChat />
       </div>

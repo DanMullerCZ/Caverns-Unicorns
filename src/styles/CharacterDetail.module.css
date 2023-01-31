@@ -14,4 +14,5 @@
     grid-template-rows: 1fr 80% repeat(3, 1fr);
     padding: 10px;
     box-shadow: 5px 5px 5px 5px;
+    cursor: url('/wallpers/sword.svg'),auto;
 }
