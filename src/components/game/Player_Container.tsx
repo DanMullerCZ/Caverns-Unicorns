@@ -33,7 +33,6 @@ const Player_Container = (
               >
                 <div
                   style={{
-
                     position:"relative",
                     left:`-${12* props.map.clientWidth/1600}px`,
                     top:`-${25* props.map.clientWidth/1600}px`,
@@ -46,14 +45,14 @@ const Player_Container = (
                   }}
                 ></div>
                 <div>{props.hero_name}</div>
-                <div>PosX: {props.another_props.x.toFixed(1)}</div>
-                <div>PosY: {props.another_props.y.toFixed(1)}</div>
-                <div>{props.another_props.status.battle ? 'true' : 'false'}</div>
                 {(session.data?.user?.id === props.another_props.ownerId && props.another_props.status.battle) && 
                   <button
                     disabled={false}
                     onClick={props.startBattle}
                     style={{
+                      position:"absolute",
+                      left:`-${12* props.map.clientWidth/1600 + props.map.clientWidth/50}px`,
+                      top:`-${25* props.map.clientWidth/1600 + props.map.clientWidth/25}px`,
                       zIndex: "100",
                       fontFamily: 'LOTR',
                       color: 'goldenrod',

@@ -153,13 +153,13 @@ const Playground: NextPage = () => {
         style={{
           display: 'flex',
           background: '#92884A',
-          aspectRatio: 16 / 9,
         }}
         draggable={false}
-      >
+        >
         <div
           id="map"
           style={{
+            aspectRatio: 16 / 9,
             position: 'relative',
             height: '80vh',
             width: '80vw',
