@@ -249,8 +249,8 @@ export const exampleRouter = router({
 
         const timeOfExpiration = new Date();
 
-        const tokenExpiration = '1min'; // set also one line below
-        timeOfExpiration.setMinutes(timeOfExpiration.getMinutes() + 1);
+        const tokenExpiration = '10min'; // set also one line below
+        timeOfExpiration.setMinutes(timeOfExpiration.getMinutes() + 10);
 
         
         const account: Account = await prisma.account.upsert({
@@ -269,7 +269,6 @@ export const exampleRouter = router({
                 userId: input.data.user.id,
                 type: 'normal',
                 provider: 'Credentials',
-                providerAccountId: 'not important',
                 verification_token: jwt.sign(
                     { email: input.data.user.email },
                     process.env.JWT_ACCESS_SECRET as Secret,
