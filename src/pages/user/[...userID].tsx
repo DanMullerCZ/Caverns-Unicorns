@@ -48,7 +48,7 @@ export default function UserPage() {
           <div className="backgroundSettings "></div>
         </div>
         <div className="flex flex-col items-center rounded-x gold font-LOTR goldnohover z-30 space-y-5  p-10 drop-shadow-lg">
-          <h1 className="" test-id="succes login">USERS PAGE</h1>
+          <h1 test-id="userpage-h1">USERS PAGE</h1>
           <UserSettings />
           <hr />
           <p>{session.data?.user?.name}</p>

@@ -79,6 +79,7 @@ export default function LoginForm(props: { message: string }) {
           <button
             className="goldeffect w-full rounded-md border border-yellow-400 px-10 py-2"
             onClick={submitForm}
+            test-id='login-submit'
           >
             Login with Credentials
           </button>
