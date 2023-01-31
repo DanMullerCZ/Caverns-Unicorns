@@ -24,7 +24,7 @@ export class Player extends Entity {
     public race: string,
   ) {
     super(_name, _x, _y, _hp, _cur_hp);
-    this.orientation = 0;
+    this.orientation = 1;
     this.opponent = undefined;
   }
 
