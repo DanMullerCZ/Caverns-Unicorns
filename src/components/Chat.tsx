@@ -44,8 +44,6 @@ export const Chat: NextPage = () => {
    
 
     const usersCheck = setInterval(() => {
-      console.log(players);
-
       setPlayers((prev) => {
         for (const p in prev) {
           if (prev[p] > 1.5) {
@@ -96,7 +94,7 @@ export const Chat: NextPage = () => {
             const target: HTMLInputElement = ev.target as HTMLInputElement;
             setMessage(target.value);
           }}
-          onKeyDown={(ev: any) => {
+          onKeyDown={(ev: React.KeyboardEvent<HTMLElement>) => {
             if (ev.key == 'Enter') {
               messenger.mutate({ typing: message });
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

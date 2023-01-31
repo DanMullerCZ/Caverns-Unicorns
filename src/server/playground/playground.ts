@@ -1,6 +1,5 @@
 import { NPC } from './npc';
 import { Player } from './player';
-import { prisma } from '../db/client';
 import { listNPC } from './listNPC';
 import { specificNPC } from './listNPC';
 import { Characters } from '@prisma/client';
@@ -11,9 +10,10 @@ export class Playground {
   private _width = 1570;
   private _height = 860;
 
-  constructor() {
+
+  constructor(private NPCs:number[]=[5,2,1,2]) {
     this.createNPCs(
-      [1, 1, 3, 5],
+      NPCs,
       [listNPC.demon, listNPC.bandit, listNPC.zombie, listNPC.sheep],
     );
   }
@@ -65,14 +65,11 @@ export class Playground {
     left: boolean;
     right: boolean;
     down: boolean;
-    orientation: boolean;
+    orientation: number;
   }) {
     if (this.players.has(id)) {
       this.players.get(id)?.play(up, left, right, down, orientation);
-    } /* else {
-      this.players.set(name, new Player(name, 0, 0, 10, 10));
-      // create a new player from db
-    } */
+    }
   }
 
   setPlayers(characters: Characters[]) {
@@ -97,19 +94,22 @@ export class Playground {
       );
     }
   }
+
   getState() {
     const state: {
       [k: string]: {
         x: number;
         y: number;
-        orientation: boolean;
+        ownerId: string;
+        orientation: number;
         status: { battle: boolean; alive: boolean };
       };
     } = {};
-    this.players.forEach((player) => {
+    this.players.forEach((player, owner) => {
       state[player.name] = {
         x: player.coords.x,
         y: player.coords.y,
+        ownerId: owner,
         orientation: player.orientation,
         status: player.status,
       };
@@ -125,24 +125,8 @@ export class Playground {
     return { x: this._width, y: this._height };
   }
 
-  async fillWithNPCs() {
-    const npcFromDbArr = await prisma.characters.findMany({
-      where: {
-        name: 'ales',
-      },
-    });
-    npcFromDbArr.forEach((npc) => {
-      if (!this._enemies.some((x) => x.name === npc.name)) {
-        console.log('Adding ' + npc.name);
-        // this._enemies.push(new NPC(npc.name, 300, 350)); // we need to create new db model with all npcs
-      }
-    });
-  }
-
   getOpponent(id: string) {
     const player = this.players.get(id);
-    // const npc = this.players.get(id)?.opponent as NPC;
-    // console.log(player, npc);
     return { player: player };
   }
 
@@ -151,7 +135,7 @@ export class Playground {
       value.move(this.size);
     });
     this._enemies.forEach((enemy) => {
-      const array = enemy.getNearbies(this.players);
+      enemy.getNearbies(this.players);
     });
   }, 25);
 
@@ -189,24 +173,22 @@ export class Playground {
     }
     return 'grass';
   }
-  removeNpc(npc_id: string, hero_id: string, callback:()=>void): void {
-    console.log("----before",this._enemies);    
+
+  removeNpc(npc_id: string, hero_id: string, callback:()=>void): void {   
     const temp = this._enemies.filter((enemy) => enemy.id !== npc_id );
     this._enemies = [...temp]
-    console.log("-----after",this._enemies);
-    this.players.get(hero_id)?.geOutBattle()
+    this.players.get(hero_id)?.getOutBattle()
     callback()
   }
 
   removePlayer(hero_ownerId: string): void {
-    this.players.delete(hero_ownerId);
-    console.log("++++++++++",this.players);
-    
+    this.players.get(hero_ownerId)?.opponent?.surviveBattle()
+    this.players.delete(hero_ownerId); 
   }
 
-  retreat(hero: Characters): void {
-    const retPlayer = this.players.get(hero.owner_id) as Player
-    retPlayer.changeHp(hero.currentHP)
-    retPlayer.geOutBattle()
+  retreat(hero: Characters, npc: NPC): void {
+    this.players.get(hero.owner_id)?.changeHp(hero.currentHP)
+    this._enemies.filter((enemy) => enemy.id === npc.id)[0].surviveBattle()
+    this.players.get(hero.owner_id)?.getOutBattle()
   }
 }

@@ -87,9 +87,9 @@ model SpellsForClasses {
 }
 
 model Characters {
-  id        Int    @id @default(autoincrement())
-  name      String @db.VarChar(20)
-  owner_id  String @db.VarChar(50)
+  id        Int                   @id @default(autoincrement())
+  name      String                @db.VarChar(20)
+  owner_id  String                @db.VarChar(50)
   maxHP     Int
   currentHP Int
   str       Int
@@ -100,6 +100,7 @@ model Characters {
   char      Int
   class     String
   race      String
+  quests    QuestsForCharacters[]
 }
 
 model VerificationToken {
@@ -137,3 +138,21 @@ model ForgotenPassword {
   expiration DateTime
   email      String   @db.VarChar(50)
 }
+
+
+model Quest {
+  id          Int                   @id @default(autoincrement())
+  description String
+  objective   String
+  characters  QuestsForCharacters[]
+}
+
+model QuestsForCharacters {
+  questId   Int
+  charId    Int
+  quest     Quest      @relation(fields: [questId], references: [id])
+  character Characters @relation(fields: [charId], references: [id])
+
+  @@id([questId, charId])
+}
+

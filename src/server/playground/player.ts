@@ -4,7 +4,7 @@ import { NPC } from './npc';
 export class Player extends Entity {
   opponent: NPC | undefined;
   private _speed = 5;
-  public orientation: boolean;
+  public orientation: number;
   private _move: { up: boolean; left: boolean; right: boolean; down: boolean } =
     { up: false, left: false, right: false, down: false };
 
@@ -24,7 +24,7 @@ export class Player extends Entity {
     public race: string,
   ) {
     super(_name, _x, _y, _hp, _cur_hp);
-    this.orientation = true;
+    this.orientation = 1;
     this.opponent = undefined;
   }
 
@@ -48,7 +48,7 @@ export class Player extends Entity {
     left: boolean,
     right: boolean,
     down: boolean,
-    orientation: boolean,
+    orientation: number,
   ) {
     this._move = { up: up, left: left, right: right, down: down };
     this.orientation = orientation;
@@ -152,23 +152,18 @@ export class Player extends Entity {
   move = this._moving;
 
   getInBattle(): void {
-    console.error('Going into battle, opponent is: ', this.opponent);
     this.move = () => {
       return;
     };
   }
 
-  geOutBattle() {
+  getOutBattle() {
     this.move = this._moving;
     this.opponent = undefined;
     this.setStatus = { battle: false };
-    console.error('Out of battle, opponent is: ', this.opponent);
   }
 
-  findOpponent(opponent: NPC): any {
-    // const opponent = arrNPC.filter(
-    //   (npc) => npc.opponent?.name === this.name,
-    // )[0];
+  findOpponent(opponent: NPC): void {
     if (
       opponent.status.alive &&
       !opponent.status.battle &&

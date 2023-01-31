@@ -1,12 +1,13 @@
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { KeyboardEvent, useRef } from 'react';
 import DontHaveAccount from './DontHaveAccount';
 import ExternalLogin from './ExternalLogin';
 import ForgotPassword from './ForgotPassword';
 
 export default function LoginForm(props: { message: string }) {
   const router = useRouter();
+  const sessionData = useSession();
   const input = useRef<HTMLFormElement>(null);
 
   const submitForm = () => {
@@ -18,15 +19,25 @@ export default function LoginForm(props: { message: string }) {
         password: password.value,
         redirect: false,
       }).then((response) => {
-        console.log(response);
         if (response?.error === 'CredentialsSignin' || response?.error === "Cannot read properties of null (reading 'password')" || response?.error === "Cannot read properties of null (reading 'email')") {
           router.push('/login', { query: { error: 'true' } }); //
         } else {
-          router.push(process.env.HOST || '/user');
+          if(sessionData.data?.user?.id){
+            router.push(`/user/${sessionData.data.user.id}`);
+          } else {
+            router.push('/user');
+
+          }
         }
       });
     }
   };
+
+  const handleEnter = (e: KeyboardEvent<HTMLFormElement>) => {
+    if(e.key === 'Enter') {
+      submitForm();
+    }
+  }
 
   return (
     <>
@@ -42,7 +53,7 @@ export default function LoginForm(props: { message: string }) {
           >
             {props.message && props.message}
           </div>
-          <form ref={input} className="flex flex-col space-y-2">
+          <form ref={input} className="flex flex-col space-y-2" onKeyDown={(e) => {handleEnter(e)}}>
             <label className="text-sm" htmlFor="email">
               Email
             </label>
@@ -50,6 +61,7 @@ export default function LoginForm(props: { message: string }) {
               className="w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="email"
               name="email"
+              autoComplete='email'
               id="email"
             />
             <label className="text-sm" htmlFor="password">
@@ -59,6 +71,7 @@ export default function LoginForm(props: { message: string }) {
               className="w-96 rounded-md border border-yellow-400 bg-transparent px-3 py-2"
               type="password"
               name="password"
+              autoComplete='current-password'
               id="password"
             />
           </form>

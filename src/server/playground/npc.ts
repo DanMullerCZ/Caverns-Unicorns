@@ -3,7 +3,6 @@ import { Entity } from './entity';
 import { Player } from './player';
 
 export class NPC extends Entity {
-  //opponent: Player | undefined;
   public id: string = randomUUID();
   public inBattle = false;
   constructor(
@@ -18,7 +17,6 @@ export class NPC extends Entity {
     protected exp: number,
   ) {
     super(_name, _x, _y, _hp, _cur_hp);
-    // this.opponent = undefined;
   }
 
   get getStats() {
@@ -53,5 +51,12 @@ export class NPC extends Entity {
     const distY = Math.abs(y1 - y2);
     const result = Math.sqrt(distX ** 2 + distY ** 2);
     return result;
+  }
+
+  surviveBattle(){
+    setTimeout(() => {
+      this.setStatus = {battle: false}
+      this.inBattle = false
+    }, 1000);
   }
 }

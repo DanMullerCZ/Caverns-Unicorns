@@ -1,5 +1,5 @@
 import { Characters, NPC } from '@prisma/client';
-import { useSession } from 'next-auth/react';
+import LocationButtons from 'components/LocationButtons';
 import { useState, useRef, useEffect } from 'react';
 import { checkPosition } from 'utils/playground-functions';
 import { trpc } from 'utils/trpc';
@@ -11,25 +11,31 @@ const Entities = ({
   setHero,
   setEnemy,
   setLocation,
+  locationName,
+  setVisible,
 }: {
   setInCombat: (x: boolean) => void;
   setHero: (x: Characters) => void;
   setEnemy: (x: NPC) => void;
-  setLocation:(x:string)=>void;
+  setLocation: (x: string) => void;
+  locationName: string;
+  setVisible: (x: string) => void;
 }) => {
   // REFS
   const map = useRef<HTMLDivElement>(null);
-  const [name,setName]=useState<string>('')
 
   // STATES
+  const [name, setName] = useState<string>('');
   const [players, setPlayers] = useState<{
     [k: string]: {
       x: number;
       y: number;
-      orientation: boolean;
+      ownerId: string;
+      orientation: number;
       status: { battle: boolean; alive: boolean };
     };
   }>();
+  const [allDead, setAllDead] = useState<boolean>(false);
 
   // BACKEND PROCEDURES
   const battlePair = trpc.playground.somethingLikeBattle.useMutation();
@@ -48,31 +54,47 @@ const Entities = ({
   // USE EFFECTS
   useEffect(() => {
     enemies.mutate();
-    setBp()
+
+    setBp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   useEffect(() => {
-      if (players && name && players[name] &&players[name].x && players[name].y) {
-      const response = checkPosition(players[name].x,players[name].y)
-      setLocation(response)
+    if (
+      players &&
+      name &&
+      players[name] &&
+      players[name].x &&
+      players[name].y
+    ) {
+      const response = checkPosition(players[name].x, players[name].y);
+      setLocation(response);
+    } else {
+      if (players && Object.keys(players).length === 0 && !allDead) {
+        setAllDead(true);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [players]);
 
+  useEffect(() => {
+    if (allDead) {
+      window.location.href = '/game-result';
+    }
+  }, [allDead]);
+
   const startBattle = async () => {
+    await setBp();
     setInCombat(true);
-    setBp()
   };
 
-  const setBp = async() => {
+  const setBp = async () => {
     await battlePair.mutateAsync().then((res) => {
-        setHero(res.player as Characters) 
-        setEnemy(res.npc as NPC)
-        setName(res.player.name as string)
-      });
-
+      setHero(res.player as Characters);
+      setEnemy(res.npc as NPC);
+      setName(res.player.name as string);
+    });
   };
-  
 
   return (
     <div
@@ -96,6 +118,7 @@ const Entities = ({
                 x,
                 y,
                 orientation,
+                ownerId,
                 status: { battle, alive },
               },
             ],
@@ -111,6 +134,7 @@ const Entities = ({
                   x,
                   y,
                   orientation,
+                  ownerId,
                   status: { battle, alive },
                 }}
               />
@@ -126,6 +150,13 @@ const Entities = ({
           map={map.current as HTMLDivElement}
         />
       ))}
+      {map.current?.clientWidth && (
+        <LocationButtons
+          locationName={locationName}
+          setVisible={setVisible}
+          map={map.current as HTMLDivElement}
+        />
+      )}
     </div>
   );
 };

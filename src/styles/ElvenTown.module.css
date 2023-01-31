@@ -74,7 +74,7 @@
   width: 30px;
   border-radius: 9999px;
   background-color: transparent;
-  border: solid black;
+  background-size: contain;
   position: absolute;
   right: 3.5%;
   top: 7.5%;

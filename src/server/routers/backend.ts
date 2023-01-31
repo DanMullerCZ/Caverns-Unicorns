@@ -73,25 +73,25 @@ export const exampleRouter = router({
 
   races: publicProcedure
     .input(z.object({ name: z.string() }))
-    .mutation(async (input: any) => {
-      if (input.input.name.length == 0) {
+    .mutation(async ({ input }) => {
+      if (input.name.length == 0) {
         throw new Error('All fields are required.');
       }
       const check = await prisma?.race.findFirst({
-        where: { name: input.input.name.toLowerCase() },
+        where: { name: input.name.toLowerCase() },
       });
       if (check) {
         throw new Error('Race already added.');
       }
       const res = await fetch(
-        `https://www.dnd5eapi.co/api/races/${input.input.name.toLowerCase()}`,
+        `https://www.dnd5eapi.co/api/races/${input.name.toLowerCase()}`,
       ).then((res) => res.json());
 
       if (!res.name) {
         throw new Error('Invalid race name.');
       }
       const response = {
-        name: input.input.name.toLowerCase(),
+        name: input.name.toLowerCase(),
         str: 0,
         dex: 0,
         con: 0,
@@ -136,9 +136,9 @@ export const exampleRouter = router({
     .input(
       z.object({ email: z.string(), password: z.string(), name: z.string(), match: z.boolean() }),
     )
-    .mutation(async (input: any) => {
+    .mutation(async ({ input }) => {
       try {
-        if(!input.input.match){
+        if(!input.match){
           return 'Passwords do not match'
         }
         const date = new Date();
@@ -146,9 +146,9 @@ export const exampleRouter = router({
         date.setDate(date.getSeconds() + 30);
         const user: User = (await prisma?.user.create({
           data: {
-            email: input.input.email,
-            password: hashToken(input.input.password),
-            name: input.input.name,
+            email: input.email,
+            password: hashToken(input.password),
+            name: input.name,
             image: "/defaultUserImages/default.png"
           },
         })) as User;
@@ -202,7 +202,7 @@ export const exampleRouter = router({
 
   veryfiEmail: publicProcedure
     .input(z.object({ token: z.string() }))
-    .mutation(async ({ input }: any) => {
+    .mutation(async ({ input }) => {
       const token: string = input.token;
       let account: Account[];
       let user: User;
@@ -241,7 +241,7 @@ export const exampleRouter = router({
     }),
 
     verifyEmailAgain: publicProcedure
-      .input(z.any())
+      .input(z.object({id:z.string(),email:z.string()}))
       .mutation(async ({ input }) => {
         const date = new Date();
 
@@ -254,11 +254,11 @@ export const exampleRouter = router({
 
         
         const account: Account = await prisma.account.upsert({
-          where: {userId: input.data.user.id 
+          where: {userId: input.id 
           },
           update : {
             verification_token: jwt.sign(
-              { email: input.data.user.email },
+              { email: input.email },
               process.env.JWT_ACCESS_SECRET as Secret,
               {
                 expiresIn: tokenExpiration,
@@ -266,11 +266,11 @@ export const exampleRouter = router({
               ),
           },
           create : {
-                userId: input.data.user.id,
+                userId: input.id,
                 type: 'normal',
                 provider: 'Credentials',
                 verification_token: jwt.sign(
-                    { email: input.data.user.email },
+                    { email: input.email },
                     process.env.JWT_ACCESS_SECRET as Secret,
                     {
                         expiresIn: tokenExpiration,
@@ -289,7 +289,7 @@ export const exampleRouter = router({
         }
         `;
         sendEmailVerificationToken(
-            input.data?.user?.email as string,
+            input.email as string,
           'Verify your account',
           message,
         );

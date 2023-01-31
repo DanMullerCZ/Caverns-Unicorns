@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 import * as crypto from 'crypto';
 dotenv.config({ path: __dirname + '/.env' });
-import { User } from '@prisma/client';
 import { JWT } from 'next-auth/jwt';
 
 // Usually I keep the token between 5 minutes - 15 minutes

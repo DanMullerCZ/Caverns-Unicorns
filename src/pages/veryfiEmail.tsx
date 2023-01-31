@@ -11,10 +11,11 @@ const VeryfiEmail: NextPage = () => {
   const veryfiEmail = trpc.backend.veryfiEmail.useMutation();
   useEffect(() => {
     veryfiEmail.mutate({ token: token });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>
-      <Header title='Email Verification' />
+      <Header title="Email Verification" />
       <p>{veryfiEmail.data?.message}</p>
       <p>Token: {token}</p>
     </div>

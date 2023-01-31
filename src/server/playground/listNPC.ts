@@ -1,6 +1,6 @@
 export const listNPC: listNPCinterface = {
     demon: {
-      name: 'Ales',
+      name: 'demon',
       img: '/npc/demon2.svg',
       hp: 500,
       cur_hp: 500,
@@ -9,7 +9,7 @@ export const listNPC: listNPCinterface = {
       exp: 500,
     },
     zombie: {
-      name: 'Dead_Ales',
+      name: 'zombie',
       img: '/npc/zombie1.svg',
       hp: 20,
       cur_hp: 20,
@@ -18,7 +18,7 @@ export const listNPC: listNPCinterface = {
       exp: 10,
     },
     bandit: {
-      name: 'Rogue_Ales',
+      name: 'skaven',
       img: '/npc/skaven2.svg',
       hp: 50,
       cur_hp: 50,

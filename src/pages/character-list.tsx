@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { trpc } from 'utils/trpc';
 import CharactersDetail from 'components/Character-list';
 import { Characters } from '@prisma/client';
+import Header from 'components/general/Header';
 
 type HeroList = {
   name: string;
@@ -59,6 +60,7 @@ const CharacterList = () => {
     if (sessionData.data?.user?.id) {
       res.mutate(sessionData.data.user.id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionData]);
 
   useEffect(() => {
@@ -69,6 +71,7 @@ const CharacterList = () => {
     if (sessionData.status == 'unauthenticated') {
       window.location.href = '/login';
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -95,6 +98,7 @@ const CharacterList = () => {
 
   return (
     <>
+    <Header title="Character list" />
       <div className="h-screen w-screen">
         {characters && (
           <CharactersDetail

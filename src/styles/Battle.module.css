@@ -1,5 +1,6 @@
 .container {
     position: absolute;
+    z-index: 101;
     display: grid;
     width: 90vw;
     height: 90vh;
@@ -134,7 +135,7 @@
     border-radius: 5px;
     background-color: black;
     height: 40px;
-    width: 120px;
+    width: 150px;
     box-shadow: 2px 2px  2px 2px black;
 }
 

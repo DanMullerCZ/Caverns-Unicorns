@@ -43,8 +43,6 @@ export default function GetAllClasses() {
       </Head>
       <VideoBackground />
       <NavigationBar />
-      {/* <p>Data status: {data.status}</p> */}
-      {/* <pre>{JSON.stringify(data.data, null, 4)}</pre> */}
       <div >{data.data && <ClassList classes={data.data} />}</div>
     </>
   );

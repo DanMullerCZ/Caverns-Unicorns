@@ -1,14 +1,12 @@
 import { prisma } from '../../server/db/client';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import {
-  GetStaticPaths,
   GetStaticPropsContext,
   InferGetStaticPropsType,
 } from 'next';
 import { appRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import { trpc } from 'utils/trpc';
-import Head from 'next/head';
 
 import Image from 'next/image';
 import Header from 'components/general/Header';

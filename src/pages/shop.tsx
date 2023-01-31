@@ -1,5 +1,7 @@
 import { loadStripe, StripeError } from '@stripe/stripe-js';
 import Header from 'components/general/Header';
+import { NavigationBar } from 'components/NavigationBar';
+import VideoBackground from 'components/VideoBackground';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -41,12 +43,23 @@ export default function Checkout() {
   return (
     <>
       <Header title="Shop" />
-      <div>
-        <h1>Checkout</h1>
-        <h2>{}</h2>
-        <button role="link" onClick={handleClick}>
-          Click HERE to buy your PREMIUM MEMBERSHIP
-        </button>
+      <VideoBackground />
+      <NavigationBar />
+
+      <div className=" flex flex-col items-center justify-center  font-LOTR md:h-screen ">
+        <div className="fixed z-10 flex h-screen w-screen items-center justify-center">
+          <div className="background "></div>
+        </div>
+        <div className="rounded-x gold goldnohover z-30 space-y-5  p-10 drop-shadow-lg">
+          <h1 className="text-center font-LOTR text-3xl">Checkout</h1>
+          <h2 className="text-center font-LOTR text-xl">
+            List of benefits for premium members:
+          </h2>
+          <p className="text-center font-LOTR">*work in progress*</p>
+          <button onClick={handleClick}>
+            Click HERE to buy your PREMIUM MEMBERSHIP
+          </button>
+        </div>
       </div>
     </>
   );

@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../styles/DragonDialog.module.css';
 import Image from 'next/image';
 import { Characters } from '@prisma/client';
+import { trpc } from 'utils/trpc';
 
 const DragonDialog = ({hero,setVisible}:{hero:Characters,setVisible:(x:string)=>void}) => {
   const [dialogOption, setDialogOption] = useState<number>(1);
+  const acceptingQ = trpc.dbRouter.acceptQuest.useMutation()
   const nextDialog = () => {
     const page = dialogOption + 1;
     setDialogOption(page);
@@ -16,6 +18,9 @@ const DragonDialog = ({hero,setVisible}:{hero:Characters,setVisible:(x:string)=>
   const leave = () => {
     setVisible('nada')
   };
+  const acceptQuest = ()=>{
+    acceptingQ.mutate({questId:2,heroName:hero.name})
+}
   return (
     <div className={styles.main}>
       <Image src='/wallpers/dragon-dialog.jpg' alt='' width={2000} height={2000} className={styles.background}/> 
@@ -111,7 +116,7 @@ const DragonDialog = ({hero,setVisible}:{hero:Characters,setVisible:(x:string)=>
             </p>
             <br />
             <p className="gold font-LOTR">{heroName}</p>
-            <button className={styles.dialogButton} onClick={nextDialog}>
+            <button className={styles.dialogButton} onClick={()=>{nextDialog(),acceptQuest()}}>
               <span className="gold font-LOTR">
                 I understand and will not disappoint you. Together we will be
                 victorious.

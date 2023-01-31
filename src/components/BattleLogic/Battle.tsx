@@ -5,6 +5,7 @@ import styles from '../../styles/Battle.module.css';
 import { NPC, Characters, Spell } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import ResultScreen from './ResultScreen';
+import { trpc } from 'utils/trpc';
 
 const Battle = ({
   exitBattleHeroWin,
@@ -26,8 +27,6 @@ const Battle = ({
   enemyInput: NPC;
 }) => {
   const [luck, setLuck] = useState<number>(0);
-  type SKillName = 'skillONe' | 'skillTwo' | 'skillthree';
-  type Skill = { damage: number; name: string; CD: number; skill: string };
   const [damage, setDamage] = useState({
     damage: 0,
     name: '',
@@ -36,15 +35,29 @@ const Battle = ({
   });
   const [rolled, setRolled] = useState(false);
   const combatlog = useRef<HTMLDivElement>(null);
-  const [spellOne, setSpellOne] = useState({
+  const [spellOne, setSpellOne] = useState<{
+    name: string;
+    id: number;
+    description: string;
+    damage: number;
+    cooldown: number;
+    remainingCD: number;
+  }>({
     name: skillOne.name || '',
-    id: skillOne.id || 0,
+    id: skillOne.id || 0 ,
     description: skillOne.description || '',
     damage: skillOne.damage || 0,
     cooldown: skillOne.cooldown || 0,
     remainingCD: skillOne.cooldown || 0,
   });
-  const [spellTwo, setSpellTwo] = useState({
+  const [spellTwo, setSpellTwo] = useState<{
+    name: string;
+    id: number;
+    description: string;
+    damage: number;
+    cooldown: number;
+    remainingCD: number;
+  }>({
     name: skillTwo.name || '',
     id: skillTwo.id || 0,
     description: skillTwo.description || '',
@@ -52,32 +65,69 @@ const Battle = ({
     cooldown: skillTwo.cooldown || 0,
     remainingCD: skillTwo.cooldown || 0,
   });
-  const [spellthree, setSpellthree] = useState({
+  const [spellthree, setSpellthree] = useState<{
+    name: string;
+    id: number;
+    description: string;
+    damage: number;
+    cooldown: number;
+    remainingCD: number;
+  }>({
     name: skillthree.name || '',
     id: skillthree.id || 0,
     description: skillthree.description || '',
     damage: skillthree.damage || 0,
     cooldown: skillthree.cooldown || 0,
-    remainingCD: skillthree.cooldown || 0,
+    remainingCD: skillthree.cooldown || 0 ,
   });
-  const gifUrl = '/boromir_1.gif';
-  const herodeadRef = useRef<HTMLDivElement>(null);
+  const skillArray = trpc.dbRouter.getSkills.useMutation();
 
   const handleClickHeroWin = () => {
     exitBattleHeroWin(hero, enemy);
-  }
+  };
   const handleClickNpcWin = () => {
     exitBattleNpcWin(hero, enemy);
-  }
+  };
   const handleClickRetreat = () => {
     runFromBattle(hero, enemy);
-  }
-  
+  };
 
   const [enemy, setEnemy] = useState<NPC>(enemyInput);
 
   const [hero, setHero] = useState<Characters>(heroInput);
+  useEffect(() => {
+    skillArray.mutate(hero.class);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  useEffect(() => {
+    if (skillArray.data && skillArray.data[0].spell) {
+      setSpellOne({
+        name: skillArray.data[0].spell.name as string,
+        id: skillArray.data[0].spell.id as number,
+        description: skillArray.data[0].spell.description as string,
+        damage:skillArray.data[0].spell.damage as number,
+        cooldown:skillArray.data[0].spell.cooldown as number,
+        remainingCD: 0,
+      });
+    }
+    if (skillArray.data && skillArray.data[1].spell) {
+      setSpellTwo({name: skillArray.data[1].spell.name as string,
+        id: skillArray.data[1].spell.id as number,
+        description: skillArray.data[1].spell.description as string,
+        damage:skillArray.data[1].spell.damage as number,
+        cooldown:skillArray.data[1].spell.cooldown as number,
+        remainingCD: 0,});
+    }
+    if (skillArray.data && skillArray.data[2].spell) {
+      setSpellthree({name: skillArray.data[2].spell.name as string,
+        id: skillArray.data[2].spell.id as number,
+        description: skillArray.data[2].spell.description as string,
+        damage:skillArray.data[2].spell.damage as number,
+        cooldown:skillArray.data[2].spell.cooldown as number,
+        remainingCD: 0,});
+    }
+  }, [skillArray.data]);
   const combatProcderure = (inputdamage: {
     damage: number;
     name: string;
@@ -87,7 +137,7 @@ const Battle = ({
     setRolled(false);
     let heroDamage = 0;
 
-    if (spellOne.remainingCD > 0) {
+    if (spellOne.remainingCD && spellOne.remainingCD > 0) {
       const devCooldown = spellOne.remainingCD - 1;
       setSpellOne((prev) => ({
         ...prev,
@@ -95,7 +145,7 @@ const Battle = ({
       }));
     }
 
-    if (spellTwo.remainingCD > 0) {
+    if (spellTwo.remainingCD && spellTwo.remainingCD > 0) {
       const devCooldown = spellTwo.remainingCD - 1;
       setSpellTwo((prev) => ({
         ...prev,
@@ -103,7 +153,7 @@ const Battle = ({
       }));
     }
 
-    if (spellthree.remainingCD > 0) {
+    if (spellthree.remainingCD && spellthree.remainingCD > 0) {
       const devCooldown = spellthree.remainingCD - 1;
       setSpellthree((prev) => ({
         ...prev,
@@ -114,21 +164,21 @@ const Battle = ({
       case 1: {
         setSpellOne((prev) => ({
           ...prev,
-          remainingCD: skillOne.cooldown!,
+          remainingCD: skillOne.cooldown as number,
         }));
         break;
       }
       case 2: {
         setSpellTwo((prev) => ({
           ...prev,
-          remainingCD: skillTwo.cooldown!,
+          remainingCD: skillTwo.cooldown as number,
         }));
         break;
       }
       case 3: {
         setSpellthree((prev) => ({
           ...prev,
-          remainingCD: skillthree.cooldown!,
+          remainingCD: skillthree.cooldown as number,
         }));
         break;
       }
@@ -160,10 +210,6 @@ const Battle = ({
     );
     let heroHpAfterAttack = hero.currentHP - enemyDamage;
     let enemyHpAfterAttack: number = enemy.cur_hp - heroDamage;
-    // if( hero[skill] instanceof Object && hero[skill].hasOwnProperty('CD')){
-    //   console.log((hero[skill] as {CD: number}).CD)
-    //   console.log(hero[skill].CD)
-    // }
     if (combatlog.current)
       combatlog.current.innerText +=
         ` ${hero.name} did: ` +
@@ -202,7 +248,7 @@ const Battle = ({
   }, [enemy.cur_hp, hero.currentHP]);
 
   useEffect(() => {
-    if (luck! > 0) {
+    if (luck > 0) {
       combatProcderure(damage);
       setDamage({
         damage: 0,
@@ -210,8 +256,8 @@ const Battle = ({
         cooldown: 0,
         skill: 0,
       });
-      console.log('fight');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [luck]);
 
   const roll = async (n: number) => {
@@ -235,7 +281,7 @@ const Battle = ({
           ></progress>
         </div>
         <Image
-          src={enemy.img || "/npc/dragon.gif"}
+          src={enemy.img || '/npc/dragon.gif'}
           width="500"
           height="500"
           alt="/npc/dragon.gif"
@@ -243,35 +289,43 @@ const Battle = ({
       </div>
       <div className={styles.abilitties}>
         <h2>Skills</h2>
-        <button
-          title={`remaining cooldown: ${spellOne.remainingCD}, ${spellOne.description}`}
-          onClick={() => setDamage({ ...spellOne, skill: 1 })}
-          disabled={
-            spellOne.remainingCD > 0 || heroDead || enemyDead ? true : false
-          }
-        >
-          {spellOne.name}
-        </button>
+        {skillArray.data && (
+          <button
+            title={`remaining cooldown: ${spellOne.remainingCD}, ${spellOne.description}`}
+            onClick={() => setDamage({ ...spellOne, skill: 1 })}
+            disabled={
+              (spellOne.remainingCD as number) > 0 || heroDead || enemyDead
+                ? true
+                : false
+            }
+          >
+            {spellOne.name}
+          </button>
+        )}
         <br />
-        <button
-          title={`remaining cooldown: ${spellTwo.remainingCD} ,${spellTwo.description}`}
-          onClick={() => setDamage({ ...spellTwo, skill: 2 })}
-          disabled={
-            spellTwo.remainingCD > 0 || heroDead || enemyDead ? true : false
-          }
-        >
-          {spellTwo.name}
-        </button>
+        {skillArray.data && (
+          <button
+            title={`remaining cooldown: ${spellTwo.remainingCD} ,${spellTwo.description}`}
+            onClick={() => setDamage({ ...spellTwo, skill: 2 })}
+            disabled={
+              spellTwo.remainingCD > 0 || heroDead || enemyDead ? true : false
+            }
+          >
+            {spellTwo.name}
+          </button>
+        )}
         <br />
-        <button
-          title={`remaining cooldown: ${spellthree.remainingCD}, ${spellthree.description}`}
-          onClick={() => setDamage({ ...spellthree, skill: 3 })}
-          disabled={
-            spellthree.remainingCD > 0 || heroDead || enemyDead ? true : false
-          }
-        >
-          {spellthree.name}
-        </button>
+        {skillArray.data && (
+          <button
+            title={`remaining cooldown: ${spellthree.remainingCD}, ${spellthree.description}`}
+            onClick={() => setDamage({ ...spellthree, skill: 3 })}
+            disabled={
+              spellthree.remainingCD > 0 || heroDead || enemyDead ? true : false
+            }
+          >
+            {spellthree.name}
+          </button>
+        )}
       </div>
       <button
         disabled={heroDead || enemyDead ? true : false}
@@ -311,8 +365,12 @@ const Battle = ({
         <h2>combat log</h2>
         <div className={styles.combattext} ref={combatlog}></div>
       </div>
-      {heroDead && <ResultScreen handleClick={handleClickNpcWin} whosIsDead={'hero'}/>}
-      {enemyDead && <ResultScreen handleClick={handleClickHeroWin} whosIsDead={'enemy'}/>}
+      {heroDead && (
+        <ResultScreen handleClick={handleClickNpcWin} whosIsDead={'hero'} />
+      )}
+      {enemyDead && (
+        <ResultScreen handleClick={handleClickHeroWin} whosIsDead={'enemy'} />
+      )}
     </div>
   );
 };

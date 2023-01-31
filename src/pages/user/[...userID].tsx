@@ -11,10 +11,9 @@ import { trpc } from 'utils/trpc';
 
 
 
-export default function userPage() {
+export default function UserPage() {
   const session = useSession();
   const router = useRouter();
-  const urlQuery = (router.query.userID as string[]) || [];
 
   const deletion = trpc.dbRouter.deleteUser.useMutation();
   const verification = trpc.backend.verifyEmailAgain.useMutation();
@@ -32,7 +31,10 @@ export default function userPage() {
   });
 
   const handleSendingMail = async () => {
-    verification.mutate(session);
+    if(session.data && session.data.user && session.data.user.email){
+      verification.mutate({id: session.data.user.id, email:session.data.user.email});
+
+    }
   };
 
   return (
@@ -50,7 +52,6 @@ export default function userPage() {
           <UserSettings />
           <hr />
           <p>{session.data?.user?.name}</p>
-          {/* <p>{session.data?.user?.id}</p> */}
           <p>{session.data?.user?.email}</p>
 
           <hr />
@@ -68,12 +69,7 @@ export default function userPage() {
 
           <hr />
 
-          {/* <h2>URL Query as a string: {urlQuery.join('/')}</h2>
-
-          <hr /> */}
-
           <button onClick={handleDelete}>DELETE USER</button>
-          {/* <p>Response from deletion: {deletion.data?.toString()}</p> */}
 
           <hr />
 
