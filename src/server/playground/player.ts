@@ -159,7 +159,6 @@ export class Player extends Entity {
 
   getOutBattle() {
     this.move = this._moving;
-    this.opponent!!!!!!!!!!!!!!!!!!!!!!!.inBattle = false
     this.opponent = undefined;
     this.setStatus = { battle: false };
   }

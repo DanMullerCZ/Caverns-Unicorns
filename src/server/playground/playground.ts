@@ -96,6 +96,7 @@ export class Playground {
       );
     }
   }
+
   getState() {
     const state: {
       [k: string]: {
@@ -187,10 +188,9 @@ export class Playground {
     this.players.delete(hero_ownerId); 
   }
 
-  retreat(hero: Characters): void {
+  retreat(hero: Characters, npc: NPC): void {
     this.players.get(hero.owner_id)?.changeHp(hero.currentHP)
-    this.players.get(hero.owner_id)!.opponent!.setStatus = {battle: false}
+    this._enemies.filter((enemy) => enemy.id === npc.id)[0].surviveBattle()
     this.players.get(hero.owner_id)?.getOutBattle()
-    // opponent is probably locking the hero
   }
 }

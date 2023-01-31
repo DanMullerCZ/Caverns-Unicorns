@@ -112,9 +112,9 @@ export const playground = router({
     }),
 
   retreat: protectedProcedure
-    .input(z.object({ hero: z.any() }))
+    .input(z.object({ hero: z.any(), npc: z.any() }))
     .mutation(({ input }) => {
-      pg.retreat(input.hero);
+      pg.retreat(input.hero, input.npc);
       return 'you retreated';
     }),
 });
