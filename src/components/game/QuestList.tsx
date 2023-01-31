@@ -26,7 +26,7 @@ const QuestList = ({
       ></button>
       {acceptedQuests.data &&
         acceptedQuests.data.map((e) => {
-          return <div className="font-LOTR">{e.quest.description}</div>;
+          return <div key={e.quest.id} className="font-LOTR">{e.quest.description}{e.completed ? ' (completed)' : ' (not completed)'}</div>;
         })}
     </div>
   );

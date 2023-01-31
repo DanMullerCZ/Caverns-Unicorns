@@ -168,6 +168,7 @@ export const dbRouter = router({
             character: {
               connect: { id: id.id },
             },
+            completed:false
           },
         });
         return response;
@@ -185,9 +186,26 @@ export const dbRouter = router({
             },
             select: {
               quest: true,
+              completed:true
             },
           });
           return response
         }
-      )
+      ),
+      completeQuest: publicProcedure
+        .input(z.object({heroName:z.string(),questId:z.number()}))
+        .mutation(async(input)=>{
+          const id = await prisma.characters.findFirst({
+            where: { name: input.input.heroName },
+            select: { id: true },
+          });
+          if (id){
+          const complete = await prisma.questsForCharacters.update({
+            where :{
+              questId_charId:{questId:input.input.questId,charId:id.id}
+            },
+            data:{completed:true}
+          }
+          )
+        }})
 });

@@ -149,6 +149,7 @@ model Quest {
 model QuestsForCharacters {
   questId   Int
   charId    Int
+  completed Boolean?
   quest     Quest      @relation(fields: [questId], references: [id])
   character Characters @relation(fields: [charId], references: [id])
 
