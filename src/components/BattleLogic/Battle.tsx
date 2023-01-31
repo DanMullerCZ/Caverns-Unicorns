@@ -34,7 +34,7 @@ const Battle = ({
     skill: 0,
   });
   const acceptedQuests = trpc.dbRouter.getAcceptedQuests.useMutation();
-  const [questId,setQuestId] = useState<number>()
+  const [questId, setQuestId] = useState<number>();
   const [rolled, setRolled] = useState(false);
   const combatlog = useRef<HTMLDivElement>(null);
   const [spellOne, setSpellOne] = useState<{
@@ -46,7 +46,7 @@ const Battle = ({
     remainingCD: number;
   }>({
     name: skillOne.name || '',
-    id: skillOne.id || 0 ,
+    id: skillOne.id || 0,
     description: skillOne.description || '',
     damage: skillOne.damage || 0,
     cooldown: skillOne.cooldown || 0,
@@ -80,12 +80,13 @@ const Battle = ({
     description: skillthree.description || '',
     damage: skillthree.damage || 0,
     cooldown: skillthree.cooldown || 0,
-    remainingCD: skillthree.cooldown || 0 ,
+    remainingCD: skillthree.cooldown || 0,
   });
   const skillArray = trpc.dbRouter.getSkills.useMutation();
-  const completeQ = trpc.dbRouter.completeQuest.useMutation()
+  const completeQ = trpc.dbRouter.completeQuest.useMutation();
   const handleClickHeroWin = () => {
-    if(questId)completeQ.mutate({questId:questId,heroName:heroInput.name})
+    if (questId)
+      completeQ.mutate({ questId: questId, heroName: heroInput.name });
     exitBattleHeroWin(hero, enemy);
   };
   const handleClickNpcWin = () => {
@@ -100,7 +101,7 @@ const Battle = ({
   const [hero, setHero] = useState<Characters>(heroInput);
   useEffect(() => {
     skillArray.mutate(hero.class);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     acceptedQuests.mutate(heroInput.name);
@@ -112,26 +113,30 @@ const Battle = ({
         name: skillArray.data[0].spell.name as string,
         id: skillArray.data[0].spell.id as number,
         description: skillArray.data[0].spell.description as string,
-        damage:skillArray.data[0].spell.damage as number,
-        cooldown:skillArray.data[0].spell.cooldown as number,
+        damage: skillArray.data[0].spell.damage as number,
+        cooldown: skillArray.data[0].spell.cooldown as number,
         remainingCD: 0,
       });
     }
     if (skillArray.data && skillArray.data[1].spell) {
-      setSpellTwo({name: skillArray.data[1].spell.name as string,
+      setSpellTwo({
+        name: skillArray.data[1].spell.name as string,
         id: skillArray.data[1].spell.id as number,
         description: skillArray.data[1].spell.description as string,
-        damage:skillArray.data[1].spell.damage as number,
-        cooldown:skillArray.data[1].spell.cooldown as number,
-        remainingCD: 0,});
+        damage: skillArray.data[1].spell.damage as number,
+        cooldown: skillArray.data[1].spell.cooldown as number,
+        remainingCD: 0,
+      });
     }
     if (skillArray.data && skillArray.data[2].spell) {
-      setSpellthree({name: skillArray.data[2].spell.name as string,
+      setSpellthree({
+        name: skillArray.data[2].spell.name as string,
         id: skillArray.data[2].spell.id as number,
         description: skillArray.data[2].spell.description as string,
-        damage:skillArray.data[2].spell.damage as number,
-        cooldown:skillArray.data[2].spell.cooldown as number,
-        remainingCD: 0,});
+        damage: skillArray.data[2].spell.damage as number,
+        cooldown: skillArray.data[2].spell.cooldown as number,
+        remainingCD: 0,
+      });
     }
   }, [skillArray.data]);
   const combatProcderure = (inputdamage: {
@@ -263,15 +268,17 @@ const Battle = ({
         skill: 0,
       });
     }
-    useEffect(()=>{
-      if (acceptedQuests.isSuccess && acceptedQuests.data){
-        const id = acceptedQuests.data.filter(e=> e.quest.objective==enemyInput.name).map(e=>e.quest.id)
-        setQuestId(id[0])
-      }
-    },[acceptedQuests.data])
-  
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [luck]);
+  useEffect(() => {
+    if (acceptedQuests.isSuccess && acceptedQuests.data) {
+      const id = acceptedQuests.data
+        .filter((e) => e.quest.objective == enemyInput.name)
+        .map((e) => e.quest.id);
+      setQuestId(id[0]);
+    }
+  }, [acceptedQuests.data]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const roll = async (n: number) => {
     setTimeout(() => {
