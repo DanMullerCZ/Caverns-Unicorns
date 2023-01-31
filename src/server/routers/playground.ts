@@ -5,7 +5,7 @@ import { Playground } from '../playground/playground';
 import { Subject } from 'rxjs';
 
 export let pg:Playground = new Playground();
-const killedNpc = new Subject();
+const killedNpc = new Subject<string>();
 
 export const playground = router({
   sub: protectedProcedure.subscription(() => {
@@ -21,7 +21,7 @@ export const playground = router({
     }>((emit) => {
       setInterval(() => {
         emit.next(pg.getState());
-      }, 25);
+      }, 50);
     });
   }),
 
@@ -100,8 +100,8 @@ export const playground = router({
     }),
 
   killNpc: protectedProcedure.subscription(() => {
-    return observable<any>((emit) => {
-      killedNpc.subscribe((x: any) => emit.next(x));
+    return observable<string>((emit) => {
+      killedNpc.subscribe((x: string) => emit.next(x));
     });
   }),
 
