@@ -7,7 +7,7 @@ const Player_Container = (
             x: number;
             y: number;
             ownerId: string;
-            orientation: boolean;
+            orientation: number;
             status: {
                 battle: boolean;
                 alive: boolean;
@@ -37,8 +37,8 @@ const Player_Container = (
                     position:"relative",
                     left:`-${12* props.map.clientWidth/1600}px`,
                     top:`-${25* props.map.clientWidth/1600}px`,
-                    transform: `scaleX(${props.another_props.orientation ? -1 : 1})`,
-                    backgroundImage: `url('/npc/rogue.gif')`,
+                    transform: `scaleX(${props.another_props.orientation>0?"1":"-1"})`,
+                    backgroundImage: `url(${Math.abs(props.another_props.orientation)>1?'/npc/rogue.gif':'/npc/rogue.png'})`,
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     width: '100%',
@@ -48,6 +48,8 @@ const Player_Container = (
                 <div>{props.hero_name}</div>
                 <div>PosX: {props.another_props.x.toFixed(1)}</div>
                 <div>PosY: {props.another_props.y.toFixed(1)}</div>
+                <div>{`${props.another_props.orientation}`}</div>
+
                 <div>{props.another_props.status.battle ? 'true' : 'false'}</div>
                 {(session.data?.user?.id === props.another_props.ownerId && props.another_props.status.battle) && 
                   <button

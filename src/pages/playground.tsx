@@ -22,10 +22,10 @@ const Playground: NextPage = () => {
   const session = useSession();
   const main = useRef<HTMLDivElement>(null);
 
-    // STATES
+  // STATES
   const [heroInfo, setHeroInfo] = useState<Characters>();
-  const [location,setLocation] = useState<string>('')
-  const [locationVisibility,setLocationVisibility]= useState<string>('')
+  const [location, setLocation] = useState<string>('');
+  const [locationVisibility, setLocationVisibility] = useState<string>('');
   const [enemy, setEnemy] = useState<NPC>();
   const [inCombat, setInCombat] = useState(false);
   const [moveMatrix, setMoveMatrix] = useState({
@@ -33,20 +33,20 @@ const Playground: NextPage = () => {
     left: false,
     down: false,
     right: false,
-    orientation: true,
+    orientation: 0,
   });
 
-    // PROCEDURES HOOKS
+  // PROCEDURES HOOKS
   const controller = trpc.playground.remoteControl.useMutation();
   const deadNPC = trpc.playground.removeDeadNpc.useMutation();
   const deadPlayer = trpc.playground.removeDeadPlayer.useMutation();
   const retreat = trpc.playground.retreat.useMutation();
-   
-    //  USE EFFECTS
+
+  //  USE EFFECTS
   useEffect(() => {
     if (session.status === 'unauthenticated') {
       window.location.href = '/login';
-    } else if (localStorage.getItem('char_id') === null ) {
+    } else if (localStorage.getItem('char_id') === null) {
       window.location.href = '/character-list';
     }
   });
@@ -54,13 +54,13 @@ const Playground: NextPage = () => {
     if (main.current) {
       main.current.focus();
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (document.activeElement === main.current) {
       controller.mutate(moveMatrix);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moveMatrix]);
 
   const setHero = (x: Characters) => {
@@ -77,30 +77,58 @@ const Playground: NextPage = () => {
       switch (e.nativeEvent.key) {
         case 'w':
           if (action) {
-            setMoveMatrix({ ...moveMatrix, up: true });
+            setMoveMatrix({
+              ...moveMatrix,
+              up: true,
+              orientation:
+                moveMatrix.orientation > 0
+                  ? moveMatrix.orientation + 1
+                  : moveMatrix.orientation - 1,
+            });
           } else {
-            setMoveMatrix({ ...moveMatrix, up: false });
+            setMoveMatrix({
+              ...moveMatrix,
+              up: false,
+              orientation:
+                moveMatrix.orientation > 0
+                  ? moveMatrix.orientation - 1
+                  : moveMatrix.orientation + 1,
+            });
           }
           break;
         case 'a':
           if (action) {
-            setMoveMatrix({ ...moveMatrix, left: true, orientation: true });
+            setMoveMatrix({ ...moveMatrix, left: true, orientation: -2 });
           } else {
-            setMoveMatrix({ ...moveMatrix, left: false });
+            setMoveMatrix({ ...moveMatrix, left: false, orientation: -1 });
           }
           break;
         case 's':
           if (action) {
-            setMoveMatrix({ ...moveMatrix, down: true });
+            setMoveMatrix({
+              ...moveMatrix,
+              down: true,
+              orientation:
+                moveMatrix.orientation > 0
+                  ? moveMatrix.orientation + 1
+                  : moveMatrix.orientation - 1,
+            });
           } else {
-            setMoveMatrix({ ...moveMatrix, down: false });
+            setMoveMatrix({
+              ...moveMatrix,
+              down: false,
+              orientation:
+                moveMatrix.orientation > 0
+                  ? moveMatrix.orientation - 1
+                  : moveMatrix.orientation + 1,
+            });
           }
           break;
         case 'd':
           if (action) {
-            setMoveMatrix({ ...moveMatrix, right: true, orientation: false });
+            setMoveMatrix({ ...moveMatrix, right: true, orientation: 2 });
           } else {
-            setMoveMatrix({ ...moveMatrix, right: false });
+            setMoveMatrix({ ...moveMatrix, right: false, orientation: 1 });
           }
           break;
         default:
@@ -118,27 +146,27 @@ const Playground: NextPage = () => {
 
   const exitBattleHeroWin = (hero: Characters, npc: NPC) => {
     setInCombat(false);
-    deadNPC.mutate({npcId:npc.id})
+    deadNPC.mutate({ npcId: npc.id });
   };
 
   const exitBattleNpcWin = (hero: Characters, npc: NPC) => {
     setInCombat(false);
-    deadPlayer.mutate()
+    deadPlayer.mutate();
     alert('You died! Now you are spectating other heroes!');
   };
 
   const runFromBattle = (hero: Characters, npc: NPC) => {
     setInCombat(false);
-    retreat.mutate({hero: hero})
+    retreat.mutate({ hero: hero });
   };
 
-  const setLocationName = (name:string)=>{
-    setLocation(name)
-  }
+  const setLocationName = (name: string) => {
+    setLocation(name);
+  };
 
-  const setVisibility = (x:string)=>{
-    setLocationVisibility(x)
-  }
+  const setVisibility = (x: string) => {
+    setLocationVisibility(x);
+  };
 
   return (
     <>
@@ -182,8 +210,15 @@ const Playground: NextPage = () => {
             )}
             <InGameMenu setVisibility={setVisibility} />
           </div>
-          <Entities setHero={setHero} setEnemy={setNpc} setInCombat={setInCombat} setLocation={setLocationName} locationName={location} setVisible={setVisibility} />
-          
+          <Entities
+            setHero={setHero}
+            setEnemy={setNpc}
+            setInCombat={setInCombat}
+            setLocation={setLocationName}
+            locationName={location}
+            setVisible={setVisibility}
+          />
+
           {inCombat && enemy && heroInfo && (
             <Battle
               exitBattleHeroWin={exitBattleHeroWin}
@@ -195,10 +230,23 @@ const Playground: NextPage = () => {
               skillTwo={spellTwo}
               skillthree={spellthree}
             />
-            )}
-            {heroInfo && (<Locations setVisible={setVisibility} setInCombat={setInCombat} setEnemy={setEnemy} visible={locationVisibility} hero={heroInfo} setHero={setHero}/>)}
-            {(locationVisibility=='quest-list') && (<QuestList setVisibility={setVisibility} />)}
-            {(locationVisibility=='character-detail')&& heroInfo && (<CharacterDetail hero={heroInfo} setVisibility={setVisibility} />)}            
+          )}
+          {heroInfo && (
+            <Locations
+              setVisible={setVisibility}
+              setInCombat={setInCombat}
+              setEnemy={setEnemy}
+              visible={locationVisibility}
+              hero={heroInfo}
+              setHero={setHero}
+            />
+          )}
+          {locationVisibility == 'quest-list' && (
+            <QuestList setVisibility={setVisibility} />
+          )}
+          {locationVisibility == 'character-detail' && heroInfo && (
+            <CharacterDetail hero={heroInfo} setVisibility={setVisibility} />
+          )}
         </div>
         <InGameChat />
       </div>
