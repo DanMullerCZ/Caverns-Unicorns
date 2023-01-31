@@ -35,6 +35,10 @@ const Playground: NextPage = () => {
     right: false,
     orientation: 1,
   });
+  const [w, setW] = useState<boolean>(false);
+  const [s, setS] = useState<boolean>(false);
+  const [a, setA] = useState<boolean>(false);
+  const [d, setD] = useState<boolean>(false);
 
   // PROCEDURES HOOKS
   const controller = trpc.playground.remoteControl.useMutation();
@@ -77,58 +81,79 @@ const Playground: NextPage = () => {
       switch (e.nativeEvent.key) {
         case 'w':
           if (action) {
+            setW(true);
             setMoveMatrix({
               ...moveMatrix,
               up: true,
-              orientation:
-                moveMatrix.orientation > 0
-                  ? moveMatrix.orientation + 1
-                  : moveMatrix.orientation - 1,
+              orientation: moveMatrix.orientation > 0 ? 2 : -2,
             });
           } else {
-            setMoveMatrix({
-              ...moveMatrix,
-              up: false,
-              orientation:
-                moveMatrix.orientation > 0
-                  ? moveMatrix.orientation - 1
-                  : moveMatrix.orientation + 1,
-            });
+            setW(false);
+            if (a || d) {
+              setMoveMatrix({
+                ...moveMatrix,
+                up: false,
+                orientation: moveMatrix.orientation > 0 ? 2 : -2,
+              });
+            } else {
+              setMoveMatrix({
+                ...moveMatrix,
+                up: false,
+                orientation: moveMatrix.orientation > 0 ? 1 : -1,
+              });
+            }
           }
           break;
         case 'a':
           if (action) {
+            setA(true);
             setMoveMatrix({ ...moveMatrix, left: true, orientation: -2 });
           } else {
-            setMoveMatrix({ ...moveMatrix, left: false, orientation: -1 });
+            setA(false);
+            if (w || s) {
+              setMoveMatrix({ ...moveMatrix, left: false, orientation: -2 });
+            } else {
+              
+              setMoveMatrix({ ...moveMatrix, left: false, orientation: -1 });
+            }
           }
           break;
         case 's':
           if (action) {
+            setS(true);
             setMoveMatrix({
               ...moveMatrix,
               down: true,
-              orientation:
-                moveMatrix.orientation > 0
-                  ? moveMatrix.orientation + 1
-                  : moveMatrix.orientation - 1,
+              orientation: moveMatrix.orientation > 0 ? 2 : -2,
             });
           } else {
-            setMoveMatrix({
-              ...moveMatrix,
-              down: false,
-              orientation:
-                moveMatrix.orientation > 0
-                  ? moveMatrix.orientation - 1
-                  : moveMatrix.orientation + 1,
-            });
+            setS(false);
+            if (a || d) {
+              setMoveMatrix({
+                ...moveMatrix,
+                down: false,
+                orientation: moveMatrix.orientation > 0 ? 2 : -2,
+              });
+            } else {
+              setMoveMatrix({
+                ...moveMatrix,
+                down: false,
+                orientation: moveMatrix.orientation > 0 ? 1 : -1,
+              });
+            }
           }
           break;
         case 'd':
           if (action) {
+            setD(true);
             setMoveMatrix({ ...moveMatrix, right: true, orientation: 2 });
           } else {
-            setMoveMatrix({ ...moveMatrix, right: false, orientation: 1 });
+            setD(false);
+            if (w || s) {
+              setMoveMatrix({ ...moveMatrix, right: false, orientation: 2 });
+            } else {
+              setMoveMatrix({ ...moveMatrix, right: false, orientation: 1 });
+            }
           }
           break;
         default:
@@ -157,12 +182,11 @@ const Playground: NextPage = () => {
 
   const runFromBattle = (hero: Characters, npc: NPC) => {
     setInCombat(false);
-    const newHero = {...hero, owner_id: session.data?.user?.id as string}
-    retreat.mutate({hero: newHero, npc: npc})
+    const newHero = { ...hero, owner_id: session.data?.user?.id as string };
+    retreat.mutate({ hero: newHero, npc: npc });
     if (main.current) {
       main.current.focus();
     }
-
   };
 
   const setLocationName = (name: string) => {
