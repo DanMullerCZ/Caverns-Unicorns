@@ -13,6 +13,9 @@ import Entities from 'components/game/Entities';
 import { spellOne, spellthree, spellTwo } from 'server/playground/spells';
 import LocationButtons from 'components/LocationButtons';
 import Locations from 'components/Locations';
+import InGameMenu from 'components/game/InGameMenu';
+import QuestList from 'components/game/QuestList';
+import CharacterDetail from 'components/game/CharacterDetail';
 
 const Playground: NextPage = () => {
   // ALL HOOKS AND REFS
@@ -146,7 +149,7 @@ const Playground: NextPage = () => {
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
-        className="relative select-none"
+        className="relative select-none overflow-hidden"
         style={{
           display: 'flex',
           background: '#92884A',
@@ -177,9 +180,10 @@ const Playground: NextPage = () => {
                 />
               )),
             )}
+            <InGameMenu setVisibility={setVisibility} />
           </div>
           <Entities setHero={setHero} setEnemy={setNpc} setInCombat={setInCombat} setLocation={setLocationName} locationName={location} setVisible={setVisibility} />
-
+          
           {inCombat && enemy && heroInfo && (
             <Battle
               exitBattleHeroWin={exitBattleHeroWin}
@@ -193,6 +197,8 @@ const Playground: NextPage = () => {
             />
             )}
             {heroInfo && (<Locations setVisible={setVisibility} setInCombat={setInCombat} setEnemy={setEnemy} visible={locationVisibility} hero={heroInfo} setHero={setHero}/>)}
+            {(locationVisibility=='quest-list') && (<QuestList setVisibility={setVisibility} />)}
+            {(locationVisibility=='character-detail')&& heroInfo && (<CharacterDetail hero={heroInfo} setVisibility={setVisibility} />)}            
         </div>
         <InGameChat />
       </div>
