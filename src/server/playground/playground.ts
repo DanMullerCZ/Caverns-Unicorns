@@ -4,18 +4,53 @@ import { listNPC } from './listNPC';
 import { specificNPC } from './listNPC';
 import { Characters } from '@prisma/client';
 
+type npcTuple = [
+  string,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  string,
+  number,
+];
+
+type playerDirection = {
+  id: string;
+  up: boolean;
+  left: boolean;
+  right: boolean;
+  down: boolean;
+  orientation: number;
+};
+
+type state = {
+  [k: string]: {
+    x: number;
+    y: number;
+    ownerId: string;
+    orientation: number;
+    status: {
+      battle: boolean;
+      alive: boolean;
+    };
+  };
+};
+
 export class Playground {
   private players = new Map<string, Player>();
   private _enemies: NPC[] = [];
   private _width = 1570;
   private _height = 860;
 
-
-  constructor(private NPCs:number[]=[5,2,1,2]) {
-    this.createNPCs(
-      this.NPCs,
-      [listNPC.demon, listNPC.bandit, listNPC.zombie, listNPC.sheep],
-    );
+  constructor(private NPCs: number[] = [5, 2, 1, 2]) {
+    this.createNPCs(this.NPCs, [
+      listNPC.demon,
+      listNPC.bandit,
+      listNPC.zombie,
+      listNPC.sheep,
+    ]);
   }
 
   createNPCs(arrNum: number[], arr2: specificNPC[]): void {
@@ -34,11 +69,7 @@ export class Playground {
     });
   }
 
-  setNPC(
-    npc: specificNPC,
-    x: number,
-    y: number,
-  ): [string, number, number, number, number, number, number, string, number] {
+  setNPC(npc: specificNPC, x: number, y: number): npcTuple {
     return [
       npc.name,
       x,
@@ -52,27 +83,13 @@ export class Playground {
     ];
   }
 
-  setState({
-    id,
-    up,
-    left,
-    right,
-    down,
-    orientation,
-  }: {
-    id: string;
-    up: boolean;
-    left: boolean;
-    right: boolean;
-    down: boolean;
-    orientation: number;
-  }) {
+  setState({ id, up, left, right, down, orientation }: playerDirection) {
     if (this.players.has(id)) {
       this.players.get(id)?.play(up, left, right, down, orientation);
     }
   }
 
-  setPlayers(characters: Characters[]) {
+  setPlayers(characters: Characters[]): void {
     for (const character of characters) {
       this.players.set(
         character.owner_id,
@@ -95,16 +112,8 @@ export class Playground {
     }
   }
 
-  getState() {
-    const state: {
-      [k: string]: {
-        x: number;
-        y: number;
-        ownerId: string;
-        orientation: number;
-        status: { battle: boolean; alive: boolean };
-      };
-    } = {};
+  getState(): state {
+    const state: state = {};
     this.players.forEach((player, owner) => {
       state[player.name] = {
         x: player.coords.x,
@@ -130,14 +139,14 @@ export class Playground {
     return { player: player };
   }
 
-  interval = setInterval(() => {
+  interval: NodeJS.Timer = setInterval(() => {
     this.players.forEach((value) => {
       value.move(this.size);
     });
     this._enemies.forEach((enemy) => {
       enemy.getNearbies(this.players);
     });
-  }, 25);
+  }, 35);
 
   surface(x: number, y: number) {
     if (y > 0.96 * x + 189.37 && y < -1.09 * x + 654.83) {
@@ -174,21 +183,21 @@ export class Playground {
     return 'grass';
   }
 
-  removeNpc(npc_id: string, hero_id: string, callback:()=>void): void {   
-    const temp = this._enemies.filter((enemy) => enemy.id !== npc_id );
-    this._enemies = [...temp]
-    this.players.get(hero_id)?.getOutBattle()
-    callback()
+  removeNpc(npc_id: string, hero_id: string, callback: () => void): void {
+    const temp = this._enemies.filter((enemy) => enemy.id !== npc_id);
+    this._enemies = [...temp];
+    this.players.get(hero_id)?.getOutBattle();
+    callback();
   }
 
   removePlayer(hero_ownerId: string): void {
-    this.players.get(hero_ownerId)?.opponent?.surviveBattle()
-    this.players.delete(hero_ownerId); 
+    this.players.get(hero_ownerId)?.opponent?.surviveBattle();
+    this.players.delete(hero_ownerId);
   }
 
   retreat(hero: Characters, npc: NPC): void {
-    this.players.get(hero.owner_id)?.changeHp(hero.currentHP)
-    this._enemies.filter((enemy) => enemy.id === npc.id)[0].surviveBattle()
-    this.players.get(hero.owner_id)?.getOutBattle()
+    this.players.get(hero.owner_id)?.changeHp(hero.currentHP);
+    this._enemies.filter((enemy) => enemy.id === npc.id)[0].surviveBattle();
+    this.players.get(hero.owner_id)?.getOutBattle();
   }
 }

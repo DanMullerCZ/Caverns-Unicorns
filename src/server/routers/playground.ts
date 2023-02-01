@@ -21,7 +21,7 @@ export const playground = router({
     }>((emit) => {
       setInterval(() => {
         emit.next(pg.getState());
-      }, 50);
+      }, 35);
     });
   }),
 
