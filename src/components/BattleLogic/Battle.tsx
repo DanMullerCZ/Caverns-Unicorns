@@ -2,7 +2,7 @@ import Dice from 'components/Dice';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import styles from '../../styles/Battle.module.css';
-import { NPC, Characters, Spell } from '@prisma/client';
+import { NPC, Characters, Spell, QuestsForCharacters, Quest } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import ResultScreen from './ResultScreen';
 import { trpc } from 'utils/trpc';
@@ -272,8 +272,8 @@ const Battle = ({
   useEffect(() => {
     if (acceptedQuests.isSuccess && acceptedQuests.data) {
       const id = acceptedQuests.data
-        .filter((e) => e.quest.objective == enemyInput.name)
-        .map((e) => e.quest.id);
+        .filter((e:{ quest: Quest; completed: boolean | null; }) => e.quest.objective == enemyInput.name)
+        .map((e:{ quest: Quest; completed: boolean | null; }) => e.quest.id);
       setQuestId(id[0]);
     }
   }, [acceptedQuests.data]);
