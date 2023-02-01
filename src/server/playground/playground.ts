@@ -13,7 +13,7 @@ export class Playground {
 
   constructor(private NPCs:number[]=[5,2,1,2]) {
     this.createNPCs(
-      NPCs,
+      this.NPCs,
       [listNPC.demon, listNPC.bandit, listNPC.zombie, listNPC.sheep],
     );
   }
