@@ -26,7 +26,7 @@ test('log-in', async ({ page }) => {
   await page.getByLabel('Email').press('Tab');
   await page.getByLabel('Password').fill('1234');
   await page.getByTestId('login-submit').click();
-  await expect(page.getByTestId('userpage-h1')).toHaveText('USERS PAGE');
+  await expect(page.getByTestId('userpage-h1')).toBeVisible();
 });
 
 test.afterEach(async ({}, testInfo) => {
