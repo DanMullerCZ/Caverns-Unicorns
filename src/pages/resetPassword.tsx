@@ -15,7 +15,7 @@ const resetPassword = () => {
     const dateFromDB = email.data?.expiration as Date
     console.log('database date: ',dateFromDB, 'newDate:', actuallDate)
     const newPass = useRef<HTMLFormElement>(null)
-    const [message, setMessage] = useState<String>()
+    const [message, setMessage] = useState<string>()
 
     const handleSubmit = async(event: React.SyntheticEvent) => {
 
