@@ -115,7 +115,7 @@ export const userSettRouter = router({
             const timeOfExpiration = new Date();
             timeOfExpiration.setMinutes(timeOfExpiration.getMinutes() + 10);
             let pasResToken = ''
-            for(let index: number = 0; index < 10; index++){
+            for(let index = 0; index < 10; index++){
                 const pasResTokenGen = String.fromCharCode(Math.floor(Math.random()*26) + 97)
                 pasResToken += pasResTokenGen
             }
