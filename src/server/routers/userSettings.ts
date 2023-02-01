@@ -1,7 +1,6 @@
 import { router, publicProcedure } from '../trpc';
 import { prisma } from '../db/client'
 
-import { boolean, string, z } from 'zod';
 import { sendEmailVerificationToken } from './mail';
 import { hashToken } from '../../pages/api/auth/jwt';
 
