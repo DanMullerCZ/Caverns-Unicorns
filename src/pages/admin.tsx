@@ -4,6 +4,7 @@ import { listNPC } from 'server/playground/listNPC';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import VideoBackground from 'components/VideoBackground';
 
 const Admin: NextPage = () => {
   const session = useSession();
@@ -24,20 +25,30 @@ const Admin: NextPage = () => {
     }
   }, [router, session]);
   return (
-    <div>
-      <h1>New Game</h1>
-      {Object.entries(NPCs).map((npc, index) => (
-        <Enemy name={npc[0]} key={npc[0]} index={index} setCounts={setCounts} />
-      ))}
-      <button
-        onClick={() => {
-          newGame.mutate(counts);
-          router.push('/playground');
-        }}
-      >
-        Start new game
-      </button>
-    </div>
+    <>
+      <VideoBackground />
+      <div className="gold flex h-screen w-screen items-center justify-center text-9xl">
+        <div>
+          <h1>New Game</h1>
+          {Object.entries(NPCs).map((npc, index) => (
+            <Enemy
+              name={npc[0]}
+              key={npc[0]}
+              index={index}
+              setCounts={setCounts}
+            />
+          ))}
+          <button
+            onClick={() => {
+              newGame.mutate(counts);
+              router.push('/lobby');
+            }}
+          >
+            Start new game
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 export default Admin;
