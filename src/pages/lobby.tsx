@@ -3,7 +3,6 @@ import Header from 'components/general/Header';
 import NavigationBar from 'components/NavigationBar';
 import VideoBackground from 'components/VideoBackground';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { trpc } from 'utils/trpc';
@@ -13,9 +12,9 @@ const Lobby = () => {
   const session = useSession();
   const router = useRouter();
 
-  const [players, setPlayers] = useState<{ [k: string]: { [k: string]: string | number | boolean } }>(
-    {},
-  );
+  const [players, setPlayers] = useState<{
+    [k: string]: { [k: string]: string | number | boolean };
+  }>({});
   const [prepared, setPrepared] = useState(false);
   trpc.wsRouter.onlinePlayersAfterLogin.useSubscription(undefined, {
     onData(data) {
@@ -107,9 +106,14 @@ const Lobby = () => {
         >
           Start
         </button>
-        {/* <Link className={styles.backLink} href="/character-list"> */}
-          <button className={styles.backButton} onClick={() => {router.push('/character-list')}}>{'<-'}</button>
-        {/* </Link> */}
+        <button
+          className={styles.backButton}
+          onClick={() => {
+            router.push('/character-list');
+          }}
+        >
+          {'<-'}
+        </button>
       </div>
     </div>
   );
