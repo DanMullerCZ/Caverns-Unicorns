@@ -55,8 +55,6 @@ export class Player extends Entity {
   }
 
   private _moving(size: { x: number; y: number }) {
-    // this._x < 0 && ( () => {this._x = 0; return false;})
-
     if (
       //up
       this._move.up &&

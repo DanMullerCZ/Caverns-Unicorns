@@ -53,10 +53,10 @@ export class NPC extends Entity {
     return result;
   }
 
-  surviveBattle(){
+  surviveBattle() {
     setTimeout(() => {
-      this.setStatus = {battle: false}
-      this.inBattle = false
+      this.setStatus = { battle: false };
+      this.inBattle = false;
     }, 1000);
   }
 }

@@ -1,6 +1,6 @@
 export abstract class Entity {
+  protected _status: { battle: boolean, alive: boolean }  = { battle: false, alive: true };
 
-  protected _status: { battle: boolean; alive: boolean; }  = {battle:false, alive:true}
   constructor(
     protected _name: string,
     protected _x: number,
@@ -16,9 +16,11 @@ export abstract class Entity {
   get coords() {
     return { x: this._x, y: this._y };
   }
+
   get status() {
     return { battle: this._status.battle, alive: this._status.alive };
   }
+  
   set setStatus({ alive, battle }: { alive?: boolean; battle?: boolean }) {
     if (alive!==undefined) {
       this._status = { ...this._status, alive: alive };

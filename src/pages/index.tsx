@@ -32,7 +32,6 @@ export default Home;
 
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
-
   return (
     <div className="text-3xl mr-10 mt-3 font-LOTR" 
       style={{
