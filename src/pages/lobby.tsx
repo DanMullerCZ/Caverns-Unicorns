@@ -107,9 +107,9 @@ const Lobby = () => {
         >
           Start
         </button>
-        <Link className={styles.backLink} href="/character-list">
-          <button className={styles.backButton}>{'<-'}</button>
-        </Link>
+        {/* <Link className={styles.backLink} href="/character-list"> */}
+          <button className={styles.backButton} onClick={() => {router.push('/character-list')}}>{'<-'}</button>
+        {/* </Link> */}
       </div>
     </div>
   );
