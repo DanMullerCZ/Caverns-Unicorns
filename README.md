@@ -23,9 +23,8 @@ yarn dx
 
 ## Deployment
 
-- Deployed using OnRender
-link: https://cau-dnd.onrender.com/
+- Deployed using OnRender https://cau-dnd.onrender.com/
 
 ## Authors
 
-- junior team in GreenFox Academy
+Team of juniors in GreenFox Academy. Made as our final project.
