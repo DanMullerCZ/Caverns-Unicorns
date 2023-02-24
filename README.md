@@ -1,5 +1,7 @@
 # Caverns & Unicorns Game
 
+Multiplayer real-time game based on Dungeons & Dragons theme. 
+
 ## Technologies
 
 - 🧙‍♂️ tRPC
@@ -24,28 +26,6 @@ yarn dx
 - Deployed using OnRender
 link: https://cau-dnd.onrender.com/
 
-## Files of note
+## Authors
 
-<table>
-  <thead>
-    <tr>
-      <th>Path</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="./prisma/schema.prisma"><code>./prisma/schema.prisma</code></a></td>
-      <td>Prisma schema</td>
-    </tr>
-    <tr>
-      <td><a href="./src/api/trpc/[trpc].tsx"><code>./src/api/trpc/[trpc].tsx</code></a></td>
-      <td>tRPC response handler</td>
-    </tr>
-    <tr>
-      <td><a href="./src/server/routers"><code>./src/server/routers</code></a></td>
-      <td>Your app's different tRPC-routers</td>
-    </tr>
-  </tbody>
-</table>
-
+- junior team in GreenFox Academy
